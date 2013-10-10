@@ -22,7 +22,7 @@ public class Perspective implements IPerspectiveFactory {
 		//layout.addView(IConsoleConstants.ID_CONSOLE_VIEW, IPageLayout.BOTTOM, 0.67f, IPageLayout.ID_EDITOR_AREA);
 	}
 	private void addFastViews(IPageLayout layout) {
-		//layout.addFastView("org.eclipse.ui.console.ConsoleView");
+		layout.addFastView("org.eclipse.ui.console.ConsoleView");
 	}
 	//test ly 
 	
