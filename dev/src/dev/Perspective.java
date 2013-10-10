@@ -24,4 +24,6 @@ public class Perspective implements IPerspectiveFactory {
 	private void addFastViews(IPageLayout layout) {
 		//layout.addFastView("org.eclipse.ui.console.ConsoleView");
 	}
+	//test ly
+	
 }
