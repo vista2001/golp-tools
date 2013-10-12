@@ -86,10 +86,10 @@ public class NewProjectWizardPage0 extends WizardPage{
 
 	// 输入项校验
 	private void dialogChanged() {
-		if (getPrjDescText().getText().length() == 0||getPrjIdText().getText().length()==0||getPrjNameText().getText().length()==0) {
+		/*if (getPrjDescText().getText().isEmpty()||getPrjIdText().getText().isEmpty()||getPrjNameText().getText().isEmpty()) {
 			updateStatus("File container must be specified");
 			return;
-		}
+		}*/
 		updateStatus(null);
 	}
 
@@ -101,7 +101,7 @@ public class NewProjectWizardPage0 extends WizardPage{
 
 	@Override
 	public boolean canFlipToNextPage() {
-		if(getPrjDescText().getText().length()==0||getPrjIdText().getText().length()==0||getPrjNameText().getText().length()==0)
+		if(getPrjDescText().getText().isEmpty()||getPrjIdText().getText().isEmpty()||getPrjNameText().getText().isEmpty())
 			return false;
 		return true;
 	}

@@ -2,6 +2,8 @@ package dev.wizards.newProject;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -10,6 +12,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -18,23 +21,27 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 
 import dev.Activator;
 import dev.db.DbConnectImpl;
 import dev.model.base.RootNode;
 import dev.model.resource.ProjectNode;
+import dev.util.FileUtil;
+import dev.util.PropertiesUtil;
 import dev.views.NavView;
 
-public class NewProjectWizard extends Wizard implements INewWizard {
+public class NewProjectWizard extends Wizard  implements INewWizard{
 	private ISelection selection;
 	private NewProjectWizardPage0 page0;
 	private NewProjectWizardPage1 page1;
 	private NewProjectWizardPage2 page2;
 	private IWorkbench workbench;
+	private String projectAbsPath="";
 	
 	public NewProjectWizard() {
 		super();
-		setNeedsProgressMonitor(true);
+		//setNeedsProgressMonitor(true);
 	}
 
 	@Override
@@ -42,87 +49,79 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 		this.selection = selection;
 		this.workbench = workbench;
 	}
-
+	
+	@Override
 	public void addPages() {
 		page0 = new NewProjectWizardPage0(selection);
 		page1 = new NewProjectWizardPage1(selection);
 		page2 = new NewProjectWizardPage2(selection);
-		
 		addPage(page0);
-		//addPage(page1);
+		addPage(page1);
 		//addPage(page2);
 	}
 
 	@Override
 	public boolean performFinish() {
+		String prjId = page0.getPrjIdText().getText();
+		String prjName = page0.getPrjNameText().getText();
+		String prjDesc = page0.getPrjDescText().getText();
+		
+		//创建数据库记录
+		createDbRecord(prjId, prjName, prjDesc);
+		//创建工程工作区文件
+		createProject(prjId);
+		//创建工程工作目录
 		createDirectorys();
-		 String prjId = page0.getPrjIdText().getText();
-		 String prjName = page0.getPrjNameText().getText();
-		 String prjDesc = page0.getPrjDescText().getText();
-					doFinish(prjId, prjName, prjDesc);
-					System.out.println(Activator.getDefault()
-							.getStateLocation().append("src"));
-					//从配置文件读取默认路径
-					StringBuffer dirPath=new StringBuffer();
-					dirPath.append("d:/");
-					dirPath.append("golptests");
-					File s=new File(dirPath.toString());
-					s.mkdir();
-					File a=Activator.getDefault().getStateLocation().append("src1").toFile();
-					System.out.println(a.exists());
-					a.mkdir();
-					IViewPart view = this.workbench.getActiveWorkbenchWindow().getActivePage().findView(NavView.ID);
-					 if (view != null) {
-				          NavView v=(NavView)view;
-				          TreeViewer tv=v.getTreeViewer();
-				          RootNode root=(RootNode)tv.getInput();
-				          if(root==null){
-				        	root=new RootNode("root", "root", null);  
-				        	ProjectNode prj=new ProjectNode(prjId, prjName, root);
-				        	root.add(prj);
-				        	tv.setInput(root);
-				          }else{
-				        	  ProjectNode prj=new ProjectNode(prjId, prjName, root);
-				        	  root.add(prj);
-				          }
-				          System.out.println(root.name);
-				          v.getTreeViewer().refresh();
-				        }
-					 prj(prjId);
+		//通知其它视图或编辑器等
+		informParts(prjId, prjName, prjDesc);
+		//创建工程属性文件
+		createProperties();
 		return true;
 	}
 
-	private void doFinish(String prjId, String prjName, String prjDesc
-			) {
+	@Override
+	public boolean canFinish() {
+		/*System.out.println("page0 can filpToNext :"+page0.canFlipToNextPage());
+		System.out.println("page1 can filpToNext :"+page1.canFlipToNextPage());
+		System.out.println("page2 can isPageComplete :"+page2.isPageComplete());*/
+		//IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		//System.out.println(root.getFullPath());
+		/*String workspace=Platform.getInstanceLocation().getURL().getPath();
+		System.out.println(Platform.getInstanceLocation().getURL().getPath());*/
+		//System.out.println(Platform.getBundle(Activator.PLUGIN_ID).getLocation());
+		//System.out.println(Activator.getDefault().getStateLocation());
+		boolean p0 = page0.canFlipToNextPage();
+		boolean p1 = page1.canFlipToNextPage();
+		boolean p2 = page2.isPageComplete();
+		if (p0 && p1 && p2) {
+			return true;
+		}
+		return false;
+	}
+
+	private void createDbRecord(String prjId, String prjName, String prjDesc) {
 		DbConnectImpl dbConnImpl = new DbConnectImpl();
 		dbConnImpl.openConn();
 		try {
-			dbConnImpl.executeExceptQuery("insert into project values('aa','aa','aa',null,null,null)");
+			//dbConnImpl.executeExceptQuery("insert into project values('aa','aa','aa',null,null,null)");
+			String preSql="insert into project values(?,?,?,null,null,null)";
+			dbConnImpl.setPrepareSql(preSql);
+			dbConnImpl.setPreparedString(1, prjId);
+			dbConnImpl.setPreparedString(2, prjName);
+			dbConnImpl.setPreparedString(3, prjDesc);
+			dbConnImpl.executeExceptPreparedQuery();
 		} catch (SQLException e) {
-	// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				dbConnImpl.closeConn();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+	}
 
-	}
-private void createDirectorys(){
-	
-}
-	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "ccp", IStatus.OK, message,
-				null);
-		throw new CoreException(status);
-	}
-	
-	private void prj(String prjId){
-/*		ISelection selection;
-		IWorkbench workbench;*/
+	private void createProject(String prjId){
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 	    IWorkspaceRoot root = workspace.getRoot();
 	    IProject project = root.getProject(prjId);
@@ -132,13 +131,13 @@ private void createDirectorys(){
 			System.out.println(iProject.getFullPath());
 			System.out.println(iProject.getLocation());
 		}
-	    System.out.println("project is exist:"+project.exists());
+	    //System.out.println("project is exist:"+project.exists());
 	    if (!project.exists())
 	        try
 	        {
 	          project.create(null);
 	          project.open(null);
-
+	          projectAbsPath=project.getLocationURI().toString();
 	          IProjectDescription projectDesc = project.getDescription();
 	          String[] oldIds = projectDesc.getNatureIds();
 	          String[] newIds = new String[oldIds.length + 1];
@@ -146,30 +145,14 @@ private void createDirectorys(){
 	          newIds[oldIds.length] = "dev.natures.golpProjectNature";
 	          projectDesc.setNatureIds(newIds);
 	          project.setDescription(projectDesc, null);
-
-	          /*IFile serverFile = project.getFile(new Path(".server"));
-	          InputStream serverStream = sc.object2Stream();
-	          if (serverFile.exists())
-	            serverFile.setContents(serverStream, true, true, null);
-	          else {
-	            serverFile.create(serverStream, true, null);
-	          }
-	          serverStream.close();*/
-
-/*	          IViewPart view = this.workbench.getActiveWorkbenchWindow().getActivePage().findView("com.tongdatech.sef.ui.views.ItemExplorer");
-
-	          if (view != null) {
-	            ((ItemExplorer)view).getTreeViewer().setInput(new com.tongdatech.sef.ui.views.navigator.item.TreeRoot("root", "root", null));
-	          } else {
-	            view = this.workbench.getActiveWorkbenchWindow().getActivePage().findView("com.tongdatech.sef.ui.views.ResourceExplorer");
-	            if (view != null) {
-	              ((ResourceExplorer)view).getTreeViewer().setInput(new com.tongdatech.sef.ui.views.navigator.resource.TreeRoot("root", "root", null));
-	            }
-	          }*/
+	
 	        }
 	        catch (Exception e)
 	        {
 	          //LogUtil.getInstance().logError("创建工程失败!", e);
+	        	//LogUtil.getInstance().logError("创建工程失败!", e);
+	        	//LogUtil.getInstance().logError("创建工程失败!", e);
+	        	//LogUtil.getInstance().logError("创建工程失败!", e);
 	        	e.printStackTrace();
 	        }
 	      else
@@ -180,13 +163,69 @@ private void createDirectorys(){
 	        	e.printStackTrace();
 	        }
 	}
+	/**创建相关工程目录*/
+	private void createDirectorys() {
+		//读取路径
+		String projectPath=projectAbsPath.substring(6);
+		List<String> sorceList=FileUtil.iteratorDirs("e:\\temp",null);
+		for (String string : sorceList) {
+			String sourceString=string;
+			string=projectPath+string.substring(7);
+			System.out.println(string);
+			System.out.println(sourceString);
+			if(string.endsWith(File.separator)){
+				FileUtil.createMultiDir(string);
+			}else{
+				FileUtil.createFile(string);
+				if(!FileUtil.isFileBlank(sourceString)){
+					List<String> sourceFile=FileUtil.readFileByLines(sourceString);
+					for (String string2 : sourceFile) {
+						FileUtil.writeFileByLine(string, string2);
+					}
+				}
+			}
+			
+		}
+		
+	}
 
-	@Override
-	public boolean canFinish() {
-		System.out.println(page0.canFlipToNextPage());
-		/*if(page0.canFlipToNextPage())
-			return true;*/
-		return this.getContainer().getCurrentPage().canFlipToNextPage();
-		//return false;
+	/** 通知其他视图或编辑器*/
+	private void informParts(String prjId, String prjName, String prjDesc) {
+	IViewPart view = this.workbench.getActiveWorkbenchWindow().getActivePage().findView(NavView.ID);
+	if (view != null) {
+		NavView v = (NavView) view;
+		TreeViewer tv = v.getTreeViewer();
+		RootNode root = (RootNode) tv.getInput();
+		if (root == null) {
+			root = new RootNode("root", "root", null);
+			ProjectNode prj = new ProjectNode(prjId, prjName, root);
+			root.add(prj);
+			tv.setInput(root);
+		} else {
+			ProjectNode prj = new ProjectNode(prjId, prjName, root);
+			root.add(prj);
+			}
+			v.getTreeViewer().refresh();
+		}
+	}
+	
+	private void throwCoreException(String message) throws CoreException {
+		IStatus status = new Status(IStatus.ERROR, "ccp", IStatus.OK, message,
+				null);
+		throw new CoreException(status);
+	}
+	
+	private void createProperties(){
+		LinkedHashMap<String,String> map=new LinkedHashMap<String, String>();
+		map.put("dbAddress", page1.getDbAddressText().getText());
+		map.put("dbInstance", page1.getDbInstanceText().getText());
+		map.put("dbPort", page1.getDbPortText().getText());
+		map.put("dbUser", page1.getDbUserText().getText());
+		map.put("dbPwd", page1.getDbPwdText().getText());
+		String properties=projectAbsPath.substring(5)+File.separator+page0.getPrjIdText().getText()+".properties";
+		System.out.println("properties path is :"+properties);
+		PropertiesUtil.rewriteProperties(properties, map);
+		
 	}
 }
+//String workspace=Platform.getInstanceLocation().getURL().getPath();

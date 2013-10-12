@@ -1,27 +1,29 @@
 package dev.wizards.newProject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 
 public class NewProjectWizardPage2 extends WizardPage{
 	private ISelection selection;
 	private Text prjCommIncludePathText;
 	private Text prjCommLibPathText;
 	private Text prjCommAopLibText;
+	private List<Object> list = new ArrayList<Object>();
+
 	public NewProjectWizardPage2(ISelection selection) {
 		super("wizardPage");
 		setTitle("新建工程");
@@ -86,7 +88,32 @@ public class NewProjectWizardPage2 extends WizardPage{
 			}
 		});
 		prjCommAopLibBtn.setText("...");
+		list.add(prjCommAopLibText);
+		list.add(prjCommIncludePathText);
+		list.add(prjCommLibPathText);
 	}
 	//更新状态
 
+	// 检测页面输入是否完成
+	@Override
+	public boolean isPageComplete() {
+		return isFieldComplete(list);
+	}
+
+	// 检测本页输入信息是否为空
+	private boolean isFieldComplete(List<Object> l) {
+		for (Object object : l) {
+			if (object instanceof Text) {
+				if (((Text) object).getText() == null
+						|| ((Text) object).getText().isEmpty())
+					return false;
+			}
+			if (object instanceof Combo) {
+				if (((Combo) object).getText() == null
+						|| ((Combo) object).getText().isEmpty())
+					return false;
+			}
+		}
+		return true;
+	}
 }
