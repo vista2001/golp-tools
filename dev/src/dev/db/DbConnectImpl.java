@@ -23,6 +23,8 @@ public class DbConnectImpl implements IDbConnect {
 	private ResultSet rs = null;
 	// 注意设置为false时，如果数据库为access，那么再关闭链接时会抛出异常
 	private boolean autoCommit = true;
+	private String username;
+	private String password;
 
 	public DbConnectImpl() {
 	}
@@ -46,13 +48,20 @@ public class DbConnectImpl implements IDbConnect {
 	public void openConn() {
 /*		Properties properties = ReadProperties.readProperties(PROPERTIES_PATH);
 		this.url = properties.getProperty("url");
-		this.driver = properties.getProperty("driver");*/
+		this.driver = properties.getProperty("driver");
 		this.url="jdbc:odbc:DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=d:\\golp.accdb";
 		this.driver="sun.jdbc.odbc.JdbcOdbcDriver";
 		try {
 			Class.forName(driver).newInstance();
 			this.conn = DriverManager.getConnection(url);
-			this.conn.setAutoCommit(autoCommit);
+			this.conn.setAutoCommit(autoCommit);*/
+		try {
+			this.url = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
+			this.driver = "oracle.jdbc.driver.OracleDriver";
+			this.username = "fapdb";
+			this.password = "fapdb";
+			Class.forName(driver).newInstance();
+			this.conn = DriverManager.getConnection(url,username,password);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -197,7 +206,7 @@ public class DbConnectImpl implements IDbConnect {
 		DbConnectImpl dbConn = DbConnFactory.dbConnCreator();
 		dbConn.openConn();
 		try {
-			rs = dbConn.retrive("select count(*) from test");
+			rs = dbConn.retrive("select count(*) from t_history_trans");
 			// dbConn.setPrepareSql("select count(*) from server where 1=?");
 			// dbConn.setPreparedInt(1, 0);
 			// rs=dbConn.retrivePrepared();
@@ -210,7 +219,7 @@ public class DbConnectImpl implements IDbConnect {
 			if (rs.next()) {
 				System.out.println(rs.getInt(1));
 			}
-			dbConn.executeExceptQuery("insert into test  values('11','aa',null)");
+			//dbConn.executeExceptQuery("insert into test  values('11','aa',null)");
 		} catch (SQLException e) {
 			//LogUtils.logError(e);
 			System.out.println("access err:" + e.getErrorCode());
