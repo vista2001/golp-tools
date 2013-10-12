@@ -12,3 +12,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: lib/ojdbc14-10.2.0.2.0.jar,
+ .
