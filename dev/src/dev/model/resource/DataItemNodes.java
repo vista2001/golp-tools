@@ -3,6 +3,7 @@ package dev.model.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.model.base.ResourceLeafNode;
 import dev.model.base.ResourceNode;
 import dev.model.base.TreeNode;
 
@@ -12,6 +13,7 @@ public class DataItemNodes extends ResourceNode{
 	
 	public DataItemNodes(String name, String id, TreeNode parent) {
 		super(name, id, parent);
+		this.children = new ArrayList<TreeNode>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -42,9 +44,7 @@ public class DataItemNodes extends ResourceNode{
 	@Override
 	public List<TreeNode> getChildren() {
 		// TODO Auto-generated method stub
-		if(this.children==null){
-			return new ArrayList<TreeNode>();
-		}
+
 		return this.children;
 	}
 
@@ -64,4 +64,9 @@ public class DataItemNodes extends ResourceNode{
 		return !this.children.isEmpty();
 	}
 	
+	public void add(ResourceLeafNode rln)
+	{
+
+		this.children.add(rln);
+	}
 }

@@ -424,6 +424,14 @@
             class="dev.commands.OpenProperty"
             commandId="dev.menu.resource.commands.openProperty">
       </handler>
+      <handler
+            class="dev.commands.NewServerHandler"
+            commandId="dev.menu.resource.commands.newServer">
+      </handler>
+      <handler
+            class="dev.commands.NewDataItemHandler"
+            commandId="dev.menu.resource.commands.newDataItem">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
