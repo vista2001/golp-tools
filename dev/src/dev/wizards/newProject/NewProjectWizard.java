@@ -57,7 +57,7 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 		page2 = new NewProjectWizardPage2(selection);
 		addPage(page0);
 		addPage(page1);
-		//addPage(page2);
+		addPage(page2);
 	}
 
 	@Override
@@ -81,15 +81,6 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 
 	@Override
 	public boolean canFinish() {
-		/*System.out.println("page0 can filpToNext :"+page0.canFlipToNextPage());
-		System.out.println("page1 can filpToNext :"+page1.canFlipToNextPage());
-		System.out.println("page2 can isPageComplete :"+page2.isPageComplete());*/
-		//IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		//System.out.println(root.getFullPath());
-		/*String workspace=Platform.getInstanceLocation().getURL().getPath();
-		System.out.println(Platform.getInstanceLocation().getURL().getPath());*/
-		//System.out.println(Platform.getBundle(Activator.PLUGIN_ID).getLocation());
-		//System.out.println(Activator.getDefault().getStateLocation());
 		boolean p0 = page0.canFlipToNextPage();
 		boolean p1 = page1.canFlipToNextPage();
 		boolean p2 = page2.isPageComplete();
@@ -103,7 +94,6 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 		DbConnectImpl dbConnImpl = new DbConnectImpl();
 		dbConnImpl.openConn();
 		try {
-			//dbConnImpl.executeExceptQuery("insert into project values('aa','aa','aa',null,null,null)");
 			String preSql="insert into project values(?,?,?,null,null,null)";
 			dbConnImpl.setPrepareSql(preSql);
 			dbConnImpl.setPreparedString(1, prjId);
@@ -131,7 +121,6 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 			System.out.println(iProject.getFullPath());
 			System.out.println(iProject.getLocation());
 		}
-	    //System.out.println("project is exist:"+project.exists());
 	    if (!project.exists())
 	        try
 	        {
@@ -217,15 +206,26 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 	
 	private void createProperties(){
 		LinkedHashMap<String,String> map=new LinkedHashMap<String, String>();
+/*		map.put("dbAddress", page1.getDbAddressText().getText());
+		map.put("dbInstance", page1.getDbInstanceText().getText());
+		map.put("dbPort", page1.getDbPortText().getText());
+		map.put("dbUser", page1.getDbUserText().getText());
+		map.put("dbPwd", page1.getDbPwdText().getText());*/
+		map.put("prjId", page0.getPrjIdText().getText());
+		map.put("prjName", page0.getPrjNameText().getText());
+		map.put("prjDesc", page0.getPrjDescText().getText());
+		map.put("dbType", page1.getDbTypeCombo().getText());
 		map.put("dbAddress", page1.getDbAddressText().getText());
 		map.put("dbInstance", page1.getDbInstanceText().getText());
 		map.put("dbPort", page1.getDbPortText().getText());
 		map.put("dbUser", page1.getDbUserText().getText());
 		map.put("dbPwd", page1.getDbPwdText().getText());
+		map.put("prjCommIncludePath", page2.getPrjCommIncludePathText().getText());
+		map.put("prjCommLibPath", page2.getPrjCommLibPathText().getText());
+		map.put("prjCommAopLib", page2.getPrjCommAopLibText().getText());
 		String properties=projectAbsPath.substring(5)+File.separator+page0.getPrjIdText().getText()+".properties";
 		System.out.println("properties path is :"+properties);
-		PropertiesUtil.rewriteProperties(properties, map);
+		PropertiesUtil.rewriteProperties1(properties, map);
 		
 	}
 }
-//String workspace=Platform.getInstanceLocation().getURL().getPath();

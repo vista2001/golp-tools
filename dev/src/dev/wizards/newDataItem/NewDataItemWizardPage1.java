@@ -30,6 +30,7 @@ public class NewDataItemWizardPage1 extends WizardPage
 	private Text dataItemlenText;
 	private Text dataItemAOPText;
 	private Combo dataItemUpProjectCombo;
+	//private Combo dataItemLenFixedCombo;
 
 	public Combo getDataItemLvLCombo()
 	{
@@ -40,6 +41,11 @@ public class NewDataItemWizardPage1 extends WizardPage
 	{
 		return dataItemTypeCombo;
 	}
+
+//	public Combo getDataItemLenFixedCombo()
+//	{
+//		return dataItemLenFixedCombo;
+//	}
 
 	public Text getDataItemlenText()
 	{
@@ -93,6 +99,14 @@ public class NewDataItemWizardPage1 extends WizardPage
 		dataItemTypeCombo.add("3-char");
 		dataItemTypeCombo.add("4-char[]");
 		dataItemTypeCombo.add("5-String");
+		
+//		Label dataItemLenFixedLabel = new Label(container, SWT.NONE);
+//		dataItemLenFixedLabel.setText("*数据是否定长：");
+		
+//		dataItemLenFixedCombo = new Combo(container, SWT.READ_ONLY);
+//		dataItemLenFixedCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+//		dataItemLenFixedCombo.add("0-是");
+//		dataItemLenFixedCombo.add("1-否");
 
 		Label dataItemlenLabel = new Label(container, SWT.NONE);
 		dataItemlenLabel.setText("*数据最大长度：");
@@ -109,7 +123,7 @@ public class NewDataItemWizardPage1 extends WizardPage
 				false, 1, 1));
 		
 		Label dataItemUpProjectLabel = new Label(container, SWT.NONE);
-		dataItemUpProjectLabel.setText("*上级工程:");
+		dataItemUpProjectLabel.setText("*所属工程:");
 		
 		dataItemUpProjectCombo = new Combo(container, SWT.READ_ONLY);
 		dataItemUpProjectCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -144,6 +158,14 @@ public class NewDataItemWizardPage1 extends WizardPage
 			}
 		});
 
+//		dataItemLenFixedCombo.addModifyListener(new ModifyListener()
+//		{
+//			public void modifyText(ModifyEvent e)
+//			{
+//				dialogChanged();
+//			}
+//		});
+		
 		dataItemlenText.addModifyListener(new ModifyListener()
 		{
 			public void modifyText(ModifyEvent e)
@@ -172,6 +194,7 @@ public class NewDataItemWizardPage1 extends WizardPage
 	{
 		if (getDataItemLvLCombo().getText().length() == 0
 				|| getDataItemTypeCombo().getText().length() == 0
+//				|| getDataItemLenFixedCombo().getText().length() == 0
 				|| getDataItemlenText().getText().length() == 0
 				|| getDataItemUpProjectCombo().getText().length() == 0)
 			return false;

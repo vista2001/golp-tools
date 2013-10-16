@@ -432,6 +432,22 @@
             class="dev.commands.NewDataItemHandler"
             commandId="dev.menu.resource.commands.newDataItem">
       </handler>
+      <handler
+            class="dev.commands.NewRetCodeHandler"
+            commandId="dev.menu.resource.commands.newRetCode">
+      </handler>
+      <handler
+            class="dev.commands.NewAopHandler"
+            commandId="dev.menu.resource.commands.newAop">
+      </handler>
+      <handler
+            class="dev.commands.NewTradeHandler"
+            commandId="dev.menu.resource.commands.newTrade">
+      </handler>
+      <handler
+            class="dev.commands.NewDllHandler"
+            commandId="dev.menu.resource.commands.newDll">
+ 	  </handler>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
@@ -532,6 +548,36 @@
          <enabledWhen>
             <instanceof
                   value="dev.model.provider.TreeObject">
+            </instanceof>
+         </enabledWhen>
+      </page>
+      <page
+            class="dev.properties.PrjPropertyPage1"
+            id="dev.properties.PrjPropertyPage1"
+            name="工程常规属性">
+         <enabledWhen>
+            <instanceof
+                  value="dev.model.resource.ProjectNode">
+            </instanceof>
+         </enabledWhen>
+      </page>
+      <page
+            class="dev.properties.PrjPropertyPage2"
+            id="dev.properties.PrjPropertyPage2"
+            name="工程数据库属性">
+         <enabledWhen>
+            <instanceof
+                  value="dev.model.resource.ProjectNode">
+            </instanceof>
+         </enabledWhen>
+      </page>
+      <page
+            class="dev.properties.PrjPropertyPage3"
+            id="dev.properties.PrjPropertyPage3"
+            name="工程路径属性">
+         <enabledWhen>
+            <instanceof
+                  value="dev.model.resource.ProjectNode">
             </instanceof>
          </enabledWhen>
       </page>

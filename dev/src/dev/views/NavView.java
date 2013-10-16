@@ -34,6 +34,7 @@ import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
 import dev.Activator;
+import dev.actions.prjPropertyAction;
 import dev.db.DbConnFactory;
 import dev.db.DbConnectImpl;
 import dev.editors.AopEditor;
@@ -94,13 +95,25 @@ public class NavView extends ViewPart {
 	}
 
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		/*MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
 				NavView.this.fillContextMenu(manager);
 			}
 		});
+		Menu menu = menuMgr.createContextMenu(viewer.getControl());
+		viewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, viewer);*/
+		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		menuMgr.add(expandAllAction);
+		menuMgr.add(collapseAllAction);
+		menuMgr.add(new Separator());
+		drillDownAdapter.addNavigationActions(menuMgr);
+		menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		menuMgr.add(new Separator());
+		menuMgr.add(new prjPropertyAction(getSite().getWorkbenchWindow()));//rxy
+		getSite().setSelectionProvider(viewer);
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -118,14 +131,14 @@ public class NavView extends ViewPart {
 		manager.add(collapseAllAction);
 	}
 
-	private void fillContextMenu(IMenuManager manager) {
+/*	private void fillContextMenu(IMenuManager manager) {
 		manager.add(expandAllAction);
 		manager.add(collapseAllAction);
 		manager.add(new Separator());
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	}
+	}*/
 
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(expandAllAction);

@@ -1,4 +1,4 @@
-package dev.wizards.newDataItem;
+package dev.wizards.newDll;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -7,7 +7,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -16,29 +15,24 @@ import dev.db.DbConnectImpl;
 import dev.model.base.ResourceLeafNode;
 import dev.model.base.RootNode;
 import dev.model.base.TreeNode;
-import dev.model.resource.DataItemNodes;
+import dev.model.resource.DllNodes;
 import dev.model.resource.ProjectNode;
-import dev.model.resource.ServerNodes;
 import dev.views.NavView;
 
-public class NewDataItemWizard extends Wizard implements INewWizard
+public class NewDllWizard extends Wizard implements INewWizard
 {
 	private ISelection selection;
 	private IWorkbench workbench;
-
-	private NewDataItemWizardPage0 page0;
-	private NewDataItemWizardPage1 page1;
-
-	private String dataItemId = "";
-	private String dataItemName = "";
-	private String dataItemDesc = "";
-	private String dataItemLvL = "";
-	private String dataItemType = "";
-	private String dataItemLenFixed = "";
-	private int dataItemlen = 0;
-	private String dataItemAOP = "";
-	private String dataItemUpProject;
-
+	
+	private NewDllWizardPage0 page0;
+	private NewDllWizardPage1 page1;
+	
+	private String dllId = "";
+	private String dllName = "";
+	private String dllDesc = "";
+	private String dllType = "";
+	private String dllUpProject = "";
+	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection)
 	{
@@ -46,11 +40,11 @@ public class NewDataItemWizard extends Wizard implements INewWizard
 		this.selection = selection;
 		this.workbench = workbench;
 	}
-
+	
 	public void addPages()
 	{
-		page0 = new NewDataItemWizardPage0(selection);
-		page1 = new NewDataItemWizardPage1(selection);
+		page0 = new NewDllWizardPage0(selection);
+		page1 = new NewDllWizardPage1(selection);
 
 		addPage(page0);
 		addPage(page1);
@@ -61,44 +55,35 @@ public class NewDataItemWizard extends Wizard implements INewWizard
 	{
 		// TODO 自动生成的方法存根
 		getData();
-		doFinish(dataItemId, dataItemName, dataItemDesc, dataItemLvL, dataItemType, dataItemLenFixed, dataItemlen, dataItemAOP);
+		doFinish(dllId, dllName, dllDesc, dllType);
 		updateNavView();
 		return true;
 	}
-
+	
 	//获取该新建向导中所设置的数据
 	private void getData()
 	{
-		dataItemId = page0.getDataItemIdText().getText();
-		dataItemName = page0.getDataItemNameText().getText();
-		dataItemDesc = page0.getDataItemDescText().getText();
-		dataItemLvL = page1.getDataItemLvLCombo().getText();
-		dataItemType = page1.getDataItemTypeCombo().getText().substring(0, 1);
-//		dataItemLenFixed = page1.getDataItemLenFixedCombo().getText().substring(0, 1);
-		dataItemlen = Integer.parseInt(page1.getDataItemlenText().getText());
-		dataItemAOP = page1.getDataItemAOPText().getText();
-		dataItemUpProject = page1.getDataItemUpProjectCombo().getText();
+		dllId = page0.getDllIdText().getText();
+		dllName = page0.getDllNameText().getText();
+		dllDesc = page0.getDllDescText().getText();
+		dllType = page1.getDllTypeCombo().getText();
+		dllUpProject = page1.getDllUpProjectCombo().getText();
 	}
-
+	
 	// 将从新建向导中得到的数据写入数据库
-	private void doFinish(String dataItemId, String dataItemName,
-			String dataItemDesc, String dataItemLvL, String dataItemType,
-			String dataItemLenFixed, int dataItemlen, String dataItemAOP)
+	private void doFinish(String dllId, String dllName,
+			String dllDesc, String dllType)
 	{
 		DbConnectImpl dbConnImpl = new DbConnectImpl();
 		dbConnImpl.openConn();
-		String preSql = "insert into dataitem values(?,?,?,?,?,?,?,?)";
+		String preSql = "insert into dll values(?,?,?,?)";
 		try
 		{
 			dbConnImpl.setPrepareSql(preSql);
-			dbConnImpl.setPreparedString(1, dataItemId);
-			dbConnImpl.setPreparedString(2, dataItemName);
-			dbConnImpl.setPreparedString(3, dataItemDesc);
-			dbConnImpl.setPreparedString(4, dataItemLvL);
-			dbConnImpl.setPreparedString(5, dataItemType);
-			dbConnImpl.setPreparedString(6, null);
-			dbConnImpl.setPreparedInt(7, dataItemlen);
-			dbConnImpl.setPreparedString(8, dataItemAOP);
+			dbConnImpl.setPreparedString(1, dllId);
+			dbConnImpl.setPreparedString(2, dllName);
+			dbConnImpl.setPreparedString(3, dllDesc);
+			dbConnImpl.setPreparedString(4, dllType);
 			dbConnImpl.executeExceptPreparedQuery();
 
 		} 
@@ -119,7 +104,6 @@ public class NewDataItemWizard extends Wizard implements INewWizard
 			}
 		}
 	}
-	
 	//更新左侧导航视图
 	private void updateNavView()
 	{
@@ -134,8 +118,9 @@ public class NewDataItemWizard extends Wizard implements INewWizard
 			int index;
 			for (index = 0; index < root.getChildren().size(); index++)
 			{
-				if (root.getChildren().get(index).getName().equals(dataItemUpProject))
+				if (root.getChildren().get(index).getName().equals(dllUpProject)){
 					break;
+				}
 			}
 			ProjectNode projectNode = (ProjectNode) root.getChildren().get(
 					index);
@@ -145,13 +130,13 @@ public class NewDataItemWizard extends Wizard implements INewWizard
 			int i;
 			for (i = 0; i < list.size(); i++)
 			{
-				if (list.get(i).getName().equals("数据项"))
+				if (list.get(i).getName().equals("动态库"))
 					break;
 			}
 			//System.out.println(list.get(i).getName());
-			ResourceLeafNode resourceLeafNode = new ResourceLeafNode(dataItemName,
-					dataItemId, list.get(i));
-			((DataItemNodes) list.get(i)).add(resourceLeafNode);
+			ResourceLeafNode resourceLeafNode = new ResourceLeafNode(dllName,
+					dllId, list.get(i));
+			((DllNodes) list.get(i)).add(resourceLeafNode);
 			tv.refresh();
 		}
 	}

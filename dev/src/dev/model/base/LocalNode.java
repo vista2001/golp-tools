@@ -3,13 +3,12 @@ package dev.model.base;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.model.base.TreeNode;
+import dev.model.resource.ProjectNode;
 
 
-public class ResourceNode extends TreeNode{
+public class LocalNode extends TreeNode{
 
-	
-	public ResourceNode(String name, String id, TreeNode parent) {
+	public LocalNode(String name, String id, TreeNode parent) {
 		super(name, id, parent);
 		// TODO Auto-generated constructor stub
 	}
@@ -52,15 +51,20 @@ public class ResourceNode extends TreeNode{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public void add(ProjectNode prj){
+		if(children==null){
+			children=new ArrayList<TreeNode>();
+			children.add(prj);
+		}else{
+			children.add(prj);
+		}
+	}
 
 	@Override
 	public boolean hasChildren() {
 		// TODO Auto-generated method stub
-		//System.out.println("this children is="+this.children);
-		if(this.children==null||this.children.isEmpty()){
-			return false;
-		}
+		//System.out.println("root is empty="+this.children.isEmpty());
 		return !this.children.isEmpty();
 	}
-	
 }

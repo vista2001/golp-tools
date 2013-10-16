@@ -22,6 +22,8 @@ public class NewProjectWizardPage1 extends WizardPage {
 	private Text dbInstanceText;
 	private Text dbUserText;
 	private Text dbPwdText;
+	private Combo dbTypeCombo;
+	
 	private List<Object> list = new ArrayList<Object>();
 
 	public ISelection getSelection() {
@@ -48,6 +50,10 @@ public class NewProjectWizardPage1 extends WizardPage {
 		return dbPwdText;
 	}
 
+	public Combo getDbTypeCombo() {
+		return dbTypeCombo;
+	}
+
 	public NewProjectWizardPage1(ISelection selection) {
 		super("wizardPage");
 		setTitle("新建工程");
@@ -66,7 +72,7 @@ public class NewProjectWizardPage1 extends WizardPage {
 		dbTypeLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		dbTypeLabel.setText("数据库类型*");
 
-		Combo dbTypeCombo = new Combo(container, SWT.NONE);
+		dbTypeCombo = new Combo(container, SWT.READ_ONLY);
 		dbTypeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		dbTypeCombo.setItems(new String[] { "oracle" });
 

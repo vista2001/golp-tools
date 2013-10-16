@@ -56,7 +56,6 @@ public class TFMNodes extends ResourceNode{
 
 	@Override
 	public boolean hasChildren() {
-		// TODO Auto-generated method stub
 		System.out.println("this children is="+this.children);
 		if(this.children==null||this.children.isEmpty()){
 			return false;

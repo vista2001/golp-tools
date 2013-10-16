@@ -9,6 +9,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.jface.preference.PreferenceStore;
+
 
 /**
  * 读写Properties文件
@@ -60,6 +62,58 @@ public class PropertiesUtil {
 			String line = key + "=" + map.get(key);
 			FileUtil.writeFileByLine(path, line);
 		}
+	}
+	
+	public static void rewriteProperties1(String path,LinkedHashMap<String, String> map) {
+
+		// 写文件
+		FileUtil.cleanFile(path);
+		// 遍历要输入的内容
+		PreferenceStore ps = new PreferenceStore(path);
+//		try
+//		{
+//			ps.load();
+//		} catch (IOException e)
+//		{
+//			// TODO 自动生成的 catch 块
+//			e.printStackTrace();
+//		}
+//		for (String key : map.keySet()) 
+//		{
+//			
+//			ps.setValue(key, map.get(key));
+//			
+//			String line = key + "=" + map.get(key);
+//			FileUtil.writeFileByLine(path, line);
+//		}
+//		try
+//		{
+//			ps.save();
+//		} catch (IOException e)
+//		{
+//			// TODO 自动生成的 catch 块
+//			e.printStackTrace();
+//		}
+		
+		try
+		{
+			ps.load();
+			for (String key : map.keySet()) 
+			{
+				
+				ps.setValue(key, map.get(key));
+				
+				String line = key + "=" + map.get(key);
+				FileUtil.writeFileByLine(path, line);
+			}
+			ps.save();
+		} 
+		catch (IOException e)
+		{
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+
 	}
 
 	/** 遍历properties，放入到一个List中，

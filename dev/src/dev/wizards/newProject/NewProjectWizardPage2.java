@@ -22,6 +22,19 @@ public class NewProjectWizardPage2 extends WizardPage{
 	private Text prjCommIncludePathText;
 	private Text prjCommLibPathText;
 	private Text prjCommAopLibText;
+	
+	public Text getPrjCommIncludePathText() {
+		return prjCommIncludePathText;
+	}
+
+	public Text getPrjCommLibPathText() {
+		return prjCommLibPathText;
+	}
+
+	public Text getPrjCommAopLibText() {
+		return prjCommAopLibText;
+	}
+
 	private List<Object> list = new ArrayList<Object>();
 
 	public NewProjectWizardPage2(ISelection selection) {

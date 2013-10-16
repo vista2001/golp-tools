@@ -67,7 +67,7 @@ public class NewServerWizard extends Wizard implements INewWizard
 		// TODO 自动生成的方法存根	
 		getData();
 		doFinish(svrId, svrName, svrDesc, serverSpeclib, serverSpecAopDlls,
-				upProject, callBackSource, othFunSrource);
+				callBackSource, othFunSrource);
 		updateNavView();
 		return true;
 	}
@@ -105,12 +105,12 @@ public class NewServerWizard extends Wizard implements INewWizard
 	}
 	//将从新建向导中得到的数据写入数据库
 	private void doFinish(String svrId, String svrName, String svrDesc,
-			String serverSpeclib, String serverSpecAopDlls, String upProject,
+			String serverSpeclib, String serverSpecAopDlls,
 			String callBackSource, String othFunSrource)
 	{
 		DbConnectImpl dbConnImpl = new DbConnectImpl();
 		dbConnImpl.openConn();
-		String preSql = "insert into server values(?,?,?,?,?,?,?,?)";
+		String preSql = "insert into server values(?,?,?,?,?,?,?)";
 		try
 		{
 			dbConnImpl.setPrepareSql(preSql);
@@ -121,7 +121,6 @@ public class NewServerWizard extends Wizard implements INewWizard
 			dbConnImpl.setPreparedString(5, serverSpecAopDlls);
 			dbConnImpl.setPreparedString(6, callBackSource);
 			dbConnImpl.setPreparedString(7, othFunSrource);
-			dbConnImpl.setPreparedString(8, upProject);
 			dbConnImpl.executeExceptPreparedQuery();
 
 		} catch (SQLException e1)

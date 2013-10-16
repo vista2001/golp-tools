@@ -65,7 +65,7 @@ public class ProjectNode extends ResourceNode{
 
 	@Override
 	public boolean hasChildren() {
-		System.out.println("this children is"+ this.children);
+		//System.out.println("this children is"+ this.children);
 		if(this.children==null||this.children.isEmpty()){
 			return false;
 		}

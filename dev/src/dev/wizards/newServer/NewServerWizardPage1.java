@@ -142,7 +142,7 @@ public class NewServerWizardPage1 extends WizardPage
 		});
 
 		Label upProjectLabel = new Label(container, SWT.NONE);
-		upProjectLabel.setText("*上级工程：");
+		upProjectLabel.setText("*所属工程：");
 
 		upProjectCombo = new Combo(container, SWT.DROP_DOWN | SWT.READ_ONLY);
 		upProjectCombo.addModifyListener(new ModifyListener()
