@@ -11,7 +11,7 @@ public class ResourceNode extends TreeNode{
 	
 	public ResourceNode(String name, String id, TreeNode parent) {
 		super(name, id, parent);
-		// TODO Auto-generated constructor stub
+		this.children=new ArrayList<TreeNode>();
 	}
 
 	@Override
@@ -34,13 +34,11 @@ public class ResourceNode extends TreeNode{
 
 	@Override
 	public TreeNode getRootProject() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.parent;
 	}
 
 	@Override
 	public List<TreeNode> getChildren() {
-		// TODO Auto-generated method stub
 		if(this.children==null){
 			return new ArrayList<TreeNode>();
 		}
@@ -61,6 +59,11 @@ public class ResourceNode extends TreeNode{
 			return false;
 		}
 		return !this.children.isEmpty();
+	}
+
+	@Override
+	public void removeAllChildren() {
+		this.children.clear();
 	}
 	
 }

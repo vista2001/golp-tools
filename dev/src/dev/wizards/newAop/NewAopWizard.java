@@ -83,9 +83,9 @@ public class NewAopWizard extends Wizard implements INewWizard
 			aopErrRecover= "1";
 		}
 		aopUpDll=page1.getUpDllCombo().getText();
-		aopUpProject = page1.getUpProjectCombo().getText();
-		aopLvL = page1.getAopLvlCombo().getText();
-		String lvltmp=page1.getAopLvlCombo().getText();
+		aopUpProject = page0.getUpProjectCombo().getText();
+		aopLvL = page0.getAopLvlCombo().getText();
+		String lvltmp=page0.getAopLvlCombo().getText();
 		if(lvltmp.equals("GOLP")){
 			aopLvL = "0";
 		} else {
@@ -147,7 +147,6 @@ public class NewAopWizard extends Wizard implements INewWizard
 			for (index = 0; index < root.getChildren().size(); index++){
 				if (root.getChildren().get(index).getName().equals(aopUpProject)){
 					break;
-					//System.out.println("up project is :"+root.getChildren().get(index).getName().equals(aopUpProject));
 				}
 			}
 			ProjectNode projectNode = (ProjectNode) root.getChildren().get(index);

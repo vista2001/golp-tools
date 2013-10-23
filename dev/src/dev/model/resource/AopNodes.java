@@ -33,7 +33,7 @@ public class AopNodes extends ResourceNode{
 
 	@Override
 	public TreeNode getRootProject() {
-		return null;
+		return this.parent;
 	}
 
 	@Override

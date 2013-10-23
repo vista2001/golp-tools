@@ -33,7 +33,7 @@ public class DataItemNodes extends ResourceNode{
 
 	@Override
 	public TreeNode getRootProject() {
-		return null;
+		return this.parent;
 	}
 
 	@Override
@@ -49,7 +49,6 @@ public class DataItemNodes extends ResourceNode{
 
 	@Override
 	public boolean hasChildren() {
-		//System.out.println("this children is="+this.children);
 		if(this.children==null||this.children.isEmpty()){
 			return false;
 		}

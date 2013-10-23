@@ -25,13 +25,15 @@ public class NewDllWizard extends Wizard implements INewWizard
 	private IWorkbench workbench;
 	
 	private NewDllWizardPage0 page0;
-	private NewDllWizardPage1 page1;
+//	private NewDllWizardPage1 page1;
 	
+	private String dllUpProject = "";
+	private String dllLevel = "";
 	private String dllId = "";
 	private String dllName = "";
 	private String dllDesc = "";
 	private String dllType = "";
-	private String dllUpProject = "";
+	
 	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection)
@@ -44,10 +46,10 @@ public class NewDllWizard extends Wizard implements INewWizard
 	public void addPages()
 	{
 		page0 = new NewDllWizardPage0(selection);
-		page1 = new NewDllWizardPage1(selection);
+//		page1 = new NewDllWizardPage1(selection);
 
 		addPage(page0);
-		addPage(page1);
+//		addPage(page1);
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class NewDllWizard extends Wizard implements INewWizard
 	{
 		// TODO 自动生成的方法存根
 		getData();
-		doFinish(dllId, dllName, dllDesc, dllType);
+		doFinish(dllId, dllName, dllDesc, dllType,dllLevel,dllUpProject);
 		updateNavView();
 		return true;
 	}
@@ -63,20 +65,22 @@ public class NewDllWizard extends Wizard implements INewWizard
 	//获取该新建向导中所设置的数据
 	private void getData()
 	{
+		dllUpProject = page0.getDllUpProjectCombo().getText();
+		dllLevel = page0.getDllLevelCombo().getText().substring(0, 1);
 		dllId = page0.getDllIdText().getText();
 		dllName = page0.getDllNameText().getText();
 		dllDesc = page0.getDllDescText().getText();
-		dllType = page1.getDllTypeCombo().getText();
-		dllUpProject = page1.getDllUpProjectCombo().getText();
+		dllType = page0.getDllTypeCombo().getText();
+		
 	}
 	
 	// 将从新建向导中得到的数据写入数据库
 	private void doFinish(String dllId, String dllName,
-			String dllDesc, String dllType)
+			String dllDesc, String dllType,String dllLevel, String dllUpProject)
 	{
 		DbConnectImpl dbConnImpl = new DbConnectImpl();
 		dbConnImpl.openConn();
-		String preSql = "insert into dll values(?,?,?,?)";
+		String preSql = "insert into aopdll values(?,?,?,?,?,?)";
 		try
 		{
 			dbConnImpl.setPrepareSql(preSql);
@@ -84,6 +88,8 @@ public class NewDllWizard extends Wizard implements INewWizard
 			dbConnImpl.setPreparedString(2, dllName);
 			dbConnImpl.setPreparedString(3, dllDesc);
 			dbConnImpl.setPreparedString(4, dllType);
+			dbConnImpl.setPreparedString(5, dllLevel);
+			dbConnImpl.setPreparedString(6, dllUpProject);
 			dbConnImpl.executeExceptPreparedQuery();
 
 		} 
@@ -145,7 +151,7 @@ public class NewDllWizard extends Wizard implements INewWizard
 	public boolean canFinish()
 	{
 		// TODO 自动生成的方法存根
-		return page0.canFlipToNextPage() && page1.validInput();
+		return page0.validInput();
 
 	}
 }

@@ -3,10 +3,6 @@ package dev.wizards.newTrade;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -30,7 +26,6 @@ import org.eclipse.swt.widgets.Button;
 
 public class NewTradeWizardPage1 extends WizardPage{
 	private ISelection selection;
-	private Combo tradeUpProjectCombo;
 	private Combo tradeUpServerCombo;
 	private Combo tradeModelCombo;
 	private Combo tradeServerModelCombo;
@@ -39,11 +34,6 @@ public class NewTradeWizardPage1 extends WizardPage{
 	private Text tradeCallServiceText;
 	private Text tradePreConditionText;
 	private Text tradePostConditionText;
-
-	public Combo getTradeUpProjectCombo() {
-		return tradeUpProjectCombo;
-	}
-
 
 	public Combo getTradeUpServerCombo() {
 		return tradeUpServerCombo;
@@ -99,14 +89,7 @@ public class NewTradeWizardPage1 extends WizardPage{
 		Composite container = new Composite(parent, SWT.NULL);
 		setControl(container);
 		container.setLayout(new GridLayout(3, false));
-		
-		Label tradeUpProjectLabel = new Label(container, SWT.NONE);
-		tradeUpProjectLabel.setText("*所属工程");
-		
-		tradeUpProjectCombo = new Combo(container, SWT.READ_ONLY);
-		tradeUpProjectCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		new Label(container, SWT.NONE);
-		
+
 		Label tradeUpServerLabel = new Label(container, SWT.NONE);
 		tradeUpServerLabel.setText("*所属服务程序");
 		
@@ -259,13 +242,6 @@ public class NewTradeWizardPage1 extends WizardPage{
 		return true;
 	}
 	private void initData(){
-		// 初始化所属工程内容
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IWorkspaceRoot prjRoot = workspace.getRoot();
-		IProject[] projects = prjRoot.getProjects();
-		for (IProject iProject : projects) {
-			tradeUpProjectCombo.add(iProject.getName());
-		}
 		// 初始化所属服务程序内容
 		DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
 		dbConnectImpl.openConn();

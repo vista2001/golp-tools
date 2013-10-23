@@ -7,71 +7,53 @@ import dev.model.base.ResourceLeafNode;
 import dev.model.base.ResourceNode;
 import dev.model.base.TreeNode;
 
-public class ServerNodes extends ResourceNode
-{
+public class ServerNodes extends ResourceNode {
 
-	public ServerNodes(String name, String id, TreeNode parent)
-	{
+	public ServerNodes(String name, String id, TreeNode parent) {
 		super(name, id, parent);
 		this.children = new ArrayList<TreeNode>();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public String getName()
-	{
-		// TODO Auto-generated method stub
+	public String getName() {
 		return this.name;
 	}
 
 	@Override
-	public String getId()
-	{
-		// TODO Auto-generated method stub
+	public String getId() {
 		return this.id;
 	}
 
 	@Override
-	public TreeNode getParent()
-	{
-		// TODO Auto-generated method stub
+	public TreeNode getParent() {
 		return this.parent;
 	}
 
 	@Override
-	public TreeNode getRootProject()
-	{
-		// TODO Auto-generated method stub
-		return null;
+	public TreeNode getRootProject() {
+		return this.parent;
 	}
 
 	@Override
-	public List<TreeNode> getChildren()
-	{
-		// TODO Auto-generated method stub
+	public List<TreeNode> getChildren() {
 		return this.children;
 	}
 
 	@Override
-	public Object getAdapter(Class adapter)
-	{
+	public Object getAdapter(Class adapter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean hasChildren()
-	{
-		//System.out.println("this children is=" + this.children);
-		if (this.children == null || this.children.isEmpty())
-		{
+	public boolean hasChildren() {
+		if (this.children == null || this.children.isEmpty()) {
 			return false;
 		}
 		return !this.children.isEmpty();
 	}
 
-	public void add(ResourceLeafNode rln)
-	{
+	public void add(ResourceLeafNode rln) {
 		children.add(rln);
 	}
 }

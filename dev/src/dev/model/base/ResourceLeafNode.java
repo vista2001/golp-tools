@@ -26,13 +26,13 @@ public class ResourceLeafNode extends TreeNode{
 	@Override
 	public TreeNode getParent() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.parent;
 	}
 
 	@Override
 	public TreeNode getRootProject() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.parent.getRootProject();
 	}
 
 	@Override
@@ -51,6 +51,12 @@ public class ResourceLeafNode extends TreeNode{
 	public Object getAdapter(Class adapter) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void removeAllChildren() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

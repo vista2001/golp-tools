@@ -1,9 +1,8 @@
 package dev.wizards.newServer;
 
-import java.util.List;
-
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -12,6 +11,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,33 +32,25 @@ import org.eclipse.swt.events.VerifyEvent;
 public class NewServerWizardPage1 extends WizardPage
 {
 	private ISelection selection;
-	private Text serverSpeclibText;
-	private Text serverSpecAopDllsText;
-	private Combo upProjectCombo;
+	private Text serverSpeclibPathText;
+	private List serverSpeclibPathList;
+	private Button delButton;
+	private Button upButton;
+	private Button downButton;
 
 	public ISelection getSelection()
 	{
 		return selection;
 	}
 
-	public Text getServerSpeclibText()
+	public List getServerSpeclibPathList()
 	{
-		return serverSpeclibText;
-	}
-
-	public Text getServerSpecAopDllsText()
-	{
-		return serverSpecAopDllsText;
-	}
-
-	public Combo getUpProjectCombo()
-	{
-		return upProjectCombo;
+		return serverSpeclibPathList;
 	}
 
 	public NewServerWizardPage1(ISelection selection)
 	{
-		super("NewServerWizardPage0");
+		super("NewServerWizardPage1");
 		setTitle("新建服务程序向导");
 		setDescription("这个向导将指导你完成GOLP服务程序的创建");
 		this.selection = selection;
@@ -72,121 +64,161 @@ public class NewServerWizardPage1 extends WizardPage
 		setControl(container);
 		container.setLayout(new GridLayout(3, false));
 
-		Label serverSpeclibLabel = new Label(container, SWT.NONE);
-		serverSpeclibLabel.setText("*额外的lib库依赖：");
+		Label serverSpeclibPathLabel = new Label(container, SWT.NONE);
+		serverSpeclibPathLabel.setText("服务程序个性依赖库路径：");
 
-		serverSpeclibText = new Text(container, SWT.BORDER);
-		serverSpeclibText.addModifyListener(new ModifyListener()
-		{
-			public void modifyText(ModifyEvent e)
-			{
-				dialogChanged();
-			}
-		});
-		serverSpeclibText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+		serverSpeclibPathText = new Text(container, SWT.BORDER);
+		serverSpeclibPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
 
-		Button serverSpeclibButton = new Button(container, SWT.NONE);
-		GridData gd_serverSpeclibButton = new GridData(SWT.LEFT, SWT.CENTER,
-				false, false, 1, 1);
-		gd_serverSpeclibButton.widthHint = 60;
-		serverSpeclibButton.setLayoutData(gd_serverSpeclibButton);
-		serverSpeclibButton.setText("选择");
-		serverSpeclibButton.addSelectionListener(new SelectionAdapter()
+		Button addButton = new Button(container, SWT.NONE);
+		GridData gd_addButton = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
+		gd_addButton.widthHint = 60;
+		addButton.setLayoutData(gd_addButton);
+		addButton.setText("添加");
+		addButton.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				System.out.println(serverSpeclibText.getText().length());
-				DirectoryDialog dialog = new DirectoryDialog(getShell());
-				dialog.setMessage("请选择额外的lib库依赖的目录");
-				dialog.setText("选择目录");
-				dialog.setFilterPath("C:\\");
-				serverSpeclibText.setText(dialog.open());
+				if (!serverSpeclibPathText.getText().isEmpty())
+				{
+					
+					serverSpeclibPathList.add(serverSpeclibPathText.getText());
+					serverSpeclibPathText.setText("");
+					dialogChanged();
+				}
 			}
 		});
-
-		Label serverSpecAopDllsLabel = new Label(container, SWT.NONE);
-		serverSpecAopDllsLabel
-				.setText("*个性化的原子交易库依赖：");
-
-		serverSpecAopDllsText = new Text(container, SWT.BORDER);
-		serverSpecAopDllsText.addModifyListener(new ModifyListener()
-		{
-			public void modifyText(ModifyEvent e)
-			{
-				dialogChanged();
-			}
-		});
-		serverSpecAopDllsText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
-
-		Button serverSpecAopDllsButton = new Button(container, SWT.NONE);
-		GridData gd_serverSpecAopDllsButton = new GridData(SWT.LEFT,
-				SWT.CENTER, false, false, 1, 1);
-		gd_serverSpecAopDllsButton.widthHint = 60;
-		serverSpecAopDllsButton.setLayoutData(gd_serverSpecAopDllsButton);
-		serverSpecAopDllsButton.setText("选择");
-
-		serverSpecAopDllsButton.addSelectionListener(new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				DirectoryDialog dialog = new DirectoryDialog(getShell());
-				dialog.setMessage("请选择个性化的原子交易库依赖的目录");
-				dialog.setText("选择目录");
-				dialog.setFilterPath("C:\\");
-				serverSpecAopDllsText.setText(dialog.open());
-			}
-		});
-
-		Label upProjectLabel = new Label(container, SWT.NONE);
-		upProjectLabel.setText("*所属工程：");
-
-		upProjectCombo = new Combo(container, SWT.DROP_DOWN | SWT.READ_ONLY);
-		upProjectCombo.addModifyListener(new ModifyListener()
-		{
-			public void modifyText(ModifyEvent e)
-			{
-				dialogChanged();
-			}
-		});
-		upProjectCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1));
 		new Label(container, SWT.NONE);
-		IViewPart viewPart = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage()
-				.findView(NavView.ID);
-		if (viewPart != null)
+
+		serverSpeclibPathList = new List(container, SWT.BORDER | SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.MULTI);
+		serverSpeclibPathList.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+				true, true, 1, 3));
+		serverSpeclibPathList.addSelectionListener(new SelectionAdapter()
 		{
-			NavView v = (NavView) viewPart;
-			TreeViewer treeViewer = v.getTreeViewer();
-			RootNode root = (RootNode) treeViewer.getInput();
-			List<TreeNode> projectNodes = root.getChildren();
-			for (TreeNode treeNode : projectNodes)
+			@Override
+			public void widgetSelected(SelectionEvent e)
 			{
-				upProjectCombo.add(treeNode.getName());
+				if (serverSpeclibPathList.getSelectionIndices().length > 0)
+				{
+					delButton.setEnabled(true);
+					if (serverSpeclibPathList.getSelectionIndices().length == 1)
+					{
+						upButton.setEnabled(true);
+						downButton.setEnabled(true);
+					}
+					else
+					{
+						upButton.setEnabled(false);
+						downButton.setEnabled(false);
+					}
+				}
 			}
-		}
+		});
+
+		delButton = new Button(container, SWT.NONE);
+		delButton.setEnabled(false);
+		GridData gd_delButton = new GridData(SWT.LEFT, SWT.TOP, false, false,
+				1, 1);
+		gd_delButton.widthHint = 60;
+		delButton.setLayoutData(gd_delButton);
+		delButton.setText("移除");
+		new Label(container, SWT.NONE);
+
+		delButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				int[] indices = serverSpeclibPathList.getSelectionIndices();
+				serverSpeclibPathList.remove(indices);
+				delButton.setEnabled(false);
+				upButton.setEnabled(false);
+				downButton.setEnabled(false);
+				dialogChanged();
+			}
+		});
+
+		upButton = new Button(container, SWT.NONE);
+		upButton.setEnabled(false);
+		GridData gd_upButton = new GridData(SWT.LEFT, SWT.TOP, false, false, 1,
+				1);
+		gd_upButton.widthHint = 60;
+		upButton.setLayoutData(gd_upButton);
+		upButton.setText("上移");
+		new Label(container, SWT.NONE);
+		upButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				int index = serverSpeclibPathList.getSelectionIndex();
+				if(index > 0)
+				{
+					String tmp = serverSpeclibPathList.getItem(index);
+					serverSpeclibPathList.setItem(index, serverSpeclibPathList.getItem(index-1));
+					serverSpeclibPathList.setItem(index-1, tmp);
+					serverSpeclibPathList.setSelection(index-1);
+				}
+			}
+		});
+
+		downButton = new Button(container, SWT.NONE);
+		downButton.setEnabled(false);
+		GridData gd_downButton = new GridData(SWT.LEFT, SWT.TOP, false, false,
+				1, 1);
+		gd_downButton.widthHint = 60;
+		downButton.setLayoutData(gd_downButton);
+		downButton.setText("下移");
+		downButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				int index = serverSpeclibPathList.getSelectionIndex();
+				if(index < serverSpeclibPathList.getItemCount()-1)
+				{
+					String tmp = serverSpeclibPathList.getItem(index);
+					serverSpeclibPathList.setItem(index, serverSpeclibPathList.getItem(index+1));
+					serverSpeclibPathList.setItem(index+1, tmp);
+					serverSpeclibPathList.setSelection(index+1);
+				}
+			}
+		});
+
 	}
-	//此处虽设置为true，但还是会调用下边的canFlipToNextPage()方法
+
+
+	// 此处虽设置为true，但还是会调用下边的canFlipToNextPage()方法
 	private void dialogChanged()
 	{
 		setPageComplete(true);
 	}
-
 	@Override
 	public boolean canFlipToNextPage()
 	{
-
-		// System.out.println(getServerSpeclibText().getText().length());
-		if (getServerSpeclibText().getText().length() == 0
-				|| getServerSpecAopDllsText().getText().length() == 0
-				|| getUpProjectCombo().getText().length() == 0)
-			return false;
 		return true;
 
 	}
+
+	@Override
+	public IWizardPage getNextPage()
+	{
+		// TODO 自动生成的方法存根
+		if(serverSpeclibPathList.getItemCount() > 0)
+		{
+			return super.getNextPage();
+		}
+		else
+		{
+			return getWizard().getPage("NewServerWizardPage3");
+		}
+				
+		
+	}
+	
 
 }

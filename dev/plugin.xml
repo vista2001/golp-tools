@@ -43,25 +43,9 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="dev.editors.AopEditor"
-            contributorClass="dev.editors.AopEditorContribute"
-            default="false"
-            icon="icons/sample.gif"
-            id="dev.editors.aopEditor"
-            name="AopEditor">
-      </editor>
-      <editor
-            class="dev.editors.ServerEditor"
-            contributorClass="dev.editors.ServerEditorContribute"
-            default="false"
-            icon="icons/sample.gif"
-            id="dev.editors.serverEditor"
-            name="ServerEditor">
-      </editor>
-      <editor
-            class="dev.editors.AopMultiPageEditor"
-            id="dev.editors.AopMultiPageEditor"
-            name="New MultiPageEditorPart">
+            class="dev.editors.Trade.TradeEditor"
+            id="dev.editors.Trade.TradeEditor"
+            name="TradeEditor">
       </editor>
    </extension>
    <extension
@@ -421,10 +405,6 @@
             commandId="dev.menu.view.commands.openConsoleView">
       </handler>
       <handler
-            class="dev.commands.OpenProperty"
-            commandId="dev.menu.resource.commands.openProperty">
-      </handler>
-      <handler
             class="dev.commands.NewServerHandler"
             commandId="dev.menu.resource.commands.newServer">
       </handler>
@@ -539,18 +519,9 @@
       </consoleFactory>
    </extension>-->
    <extension
+         id="dev.project.properties"
+         name="工程的属性"
          point="org.eclipse.ui.propertyPages">
-      <page
-            class="dev.properties.TreeObjectPropertyPage"
-            id="dev.properties.samplePropertyPage"
-            name="TreeObject Page"
-            nameFilter="*.*">
-         <enabledWhen>
-            <instanceof
-                  value="dev.model.provider.TreeObject">
-            </instanceof>
-         </enabledWhen>
-      </page>
       <page
             class="dev.properties.PrjPropertyPage1"
             id="dev.properties.PrjPropertyPage1"

@@ -18,7 +18,6 @@ import dev.model.base.ResourceLeafNode;
 import dev.model.base.RootNode;
 import dev.model.base.TreeNode;
 import dev.model.resource.ProjectNode;
-import dev.model.resource.ServerNodes;
 import dev.model.resource.TradeNodes;
 import dev.views.NavView;
 
@@ -38,6 +37,7 @@ public class NewTradeWizard extends Wizard implements INewWizard {
 	private String postcondition;
 	private String callService;
 	private String tradeUpProject;
+	private String tradeLevel;
 	
 	private IWorkbench workbench;
 	
@@ -101,6 +101,11 @@ public class NewTradeWizard extends Wizard implements INewWizard {
 		return tradeUpProject;
 	}
 
+	
+	public String getTradeLevel() {
+		return tradeLevel;
+	}
+
 	public NewTradeWizard() {
 		super();
 		//setNeedsProgressMonitor(true);
@@ -136,7 +141,8 @@ public class NewTradeWizard extends Wizard implements INewWizard {
 				outputData,     
 				precondition,   
 				postcondition,  
-				callService);
+				callService,
+				tradeLevel);
 		//通知其它视图或编辑器等
 		informParts(tradeId, tradeName, tradeDesc);
 		
@@ -164,11 +170,12 @@ public class NewTradeWizard extends Wizard implements INewWizard {
 			String outputData,
 			String precondition,
 			String postcondition,
-			String callService) {
+			String callService,
+			String tradeLevel) {
 		DbConnectImpl dbConnImpl = new DbConnectImpl();
 		dbConnImpl.openConn();
 		try {
-			String preSql="insert into trade values(?,?,?,?,?,?,null,?,?,?,?,?,null,null)";
+			String preSql="insert into trade values(?,?,?,?,?,?,'',?,?,?,?,?,'','',?)";
 			dbConnImpl.setPrepareSql(preSql);
 			dbConnImpl.setPreparedString(1, tradeId);
 			dbConnImpl.setPreparedString(2, tradeName);
@@ -176,11 +183,15 @@ public class NewTradeWizard extends Wizard implements INewWizard {
 			dbConnImpl.setPreparedString(4, tradeUpServer);
 			dbConnImpl.setPreparedString(5, tradeModel);
 			dbConnImpl.setPreparedString(6, tradeServerMode);
+			
 			dbConnImpl.setPreparedString(7, inputData);
 			dbConnImpl.setPreparedString(8, outputData);
 			dbConnImpl.setPreparedString(9, precondition);
 			dbConnImpl.setPreparedString(10, postcondition);
+			
 			dbConnImpl.setPreparedString(11, callService);
+			
+			dbConnImpl.setPreparedString(12, tradeLevel);
 			dbConnImpl.executeExceptPreparedQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -192,7 +203,6 @@ public class NewTradeWizard extends Wizard implements INewWizard {
 			}
 		}
 	}
-
 
 	/** 通知其他视图或编辑器*/
 	private void informParts(String prjId, String prjName, String prjDesc) {
@@ -207,18 +217,16 @@ public class NewTradeWizard extends Wizard implements INewWizard {
 			if (root.getChildren().get(index).getName().equals(tradeUpProject))
 				break;
 		}
-		ProjectNode projectNode = (ProjectNode) root.getChildren().get(
-				index);
-		//System.out.println(projectNode.getName());
+		ProjectNode projectNode = (ProjectNode) root.getChildren().get(index);
 
 		List<TreeNode> list = projectNode.getChildren();
 		int i;
 		for (i = 0; i < list.size(); i++)
 		{
-			if (list.get(i).getName().equals("交易"))
+			if (list.get(i).getName().equals("交易")){
 				break;
+			}
 		}
-		//System.out.println(list.get(i).getName());
 		ResourceLeafNode resourceLeafNode = new ResourceLeafNode(tradeId,tradeName, list.get(i));
 		((TradeNodes) list.get(i)).add(resourceLeafNode);
 		tv.refresh();
@@ -247,7 +255,14 @@ public class NewTradeWizard extends Wizard implements INewWizard {
 		precondition=page1.getTradePreConditionText().getText();
 		postcondition=page1.getTradePostConditionText().getText();
 		callService=page1.getTradeCallServiceText().getText();
-		tradeUpProject=page1.getTradeUpProjectCombo().getText();
+		tradeUpProject=page0.getTradeUpProjectCombo().getText();
+		tradeLevel=page0.getTradeLvlCombo().getText();
+		String lvltmp=page0.getTradeLvlCombo().getText();
+		if(lvltmp.equals("GOLP")){
+			tradeLevel = "0";
+		} else {
+			tradeLevel = "1";
+		}
 	}
 
 	private void throwCoreException(String message) throws CoreException {

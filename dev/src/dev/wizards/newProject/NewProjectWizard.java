@@ -36,6 +36,7 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 	private NewProjectWizardPage0 page0;
 	private NewProjectWizardPage1 page1;
 	private NewProjectWizardPage2 page2;
+	private NewProjectWizardPage3 page3;
 	private IWorkbench workbench;
 	private String projectAbsPath="";
 	
@@ -55,9 +56,11 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 		page0 = new NewProjectWizardPage0(selection);
 		page1 = new NewProjectWizardPage1(selection);
 		page2 = new NewProjectWizardPage2(selection);
+		page3 = new NewProjectWizardPage3(selection);
 		addPage(page0);
 		addPage(page1);
 		addPage(page2);
+		addPage(page3);
 	}
 
 	@Override
@@ -116,11 +119,11 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 	    IWorkspaceRoot root = workspace.getRoot();
 	    IProject project = root.getProject(prjId);
 	    IProject[] prj1=root.getProjects();
-	    for (IProject iProject : prj1) {
+/*	    for (IProject iProject : prj1) {
 			System.out.println(iProject.getName());
 			System.out.println(iProject.getFullPath());
 			System.out.println(iProject.getLocation());
-		}
+		}*/
 	    if (!project.exists())
 	        try
 	        {
@@ -220,9 +223,9 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 		map.put("dbPort", page1.getDbPortText().getText());
 		map.put("dbUser", page1.getDbUserText().getText());
 		map.put("dbPwd", page1.getDbPwdText().getText());
-		map.put("prjCommIncludePath", page2.getPrjCommIncludePathText().getText());
-		map.put("prjCommLibPath", page2.getPrjCommLibPathText().getText());
-		map.put("prjCommAopLib", page2.getPrjCommAopLibText().getText());
+		map.put("prjCommIncludePath", page3.getPrjCommIncludePathText().getText());
+		map.put("prjCommLibPath", page3.getPrjCommLibPathText().getText());
+		map.put("prjCommAopLib", page3.getPrjCommAopLibText().getText());
 		String properties=projectAbsPath.substring(5)+File.separator+page0.getPrjIdText().getText()+".properties";
 		System.out.println("properties path is :"+properties);
 		PropertiesUtil.rewriteProperties1(properties, map);

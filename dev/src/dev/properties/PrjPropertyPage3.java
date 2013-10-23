@@ -34,19 +34,21 @@ import dev.views.NavView;
 public class PrjPropertyPage3 extends PropertyPage implements
 		IWorkbenchPropertyPage
 {
-	private Text prjCommIncludePathText;
-	private Text prjCommLibPathText;
-	private Text prjCommAopLibText;
+	private Text prjIncludesPathText;
+	private Text prjLibsPathText;
+	private Text prjAopLibsText;
 	
 	private PreferenceStore ps;
 	private String propertyPath = "";
+	private Text appHomePathText;
+	private Text golpHomePathText;
 	
 	public PrjPropertyPage3()
 	{
 		
 		// TODO 自动生成的构造函数存根
-		setMessage("修改3");
-		setDescription("3333");
+		setMessage("工程路径属性");
+		//setDescription("3333");
 		initPropertyPath();
 		initPreferenceStore();
 	}
@@ -65,9 +67,11 @@ public class PrjPropertyPage3 extends PropertyPage implements
 	public void initPreferenceStore()
 	{
 		ps = new PreferenceStore(propertyPath);
-		ps.setDefault("prjCommIncludePath","未从文件读取到");
-		ps.setDefault("prjCommLibPath", "未从文件读取到");
-		ps.setDefault("prjCommAopLib", "未从文件读取到");
+		ps.setDefault("prjIncludesPath","未从文件读取到");
+		ps.setDefault("prjLibsPath", "未从文件读取到");
+		ps.setDefault("prjAopLibs", "未从文件读取到");
+		ps.setDefault("appHomePath", "未从文件读取到");
+		ps.setDefault("golpHomePath", "未从文件读取到");
 		try
 		 {
 			 ps.load();
@@ -84,58 +88,42 @@ public class PrjPropertyPage3 extends PropertyPage implements
 	{
 		// TODO 自动生成的方法存根
 		Composite container = new Composite(parent, SWT.NULL);
-		container.setLayout(new GridLayout(3, false));
+		container.setLayout(new GridLayout(2, false));
 		
-		Label prjCommIncludePathLabel = new Label(container, SWT.NONE);
-		prjCommIncludePathLabel.setText("*公共头文件路径：");
+		Label prjIncludesPathLabel = new Label(container, SWT.NONE);
+		prjIncludesPathLabel.setText("*个性化头文件路径：");
 		
-		prjCommIncludePathText = new Text(container, SWT.BORDER);
-		prjCommIncludePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		prjCommIncludePathText.setText(ps.getString("prjCommIncludePath"));
+		prjIncludesPathText = new Text(container, SWT.BORDER);
+		prjIncludesPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		prjIncludesPathText.setText(ps.getString("prjIncludesPath"));
 		
-		Button prjCommIncludePathBtn = new Button(container, SWT.NONE);
-		prjCommIncludePathBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				DirectoryDialog dd=new DirectoryDialog(e.display.getActiveShell());
-				prjCommIncludePathText.setText(dd.open());
-			}
-		});
-		prjCommIncludePathBtn.setText("...");
+		Label prjLibsPathLabel = new Label(container, SWT.NONE);
+		prjLibsPathLabel.setText("*个性化库路径：");
 		
-		Label prjCommLibPathLabel = new Label(container, SWT.NONE);
-		prjCommLibPathLabel.setText("*公共库路径：");
+		prjLibsPathText = new Text(container, SWT.BORDER);
+		prjLibsPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		prjLibsPathText.setText(ps.getString("prjLibsPath"));
 		
-		prjCommLibPathText = new Text(container, SWT.BORDER);
-		prjCommLibPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		prjCommLibPathText.setText(ps.getString("prjCommLibPath"));
+		Label prjAopLibsLabel = new Label(container, SWT.NONE);
+		prjAopLibsLabel.setText("*个性化原子交易库路径：");
 		
-		Button prjCommLibPathBtn = new Button(container, SWT.NONE);
-		prjCommLibPathBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				DirectoryDialog dd=new DirectoryDialog(e.display.getActiveShell());
-				prjCommLibPathText.setText(dd.open());
-			}
-		});
-		prjCommLibPathBtn.setText("...");
+		prjAopLibsText = new Text(container, SWT.BORDER);
+		prjAopLibsText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		prjAopLibsText.setText(ps.getString("prjAopLibs"));
 		
-		Label prjCommAopLibLabel = new Label(container, SWT.NONE);
-		prjCommAopLibLabel.setText("*公共原子交易库路径：");
+		Label appHomePathLabel = new Label(container, SWT.NONE);
+		appHomePathLabel.setText("*AppHome的路径：");
 		
-		prjCommAopLibText = new Text(container, SWT.BORDER);
-		prjCommAopLibText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		prjCommAopLibText.setText(ps.getString("prjCommAopLib"));
+		appHomePathText = new Text(container, SWT.BORDER);
+		appHomePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		appHomePathText.setText(ps.getString("appHomePath"));
 		
-		Button prjCommAopLibBtn = new Button(container, SWT.NONE);
-		prjCommAopLibBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				DirectoryDialog dd=new DirectoryDialog(e.display.getActiveShell());
-				prjCommAopLibText.setText(dd.open());
-			}
-		});
-		prjCommAopLibBtn.setText("...");
+		Label golpHomePathLabel = new Label(container, SWT.NONE);
+		golpHomePathLabel.setText("*GolpHome的路径：");
+		
+		golpHomePathText = new Text(container, SWT.BORDER);
+		golpHomePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		golpHomePathText.setText(ps.getString("golpHomePath"));
 		
 		try
 		{
@@ -153,9 +141,11 @@ public class PrjPropertyPage3 extends PropertyPage implements
 	public boolean performOk()
 	{
 		// TODO 自动生成的方法存根
-		if(prjCommIncludePathText.getText().isEmpty()
-				||prjCommLibPathText.getText().isEmpty()
-				||prjCommAopLibText.getText().isEmpty())
+		if(prjIncludesPathText.getText().isEmpty()
+				||prjLibsPathText.getText().isEmpty()
+				||prjAopLibsText.getText().isEmpty()
+				||appHomePathText.getText().isEmpty()
+				||golpHomePathText.getText().isEmpty())
 		{
 			setErrorMessage("请将信息输入完整");
 			return false;
@@ -172,9 +162,11 @@ public class PrjPropertyPage3 extends PropertyPage implements
 			 e.printStackTrace();
 		 }
 				
-		ps.setValue("prjCommIncludePath", prjCommIncludePathText.getText().trim());
-		ps.setValue("prjCommLibPath", prjCommLibPathText.getText().trim());
-		ps.setValue("prjCommAopLib", prjCommAopLibText.getText().trim());
+		ps.setValue("prjIncludesPath", prjIncludesPathText.getText().trim());
+		ps.setValue("prjLibsPath", prjLibsPathText.getText().trim());
+		ps.setValue("prjAopLibs", prjAopLibsText.getText().trim());
+		ps.setValue("appHomePath", appHomePathText.getText().trim());
+		ps.setValue("golpHomePath", golpHomePathText.getText().trim());
 		
 		try
 		{
@@ -193,9 +185,11 @@ public class PrjPropertyPage3 extends PropertyPage implements
 	protected void performDefaults()
 	{
 		// TODO 自动生成的方法存根
-		prjCommIncludePathText.setText("默认路径");
-		prjCommLibPathText.setText("默认路径");
-		prjCommAopLibText.setText("默认路径");
+		prjIncludesPathText.setText("默认路径");
+		prjLibsPathText.setText("默认路径");
+		prjAopLibsText.setText("默认路径");
+		appHomePathText.setText("默认路径");
+		golpHomePathText.setText("默认路径");
 	}
 
 }

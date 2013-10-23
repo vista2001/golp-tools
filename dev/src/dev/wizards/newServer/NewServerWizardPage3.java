@@ -1,29 +1,50 @@
 package dev.wizards.newServer;
 
-import java.io.File;
-
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.PlatformUI;
+
+import dev.model.base.RootNode;
+import dev.model.base.TreeNode;
+import dev.model.resource.ProjectNode;
+import dev.views.NavView;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.events.VerifyEvent;
 
 public class NewServerWizardPage3 extends WizardPage
 {
 	private ISelection selection;
-	private List othFunSrourceList;
+	private Text serverSpecIncludePathText;
+	private List serverSpecIncludePathList;
 	private Button delButton;
-	
-	public List getOthFunSrourceList()
+	private Button upButton;
+	private Button downButton;
+
+	public ISelection getSelection()
 	{
-		return othFunSrourceList;
+		return selection;
+	}
+
+	public List getServerSpecIncludePathList()
+	{
+		return serverSpecIncludePathList;
 	}
 
 	public NewServerWizardPage3(ISelection selection)
@@ -33,7 +54,7 @@ public class NewServerWizardPage3 extends WizardPage
 		setDescription("这个向导将指导你完成GOLP服务程序的创建");
 		this.selection = selection;
 	}
-	
+
 	@Override
 	public void createControl(Composite parent)
 	{
@@ -41,14 +62,13 @@ public class NewServerWizardPage3 extends WizardPage
 		Composite container = new Composite(parent, SWT.NULL);
 		setControl(container);
 		container.setLayout(new GridLayout(3, false));
-		
-		Label  othFunSrourceLabel = new Label(container, SWT.NONE);
-		 othFunSrourceLabel.setText("请选择OthFunSrource：");
-		 
-		 othFunSrourceList = new List(container, SWT.BORDER | SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.MULTI);
-		 othFunSrourceList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 1, 2));
+
+		Label serverSpecIncludePathLabel = new Label(container, SWT.NONE);
+		serverSpecIncludePathLabel.setText("服务程序个性依赖头文件路径：");
+
+		serverSpecIncludePathText = new Text(container, SWT.BORDER);
+		serverSpecIncludePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
 
 		Button addButton = new Button(container, SWT.NONE);
 		GridData gd_addButton = new GridData(SWT.LEFT, SWT.CENTER, false,
@@ -61,65 +81,123 @@ public class NewServerWizardPage3 extends WizardPage
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				FileDialog dialog = new FileDialog(getShell(), SWT.OPEN
-						| SWT.MULTI);
-				dialog.setFilterPath("C:\\");
-				dialog.open();
-				String[] files = dialog.getFileNames();
-				for (String s : files)
+				if (!serverSpecIncludePathText.getText().isEmpty())
 				{
-					if(dialog.getFilterPath().endsWith(File.separator))
-					{
-						othFunSrourceList.add(dialog.getFilterPath() + s);
-					}
-					
-					else
-					{
-						othFunSrourceList.add(dialog.getFilterPath() + File.separator + s);
-					}
-					
+					serverSpecIncludePathList.add(serverSpecIncludePathText.getText());
+					serverSpecIncludePathText.setText("");
 				}
 			}
 		});
 		new Label(container, SWT.NONE);
 
-		delButton = new Button(container, SWT.NONE);
-		delButton.setEnabled(false);
-		delButton.addSelectionListener(new SelectionAdapter()
+		serverSpecIncludePathList = new List(container, SWT.BORDER | SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.MULTI);
+		serverSpecIncludePathList.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+				true, true, 1, 3));
+		serverSpecIncludePathList.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				int[] indices =  othFunSrourceList.getSelectionIndices();
-				 othFunSrourceList.remove(indices);
-				delButton.setEnabled(false);
+				if (serverSpecIncludePathList.getSelectionIndices().length > 0)
+				{
+					delButton.setEnabled(true);
+					if (serverSpecIncludePathList.getSelectionIndices().length == 1)
+					{
+						upButton.setEnabled(true);
+						downButton.setEnabled(true);
+					}
+					else
+					{
+						upButton.setEnabled(false);
+						downButton.setEnabled(false);
+					}
+				}
 			}
 		});
+
+		delButton = new Button(container, SWT.NONE);
+		delButton.setEnabled(false);
 		GridData gd_delButton = new GridData(SWT.LEFT, SWT.TOP, false, false,
 				1, 1);
 		gd_delButton.widthHint = 60;
 		delButton.setLayoutData(gd_delButton);
 		delButton.setText("移除");
-		
-		 othFunSrourceList.addSelectionListener(new SelectionAdapter()
+		new Label(container, SWT.NONE);
+
+		delButton.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				if( othFunSrourceList.getSelectionIndices().length > 0)
+				int[] indices = serverSpecIncludePathList.getSelectionIndices();
+				serverSpecIncludePathList.remove(indices);
+				delButton.setEnabled(false);
+				upButton.setEnabled(false);
+				downButton.setEnabled(false);
+			}
+		});
+
+		upButton = new Button(container, SWT.NONE);
+		upButton.setEnabled(false);
+		GridData gd_upButton = new GridData(SWT.LEFT, SWT.TOP, false, false, 1,
+				1);
+		gd_upButton.widthHint = 60;
+		upButton.setLayoutData(gd_upButton);
+		upButton.setText("上移");
+		new Label(container, SWT.NONE);
+		upButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				int index = serverSpecIncludePathList.getSelectionIndex();
+				if(index > 0)
 				{
-					delButton.setEnabled(true);
+					String tmp = serverSpecIncludePathList.getItem(index);
+					serverSpecIncludePathList.setItem(index, serverSpecIncludePathList.getItem(index-1));
+					serverSpecIncludePathList.setItem(index-1, tmp);
+					serverSpecIncludePathList.setSelection(index-1);
+				}
+			}
+		});
+
+		downButton = new Button(container, SWT.NONE);
+		downButton.setEnabled(false);
+		GridData gd_downButton = new GridData(SWT.LEFT, SWT.TOP, false, false,
+				1, 1);
+		gd_downButton.widthHint = 60;
+		downButton.setLayoutData(gd_downButton);
+		downButton.setText("下移");
+		downButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				int index = serverSpecIncludePathList.getSelectionIndex();
+				if(index < serverSpecIncludePathList.getItemCount()-1)
+				{
+					String tmp = serverSpecIncludePathList.getItem(index);
+					serverSpecIncludePathList.setItem(index, serverSpecIncludePathList.getItem(index+1));
+					serverSpecIncludePathList.setItem(index+1, tmp);
+					serverSpecIncludePathList.setSelection(index+1);
 				}
 			}
 		});
 
 	}
-	
+
+	// 此处虽设置为true，但还是会调用下边的canFlipToNextPage()方法
+
 	@Override
 	public boolean canFlipToNextPage()
 	{
 
-		return false;
+		// System.out.println(getServerSpeclibText().getText().length());
+
+		return true;
+
 	}
 
 }
+

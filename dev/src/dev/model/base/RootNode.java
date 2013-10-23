@@ -59,4 +59,10 @@ public class RootNode extends TreeNode{
 		//System.out.println("root is empty="+this.children.isEmpty());
 		return !this.children.isEmpty();
 	}
+
+	@Override
+	public void removeAllChildren() {
+		// TODO Auto-generated method stub
+		
+	}
 }

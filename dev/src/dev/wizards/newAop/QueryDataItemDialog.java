@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -51,6 +53,13 @@ public class QueryDataItemDialog extends TitleAreaDialog {
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		listInDialog = new List(container, SWT.BORDER | SWT.MULTI);
 		listInDialog.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		listInDialog.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+			
+		});
 		initData();
 		this.setMessage("请选择数据项");
 
@@ -71,12 +80,10 @@ public class QueryDataItemDialog extends TitleAreaDialog {
 
 	@Override
 	protected void okPressed() {
-		//System.out.println(listInDialog.isDisposed());
 		String[] aops = listInDialog.getSelection();
 		listForReturn = new ArrayList<String>();
 		for (int i = 0; i < aops.length; i++) {
 			listForReturn.add(aops[i]);
-			//System.out.println(aops[i]);
 		}
 		notifyInformDialogEvent();
 		super.okPressed();
@@ -114,13 +121,11 @@ public class QueryDataItemDialog extends TitleAreaDialog {
 
 	public void addInformDialogListener(InformDialogListener dl) {
 		listeners.add(dl);
-		//System.out.println("demo add");
 	}
 
 	public void notifyInformDialogEvent() {
 		for (InformDialogListener idl : listeners) {
 			idl.handleEvent(new InformDialogEvent(this));
-			//System.out.println(idl.toString() + " is informed");
 		}
 	}
 }

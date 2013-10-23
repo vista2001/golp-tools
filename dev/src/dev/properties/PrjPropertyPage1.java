@@ -41,8 +41,8 @@ public class PrjPropertyPage1 extends PropertyPage implements
 	public PrjPropertyPage1()
 	{
 		
-		setMessage("修改");
-		setDescription("lalala");
+		setMessage("工程常规属性");
+		//setDescription("lalala");
 		initPropertyPath();
 		initPreferenceStore();
 	}

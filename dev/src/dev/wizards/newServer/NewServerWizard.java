@@ -28,13 +28,18 @@ public class NewServerWizard extends Wizard implements INewWizard
 	private NewServerWizardPage1 page1;
 	private NewServerWizardPage2 page2;
 	private NewServerWizardPage3 page3;
+	private NewServerWizardPage4 page4;
+	private NewServerWizardPage5 page5;
 	
+	private String upProject = "";
+	private String serverLevel="";
 	private String svrId = "";
 	private String svrName = "";
 	private String svrDesc = "";
+	private String serverSpeclibPath = "";
+	private String serverSpeclibName = "";
 	private String serverSpeclib = "";
-	private String serverSpecAopDlls = "";
-	private String upProject = "";
+	private String serverSpecIncludePath = "";
 	private String callBackSource = "";
 	private String othFunSrource = "";
 
@@ -53,11 +58,15 @@ public class NewServerWizard extends Wizard implements INewWizard
 		page1 = new NewServerWizardPage1(selection);
 		page2 = new NewServerWizardPage2(selection);
 		page3 = new NewServerWizardPage3(selection);
+		page4 = new NewServerWizardPage4(selection);
+		page5 = new NewServerWizardPage5(selection);
 
 		addPage(page0);
 		addPage(page1);
 		addPage(page2);
 		addPage(page3);
+		addPage(page4);
+		addPage(page5);
 
 	}
 
@@ -66,23 +75,54 @@ public class NewServerWizard extends Wizard implements INewWizard
 	{
 		// TODO 自动生成的方法存根	
 		getData();
-		doFinish(svrId, svrName, svrDesc, serverSpeclib, serverSpecAopDlls,
-				callBackSource, othFunSrource);
+		doFinish(svrId, svrName, svrDesc, serverSpeclib, serverSpecIncludePath,
+				callBackSource, othFunSrource,serverLevel,upProject);
 		updateNavView();
 		return true;
 	}
 	//获取该新建向导中所设置的数据
 	private void getData()
 	{
+		upProject = page0.getUpProjectCombo().getText();
+		serverLevel = page0.getServerLevelCombo().getText().substring(0, 1);
 		svrId = page0.getSvrIdText().getText();
 		svrName = page0.getSvrNameText().getText();
 		svrDesc = page0.getSvrDescText().getText();
-		serverSpeclib = page1.getServerSpeclibText().getText();
-		serverSpecAopDlls = page1.getServerSpecAopDllsText().getText();
-		upProject = page1.getUpProjectCombo().getText();
-		if (page2.getCallBackSourceList().getItems().length > 0)
+		
+		if (page1.getServerSpeclibPathList().getItems().length > 0)
 		{
-			for (String s : page2.getCallBackSourceList().getItems())
+			for (String s : page1.getServerSpeclibPathList().getItems())
+			{
+				if (serverSpeclibPath.length() == 0)
+					serverSpeclibPath = serverSpeclibPath + s;
+				else
+					serverSpeclibPath = serverSpeclibPath + "|" + s;
+			}
+			for (String s : page2.getServerSpeclibNameList().getItems())
+			{
+				if (serverSpeclibName.length() == 0)
+					serverSpeclibName = serverSpeclibName + s;
+				else
+					serverSpeclibName = serverSpeclibName + "|" + s;
+			}
+			serverSpeclib = "[" + serverSpeclibPath + "]" + "[" + serverSpeclibName + "]";
+		}
+		
+		if (page3.getServerSpecIncludePathList().getItems().length > 0)
+		{
+			for (String s : page3.getServerSpecIncludePathList().getItems())
+			{
+				if (serverSpecIncludePath.length() == 0)
+					serverSpecIncludePath = serverSpecIncludePath + s;
+				else
+					serverSpecIncludePath = serverSpecIncludePath + "|" + s;
+			}
+
+		}
+		
+		if (page4.getCallBackSourceList().getItems().length > 0)
+		{
+			for (String s : page4.getCallBackSourceList().getItems())
 			{
 				if (callBackSource.length() == 0)
 					callBackSource = callBackSource + s;
@@ -91,9 +131,9 @@ public class NewServerWizard extends Wizard implements INewWizard
 			}
 
 		}
-		if (page3.getOthFunSrourceList().getItems().length > 0)
+		if (page5.getOthFunSrourceList().getItems().length > 0)
 		{
-			for (String s : page3.getOthFunSrourceList().getItems())
+			for (String s : page5.getOthFunSrourceList().getItems())
 			{
 				if (othFunSrource.length() == 0)
 					othFunSrource = othFunSrource + s;
@@ -106,11 +146,11 @@ public class NewServerWizard extends Wizard implements INewWizard
 	//将从新建向导中得到的数据写入数据库
 	private void doFinish(String svrId, String svrName, String svrDesc,
 			String serverSpeclib, String serverSpecAopDlls,
-			String callBackSource, String othFunSrource)
+			String callBackSource, String othFunSrource, String serverLevel, String upProject)
 	{
 		DbConnectImpl dbConnImpl = new DbConnectImpl();
 		dbConnImpl.openConn();
-		String preSql = "insert into server values(?,?,?,?,?,?,?)";
+		String preSql = "insert into server values(?,?,?,?,?,?,?,?,?)";
 		try
 		{
 			dbConnImpl.setPrepareSql(preSql);
@@ -121,6 +161,8 @@ public class NewServerWizard extends Wizard implements INewWizard
 			dbConnImpl.setPreparedString(5, serverSpecAopDlls);
 			dbConnImpl.setPreparedString(6, callBackSource);
 			dbConnImpl.setPreparedString(7, othFunSrource);
+			dbConnImpl.setPreparedString(8, serverLevel);
+			dbConnImpl.setPreparedString(9, upProject);
 			dbConnImpl.executeExceptPreparedQuery();
 
 		} catch (SQLException e1)
@@ -179,7 +221,26 @@ public class NewServerWizard extends Wizard implements INewWizard
 	public boolean canFinish()
 	{
 		// TODO 自动生成的方法存根
-		return page0.canFlipToNextPage() && page1.canFlipToNextPage();
+		if(page0.canFlipToNextPage())
+		{
+			if(page1.getServerSpeclibPathList().getItemCount() > 0)
+			{
+				if(page2.canFlipToNextPage())
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return true;
+			}
+			
+		}
+		return false;
 
 	}
 

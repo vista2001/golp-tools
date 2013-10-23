@@ -1,20 +1,20 @@
 package dev.db;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 
-import org.eclipse.core.runtime.ILog;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.PreferenceStore;
 
 
 public class DbConnectImpl implements IDbConnect {
 	private static final String PROPERTIES_PATH = "/dev/db/dbConnect.properties";
+	private static final String ORACLC="jdbc:oracle:thin:@";
+	private static final String ORACLC_DRIVER="oracle.jdbc.driver.OracleDriver";
 	private Connection conn = null;
 	private String url = null;
 	private String driver = null;
@@ -73,6 +73,53 @@ public class DbConnectImpl implements IDbConnect {
 		}
 	}
 
+	public void openConn(PreferenceStore ps){
+		
+		try {
+			ps.load();
+			String dbAddress=ps.getString("dbAddress");
+			String dbInstance=ps.getString("dbInstance"); 
+			String dbUser=ps.getString("dbUser");
+			String dbPwd=ps.getString("dbPwd");
+			String dbType=ps.getString("dbType");
+			String dbPort=ps.getString("dbPort");
+			if(dbType.equals("oracle")){
+				this.url = ORACLC+dbAddress+":"+dbPort+":"+dbInstance;
+				System.out.println(url);
+			}
+			this.driver = ORACLC_DRIVER;
+			this.username = dbUser;
+			this.password = dbPwd;
+			Class.forName(driver).newInstance();
+			this.conn = DriverManager.getConnection(url,username,password);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void openConn(String url,String name,String pwd,String driver){
+		try {
+			Class.forName(driver).newInstance();
+			this.conn = DriverManager.getConnection(url,username,password);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * 購液<code>JDBC</code>全俊
 	 * 
@@ -220,26 +267,28 @@ public class DbConnectImpl implements IDbConnect {
 				System.out.println(rs.getInt(1));
 			}
 			//dbConn.executeExceptQuery("insert into test  values('11','aa',null)");
-		} catch (SQLException e) {
 			//LogUtils.logError(e);
-			System.out.println("access err:" + e.getErrorCode());
-			System.out.println("access errmsg:" + e.getMessage());
-			System.out.println("access sqlstat:" + e.getSQLState());
-			e.printStackTrace();
-			
 			/*String　message　=　"Error　while　initializing　log　properties."　+e.getMessage();
 			IStatus　status　=　new　Status(IStatus.ERROR,getDefault().getBundle().getSymbolicName(),IStatus.ERROR,　message,　e);
 			getLog().log(status);*/
 		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+			if (rs != null) {
+				rs.close();
+				dbConn.closeConn();
 			}
 		}
-		dbConn.closeConn();
+		dbConn.openConn("jdbc:oracle:thin:@127.0.0.1:1521:orcl", "fapdb", "fapdb", "oracle.jdbc.driver.OracleDriver");
+		try{
+			rs = dbConn.retrive("select count(*) from t_history_trans");
+			if (rs.next()) {
+				System.out.println(rs.getInt(1));
+			}
+		}finally{
+			if (rs != null) {
+				rs.close();
+				dbConn.closeConn();
+			}
+		}
+		
 	}
-
 }

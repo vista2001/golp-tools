@@ -46,8 +46,8 @@ public class PrjPropertyPage2 extends PropertyPage implements
 	public PrjPropertyPage2()
 	{
 		// TODO 自动生成的构造函数存根
-		setMessage("修改2");
-		setDescription("2222");
+		setMessage("工程数据库属性");
+		//setDescription("2222");
 		initPropertyPath();
 		initPreferenceStore();
 	}

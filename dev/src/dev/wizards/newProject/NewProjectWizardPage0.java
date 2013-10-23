@@ -54,7 +54,6 @@ public class NewProjectWizardPage0 extends WizardPage{
 		prjIdText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label prjNameLabel = new Label(container, SWT.NONE);
-		prjNameLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		prjNameLabel.setText("*¹¤³ÌÃû³Æ");
 		
 		prjNameText = new Text(container, SWT.BORDER);

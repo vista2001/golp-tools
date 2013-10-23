@@ -12,36 +12,31 @@ public class TFMNodes extends ResourceNode{
 	
 	public TFMNodes(String name, String id, TreeNode parent) {
 		super(name, id, parent);
-		// TODO Auto-generated constructor stub
+		this.children=new ArrayList<TreeNode>();
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return this.name;
 	}
 
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
 		return this.id;
 	}
 
 	@Override
 	public TreeNode getParent() {
-		// TODO Auto-generated method stub
 		return this.parent;
 	}
 
 	@Override
 	public TreeNode getRootProject() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.parent;
 	}
 
 	@Override
 	public List<TreeNode> getChildren() {
-		// TODO Auto-generated method stub
 		if(this.children==null){
 			return new ArrayList<TreeNode>();
 		}
@@ -56,7 +51,6 @@ public class TFMNodes extends ResourceNode{
 
 	@Override
 	public boolean hasChildren() {
-		System.out.println("this children is="+this.children);
 		if(this.children==null||this.children.isEmpty()){
 			return false;
 		}

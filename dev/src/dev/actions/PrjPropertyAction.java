@@ -1,9 +1,5 @@
 package dev.actions;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -16,7 +12,7 @@ import org.eclipse.ui.dialogs.PropertyDialogAction;
 import dev.model.resource.ProjectNode;
 import dev.views.NavView;
 
-public class prjPropertyAction extends Action implements ISelectionListener,
+public class PrjPropertyAction extends Action implements ISelectionListener,
 		IWorkbenchAction
 {
 
@@ -24,7 +20,7 @@ public class prjPropertyAction extends Action implements ISelectionListener,
 	public final static String ID = "dev.actions.prjPropertyAction";
 	private IStructuredSelection selection;
 
-	public prjPropertyAction(IWorkbenchWindow window)
+	public PrjPropertyAction(IWorkbenchWindow window)
 	{
 		super("prjPropertyAction");
 		setId(ID);

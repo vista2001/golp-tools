@@ -117,6 +117,7 @@ public class NewProjectWizardPage1 extends WizardPage {
 			}
 		});
 		
+		
 		list.add(dbTypeCombo);
 		list.add(dbAddressText);
 		list.add(dbInstanceText);

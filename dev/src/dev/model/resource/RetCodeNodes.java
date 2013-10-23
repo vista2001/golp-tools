@@ -33,8 +33,7 @@ public class RetCodeNodes extends ResourceNode{
 
 	@Override
 	public TreeNode getRootProject() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.parent;
 	}
 
 	@Override
@@ -49,7 +48,6 @@ public class RetCodeNodes extends ResourceNode{
 
 	@Override
 	public boolean hasChildren() {
-		System.out.println("this children is="+this.children);
 		if(this.children==null||this.children.isEmpty()){
 			return false;
 		}
