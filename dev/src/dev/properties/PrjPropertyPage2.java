@@ -27,7 +27,9 @@ import dev.model.base.TreeNode;
 import dev.util.FileUtil;
 import dev.util.PropertiesUtil;
 import dev.views.NavView;
-
+/**
+ * 该类定义了工程的第二个属性页，包括工程对用的数据库的全部信息
+ */
 public class PrjPropertyPage2 extends PropertyPage implements
 		IWorkbenchPropertyPage
 {
@@ -51,7 +53,9 @@ public class PrjPropertyPage2 extends PropertyPage implements
 		initPropertyPath();
 		initPreferenceStore();
 	}
-	
+	/**
+	 * 该方法用于获取工程对应的properties文件的路径
+	 */
 	private void initPropertyPath()
 	{
 		TreeViewer treeViewer = ((NavView)Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(NavView.ID)).getTreeViewer();
@@ -62,7 +66,9 @@ public class PrjPropertyPage2 extends PropertyPage implements
 	    IProject project = root.getProject(prjId);
 	    propertyPath = project.getLocationURI().toString().substring(6) + '/' + prjId +".properties";
 	}
-	
+	/**
+	 * 该方法用于加载工程对应的properties文件到ps
+	 */
 	public void initPreferenceStore()
 	{
 		ps = new PreferenceStore(propertyPath);

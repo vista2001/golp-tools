@@ -9,7 +9,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.preference.PreferenceStore;
+
+import dev.model.base.ResourceLeafNode;
 
 
 /**
@@ -129,7 +135,21 @@ public class PropertiesUtil {
 		}
 		return l;
 	}
-
+	/**通过ResourceLeafNode即树的叶子节点获得该节点对应的工程的数据库链接配置文件
+	 * @param
+	 * @return PreferenceStore ps:返回一个已经<code>load</code>过的<code>PreferenceStore</code>*/
+	public static PreferenceStore getPropertiesByRln(ResourceLeafNode rln) throws IOException{
+		PreferenceStore ps=null;
+		String prjId = rln.getRootProject().getId();
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot prjRoot = workspace.getRoot();
+		IProject project = prjRoot.getProject(prjId);
+		String dbfiles = project.getLocationURI().toString().substring(6) + '/'+ prjId + ".properties";
+		//System.out.println("dbfiles==="+dbfiles);
+		ps = new PreferenceStore(dbfiles);
+		ps.load();
+		return ps;
+	}
 	public static void main(String[] args) {
 		// Properties properties =
 		// readProperties("/dev/db/dbConnect.properties");

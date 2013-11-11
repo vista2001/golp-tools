@@ -18,22 +18,20 @@ import dev.model.base.TreeNode;
 import dev.model.resource.DllNodes;
 import dev.model.resource.ProjectNode;
 import dev.views.NavView;
-
+/**
+ * 该类定义了新建动态库向导所需要的 Wizard类
+ */
 public class NewDllWizard extends Wizard implements INewWizard
 {
 	private ISelection selection;
 	private IWorkbench workbench;
-	
 	private NewDllWizardPage0 page0;
-//	private NewDllWizardPage1 page1;
-	
 	private String dllUpProject = "";
 	private String dllLevel = "";
 	private String dllId = "";
 	private String dllName = "";
 	private String dllDesc = "";
 	private String dllType = "";
-	
 	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection)
@@ -46,10 +44,7 @@ public class NewDllWizard extends Wizard implements INewWizard
 	public void addPages()
 	{
 		page0 = new NewDllWizardPage0(selection);
-//		page1 = new NewDllWizardPage1(selection);
-
 		addPage(page0);
-//		addPage(page1);
 	}
 
 	@Override
@@ -130,7 +125,6 @@ public class NewDllWizard extends Wizard implements INewWizard
 			}
 			ProjectNode projectNode = (ProjectNode) root.getChildren().get(
 					index);
-			//System.out.println(projectNode.getName());
 
 			List<TreeNode> list = projectNode.getChildren();
 			int i;
@@ -139,7 +133,6 @@ public class NewDllWizard extends Wizard implements INewWizard
 				if (list.get(i).getName().equals("动态库"))
 					break;
 			}
-			//System.out.println(list.get(i).getName());
 			ResourceLeafNode resourceLeafNode = new ResourceLeafNode(dllName,
 					dllId, list.get(i));
 			((DllNodes) list.get(i)).add(resourceLeafNode);

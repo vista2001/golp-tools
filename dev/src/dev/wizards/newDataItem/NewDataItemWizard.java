@@ -20,7 +20,9 @@ import dev.model.resource.DataItemNodes;
 import dev.model.resource.ProjectNode;
 import dev.model.resource.ServerNodes;
 import dev.views.NavView;
-
+/**
+ * 该类定义了新建数据项向导所需要的 Wizard类
+ */
 public class NewDataItemWizard extends Wizard implements INewWizard
 {
 	private ISelection selection;
@@ -76,7 +78,6 @@ public class NewDataItemWizard extends Wizard implements INewWizard
 		dataItemName = page0.getDataItemNameText().getText();
 		dataItemDesc = page0.getDataItemDescText().getText();
 		dataItemType = page1.getDataItemTypeCombo().getText().substring(0,1);
-//		dataItemLenFixed = page1.getDataItemLenFixedCombo().getText().substring(0, 1);
 		if(page1.getDataItemlenText().isEnabled())
 		{
 			dataItemlen = Integer.parseInt(page1.getDataItemlenText().getText());

@@ -12,6 +12,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 import dev.console.ConsoleFactory;
+import dev.editors.server.UnCloseableEditorPresentationFactory;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -33,6 +34,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setTitle("GOLP TOOL"); //$NON-NLS-1$
         ConsoleFactory cf = new ConsoleFactory();
 		cf.openConsole();
+        
+		configurer.setPresentationFactory(new UnCloseableEditorPresentationFactory());
 		
     }
     @Override  

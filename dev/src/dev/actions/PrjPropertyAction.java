@@ -11,7 +11,9 @@ import org.eclipse.ui.dialogs.PropertyDialogAction;
 
 import dev.model.resource.ProjectNode;
 import dev.views.NavView;
-
+/**
+ * 该类定义了在导航视图中，鼠标右键点击工程节点时，在弹出菜单所显示的“属性”按钮，当用户点击“属性”按钮后，会弹出工程属性对话框
+ */
 public class PrjPropertyAction extends Action implements ISelectionListener,
 		IWorkbenchAction
 {

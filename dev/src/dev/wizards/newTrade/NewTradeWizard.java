@@ -238,31 +238,31 @@ public class NewTradeWizard extends Wizard implements INewWizard {
 		tradeName=page0.getTradeNameText().getText();
 		tradeDesc=page0.getTradeDescText().getText();
 		tradeUpServer=page1.getTradeUpServerCombo().getText();
-		tradeModel=page1.getTradeModelCombo().getText();
-		if(tradeModel.equals("手工编码")){
+		tradeModel=page1.getTradeModelCombo().getText().substring(0, 1);
+		/*if(tradeModel.equals("手工编码")){
 			tradeModel="0";
 		}else{
 			tradeModel="1";
-		}
-		tradeServerModel=page1.getTradeServerModelCombo().getText();
-		if(tradeServerModel.equals("模式1")){
+		}*/
+		tradeServerModel=page1.getTradeServerModelCombo().getText().substring(0,1);
+		/*if(tradeServerModel.equals("模式1")){
 			tradeServerModel="0";
 		}else{
 			tradeServerModel="1";
-		}
+		}*/
 		inputData=page1.getInputDataText().getText();
 		outputData=page1.getOutputDataText().getText();
 		precondition=page1.getTradePreConditionText().getText();
 		postcondition=page1.getTradePostConditionText().getText();
 		callService=page1.getTradeCallServiceText().getText();
 		tradeUpProject=page0.getTradeUpProjectCombo().getText();
-		tradeLevel=page0.getTradeLvlCombo().getText();
-		String lvltmp=page0.getTradeLvlCombo().getText();
+		tradeLevel=page0.getTradeLvlCombo().getText().substring(0,1);
+		/*String lvltmp=page0.getTradeLvlCombo().getText();
 		if(lvltmp.equals("GOLP")){
 			tradeLevel = "0";
 		} else {
 			tradeLevel = "1";
-		}
+		}*/
 	}
 
 	private void throwCoreException(String message) throws CoreException {

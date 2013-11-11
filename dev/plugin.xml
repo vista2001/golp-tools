@@ -43,10 +43,41 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="dev.editors.Trade.TradeEditor"
+            class="dev.editors.trade.TradeEditor"
             id="dev.editors.Trade.TradeEditor"
             name="TradeEditor">
       </editor>
+      <editor
+            class="dev.editors.server.ServerEditor"
+            default="false"
+            id="dev.editors.server.serverEditor"
+            name="ServerEditor">
+      </editor>
+      <editor
+            class="dev.editors.dataItem.DataItemEditor"
+            default="false"
+            id="dev.editor.DataItem.DataItem"
+            name="DataItem">
+      </editor>
+      <editor
+            class="dev.editors.aop.AopEditor"
+            default="false"
+            id="dev.editor.Aop.AopEditor"
+            name="AOP">
+      </editor>
+      <editor
+            class="dev.editors.retCode.RetCodeEditor"
+            default="false"
+            id="dev.editor.retcode.RetCodeEditor"
+            name="Retcode">
+      </editor>
+      <editor
+            class="dev.editors.aopDll.AopDllEditor"
+            default="false"
+            id="dev.editor.AopDll.AopDllEditor"
+            name="AopDll">
+      </editor>
+      
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -150,6 +181,10 @@
                   mnemonic="X"
                   style="push">
             </command>
+            <command
+                  commandId="dev.menu.resource.commands.deleteProject"
+                  style="push">
+            </command>
          </menu>
       </menuContribution>
       <menuContribution
@@ -238,6 +273,21 @@
             <command
                   commandId="dev.menu.resource.commands.newProject"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="NULL">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <separator
                   name="dev.separator1"
@@ -246,14 +296,59 @@
             <command
                   commandId="dev.menu.resource.commands.newDataItem"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.DataItemNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newDll"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.DllNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newRetCode"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.RetCodeNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <separator
                   name="dev.separator2"
@@ -262,18 +357,77 @@
             <command
                   commandId="dev.menu.resource.commands.newServer"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.ServerNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newTrade"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.TradeNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newAop"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.AopNodes">
+                           </instanceof>
+                        </or></iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newTfm"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.TFMNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
          </menu>
       </menuContribution>
@@ -377,6 +531,14 @@
             id="dev.menu.resource.commands.openProperty"
             name="属性">
       </command>
+      <command
+            id="org.eclipse.ui.edit.delete"
+            name="name">
+      </command>
+      <command
+            id="dev.menu.resource.commands.deleteProject"
+            name="移除工程">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -428,6 +590,10 @@
             class="dev.commands.NewDllHandler"
             commandId="dev.menu.resource.commands.newDll">
  	  </handler>
+      <handler
+            class="dev.commands.DelPrjHandler"
+            commandId="dev.menu.resource.commands.deleteProject">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

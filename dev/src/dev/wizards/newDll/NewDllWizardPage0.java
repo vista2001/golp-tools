@@ -21,7 +21,9 @@ import dev.model.base.RootNode;
 import dev.model.base.TreeNode;
 import dev.util.RegExpCheck;
 import dev.views.NavView;
-
+/**
+ * 该类定义了新建服务程序向导的第1页
+ */
 public class NewDllWizardPage0 extends WizardPage
 {
 	private Combo dllUpProjectCombo;

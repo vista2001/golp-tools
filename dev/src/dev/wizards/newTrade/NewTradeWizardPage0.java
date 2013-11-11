@@ -75,7 +75,7 @@ public class NewTradeWizardPage0 extends WizardPage{
 				dialogChanged();
 			}
 		});
-		TradeLvlCombo.setItems(new String[]{"App"});
+		TradeLvlCombo.setItems(new String[]{"0-App"});
 		
 		Label prjIdLabel = new Label(container, SWT.NONE);
 		prjIdLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));

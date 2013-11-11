@@ -30,7 +30,10 @@ import dev.model.base.TreeNode;
 import dev.util.FileUtil;
 import dev.util.PropertiesUtil;
 import dev.views.NavView;
-
+/**
+ * 该类定义了工程的第三个属性页，包括个性化头文件路径、个性化库路径、个性化原子交易库路径、
+ * AppHome的路径和GolpHome的路径
+ */
 public class PrjPropertyPage3 extends PropertyPage implements
 		IWorkbenchPropertyPage
 {
@@ -52,7 +55,9 @@ public class PrjPropertyPage3 extends PropertyPage implements
 		initPropertyPath();
 		initPreferenceStore();
 	}
-	
+	/**
+	 * 该方法用于获取工程对应的properties文件的路径
+	 */
 	private void initPropertyPath()
 	{
 		TreeViewer treeViewer = ((NavView)Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(NavView.ID)).getTreeViewer();
@@ -63,7 +68,9 @@ public class PrjPropertyPage3 extends PropertyPage implements
 	    IProject project = root.getProject(prjId);
 	    propertyPath = project.getLocationURI().toString().substring(6) + '/' + prjId +".properties";
 	}
-	
+	/**
+	 * 该方法用于加载工程对应的properties文件到ps
+	 */
 	public void initPreferenceStore()
 	{
 		ps = new PreferenceStore(propertyPath);

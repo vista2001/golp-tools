@@ -1,6 +1,5 @@
 package dev.db;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -76,7 +75,7 @@ public class DbConnectImpl implements IDbConnect {
 	public void openConn(PreferenceStore ps){
 		
 		try {
-			ps.load();
+			//ps.load();
 			String dbAddress=ps.getString("dbAddress");
 			String dbInstance=ps.getString("dbInstance"); 
 			String dbUser=ps.getString("dbUser");
@@ -99,9 +98,6 @@ public class DbConnectImpl implements IDbConnect {
 		}catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -102,7 +102,7 @@ public class NewTradeWizardPage1 extends WizardPage{
 		
 		tradeModelCombo = new Combo(container, SWT.READ_ONLY);
 		tradeModelCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		tradeModelCombo.setItems(new String[]{"手工编码","流程图"});
+		tradeModelCombo.setItems(new String[]{"0-流程图","1-手工编码"});
 		new Label(container, SWT.NONE);
 		
 		Label tradeServerModelLabel = new Label(container, SWT.NONE);
@@ -110,7 +110,7 @@ public class NewTradeWizardPage1 extends WizardPage{
 		
 		tradeServerModelCombo = new Combo(container, SWT.READ_ONLY);
 		tradeServerModelCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		tradeServerModelCombo.setItems(new String[]{"模式1","模式2"});
+		tradeServerModelCombo.setItems(new String[]{"0-模式0","1-模式1"});
 		new Label(container, SWT.NONE);
 		
 		Label inputDataLabel = new Label(container, SWT.NONE);

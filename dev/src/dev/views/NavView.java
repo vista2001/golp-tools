@@ -1,9 +1,7 @@
 package dev.views;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -15,12 +13,14 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
@@ -28,33 +28,32 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
 import dev.Activator;
 import dev.actions.PrjPropertyAction;
-import dev.db.DbConnFactory;
-import dev.db.DbConnectImpl;
-import dev.editors.AopEditor;
-import dev.editors.Trade.TradeEditor;
-import dev.editors.Trade.TradeEditorInput;
+import dev.db.service.NavViewDaoServiceImpl;
+import dev.editors.aop.AopEditor;
+import dev.editors.aop.AopEditorInput;
+import dev.editors.aopDll.AopDllEditor;
+import dev.editors.aopDll.AopDllEditorInput;
+import dev.editors.dataItem.DataItemEditor;
+import dev.editors.dataItem.DataItemInput;
+import dev.editors.retCode.RetCodeEditor;
+import dev.editors.retCode.RetCodeInput;
+import dev.editors.server.ServerEditor;
+import dev.editors.server.ServerEditorInput;
+import dev.editors.trade.TradeEditor;
+import dev.editors.trade.TradeEditorInput;
 import dev.model.base.ResourceLeafNode;
 import dev.model.base.ResourceNode;
 import dev.model.base.RootNode;
 import dev.model.provider.TreeContentProvider;
 import dev.model.provider.TreeLabelProvider;
-import dev.model.resource.AopNodes;
-import dev.model.resource.DataItemNodes;
-import dev.model.resource.DllNodes;
 import dev.model.resource.ProjectNode;
-import dev.model.resource.RetCodeNodes;
-import dev.model.resource.ServerNodes;
-import dev.model.resource.TFMNodes;
-import dev.model.resource.TradeNodes;
 
 public class NavView extends ViewPart {
 
@@ -94,9 +93,19 @@ public class NavView extends ViewPart {
 			
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				getSite().getPage().findView(NavView.ID).setFocus();
+				StructuredSelection s = (StructuredSelection) event.getSelection();
+				if (s.getFirstElement() instanceof ResourceLeafNode) {
+					TradeEditorInput editorInput = new TradeEditorInput((ResourceLeafNode) s.getFirstElement());
+					
+					TradeEditor tradeEditor = (TradeEditor) getSite()
+							.getWorkbenchWindow().getActivePage()
+							.findEditor(editorInput);
+					getSite().getWorkbenchWindow().getActivePage()
+							.bringToTop(tradeEditor);
+				}
 			}
 		});
+		getSite().setSelectionProvider(viewer);
 	}
 
 	/**
@@ -125,7 +134,7 @@ public class NavView extends ViewPart {
 		menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		menuMgr.add(new Separator());
 		menuMgr.add(new PrjPropertyAction(getSite().getWorkbenchWindow()));//rxy
-		getSite().setSelectionProvider(viewer);
+		//getSite().setSelectionProvider(viewer);
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -147,7 +156,6 @@ public class NavView extends ViewPart {
 		manager.add(expandAllAction);
 		manager.add(collapseAllAction);
 		manager.add(new Separator());
-		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}*/
@@ -156,7 +164,6 @@ public class NavView extends ViewPart {
 		manager.add(expandAllAction);
 		manager.add(collapseAllAction);
 		manager.add(new Separator());
-		//drillDownAdapter.addNavigationActions(manager);
 	}
 
 	private void makeActions() {
@@ -183,19 +190,10 @@ public class NavView extends ViewPart {
 			public void run() {
 				ISelection selection = viewer.getSelection();
 				Object obj = ((IStructuredSelection) selection).getFirstElement();
-				IWorkbenchPage page = getViewSite().getPage();
+				IWorkbenchPage page = getViewSite().getWorkbenchWindow().getActivePage();
 				if (obj instanceof ResourceLeafNode) {
 					try {
-						TradeNodes rsn=(TradeNodes) ((ResourceLeafNode) obj).getParent();
-						String name=rsn.getName();
-						switch (name) {
-						case "交易":
-							openEditor(page,obj);
-							break;
-						default:
-							break;
-						}
-						
+						openEditor(page,obj);
 					} catch (PartInitException e) {
 						e.printStackTrace();
 					}
@@ -224,27 +222,35 @@ public class NavView extends ViewPart {
 	
 	private void openEditor(IWorkbenchPage page,Object obj) throws PartInitException{
 		IEditorInput editorInput=null;
-		String parentName=((ResourceLeafNode)obj).getParent().getName();
-		switch (parentName) {
+		ResourceLeafNode node=(ResourceLeafNode)obj;
+		String name=node.getParent().getName();
+		switch (name) {
 		case "数据项":
-			
+			editorInput = new DataItemInput((node));
+			page.openEditor(editorInput,DataItemEditor.ID,false);
 			break;
 		case "响应码" :
+			editorInput = new RetCodeInput(node);
+			page.openEditor(editorInput,RetCodeEditor.ID,false);
+			break;
+		case "动态库" :
+			editorInput = new AopDllEditorInput(node);
+			page.openEditor(editorInput,AopDllEditor.ID,false);
+			break;
+		case "原子交易" :
+			editorInput=new AopEditorInput(node);
+			page.openEditor(editorInput,AopEditor.ID,false);
 			break;
 		case "服务程序" :
+			editorInput= new ServerEditorInput(node);
+			page.openEditor(editorInput, ServerEditor.ID,false);
 			break;
 		case "交易" :
-			//editorInput = new TradeEditorInput(((ResourceLeafNode)obj).id);
-			editorInput = new TradeEditorInput((ResourceLeafNode)obj);
+			editorInput = new TradeEditorInput(node);
+			page.openEditor(editorInput,TradeEditor.ID,false);
 			break;
 		default:
 			break;
-		}
-		IEditorPart editorPart = page.findEditor(editorInput);
-		if(editorPart!=null){
-			page.bringToTop(editorPart);
-		}else{
-				page.openEditor(editorInput,TradeEditor.ID);
 		}
 	}
 
@@ -258,29 +264,49 @@ public class NavView extends ViewPart {
 		IProject[] projects=prjRoot.getProjects();
 		treeRoot=new RootNode("root", "root", null);
 		for (IProject iProject : projects) {
-			System.out.println(iProject.getName());
 			treeRoot.add(new ProjectNode(iProject.getName(),iProject.getName(),treeRoot));
 		}
 	}
 	private void createTreeLeafs(ResourceNode obj){
-		DbConnectImpl dbConnectImpl=DbConnFactory.dbConnCreator() ;
-		dbConnectImpl.openConn();
-		if(obj instanceof TradeNodes){
-			try {
-				ResultSet rs=dbConnectImpl.retrive("select * from trade");
-				List<ResourceLeafNode> l=new ArrayList<ResourceLeafNode>();
-				while(rs.next()){
-					l.add(new ResourceLeafNode(rs.getString(2), rs.getString(1), (TradeNodes)obj));
-				}
-				if(!l.isEmpty()){
-					obj.removeAllChildren();
-						for (ResourceLeafNode resourceLeafNode : l) {
-							((TradeNodes) obj).add(resourceLeafNode);
-						}
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		
+		String prjId = obj.getParent().getId();
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+	    IWorkspaceRoot root = workspace.getRoot();
+	    IProject project = root.getProject(prjId);
+	    String propertyPath = project.getLocationURI().toString().substring(6) + '/' + prjId +".properties";
+	    PreferenceStore ps = new PreferenceStore(propertyPath);
+	    try {
+			ps.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    NavViewDaoServiceImpl navViewDaoServiceImpl=new NavViewDaoServiceImpl();
+	    String tableName=obj.getName();
+	    switch(tableName){
+	    case "数据项":
+	    	tableName="DataItem";
+			break;
+		case "响应码" :
+			tableName="RetCode";
+			break;
+		case "动态库" :
+			tableName="AopDll";
+			break;
+		case "原子交易" :
+			tableName="Aop";
+			break;
+	    case "服务程序":
+	    	tableName="Server";
+	    	break;
+	    case "交易":
+	    	tableName="Trade";
+	    }
+	    LinkedHashMap<String, String> map=navViewDaoServiceImpl.getResourceNodeChild(ps, tableName);
+	    if(!map.isEmpty()){
+			obj.removeAllChildren();
+			for (String key : map.keySet()) {
+				ResourceLeafNode rln =new ResourceLeafNode(map.get(key), key, obj);
+				obj.getChildren().add(rln);
 			}
 		}
 	}

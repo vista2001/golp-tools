@@ -1,4 +1,4 @@
-package dev.editors.Trade;
+package dev.editors.trade;
 
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -6,22 +6,23 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 import dev.Activator;
+import dev.editors.server.ServerEditorInput;
 import dev.model.base.ResourceLeafNode;
 
 
 public class TradeEditorInput implements IEditorInput{
-	private String input;
 	private ResourceLeafNode source;
 	
 	public ResourceLeafNode getSource() {
 		return source;
 	}
 	
-	public TradeEditorInput(String input){
-		this.input=input;
+	public void setSource(ResourceLeafNode source) {
+		this.source = source;
 	}
-	public TradeEditorInput(ResourceLeafNode obj){
-		this.input=obj.getId();
+
+
+	public TradeEditorInput(ResourceLeafNode obj) {
 		this.source=obj;
 	}
 	
@@ -45,7 +46,7 @@ public class TradeEditorInput implements IEditorInput{
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return input;
+		return source.getId();
 	}
 
 	@Override
@@ -57,8 +58,10 @@ public class TradeEditorInput implements IEditorInput{
 	@Override
 	public String getToolTipText() {
 		// TODO Auto-generated method stub
-		return input;
+		//return input;
+		return source.getId();
 	}
+	
 	 @Override
 	 public boolean equals(Object obj) {
 	  if(null == obj) return false;
@@ -66,7 +69,15 @@ public class TradeEditorInput implements IEditorInput{
 	  if(!(obj instanceof TradeEditorInput)) return false;
 	   
 	  if(!getName().equals(((TradeEditorInput)obj).getName())) return false;
-	   
+	  if(!source.getParent().getName().equals(((TradeEditorInput)obj).getSource().getParent().getName()))
+	  {
+		  return false;
+	  }
+	  if(!source.getParent().getParent().getId().equals(((TradeEditorInput)obj).getSource().getParent().getParent().getId()))
+	  {
+		  return false;
+	  } 
 	  return true;
 	 }
+	 
 }

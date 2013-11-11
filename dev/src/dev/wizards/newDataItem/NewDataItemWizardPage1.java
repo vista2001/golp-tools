@@ -17,7 +17,9 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 
 import dev.util.RegExpCheck;
-
+/**
+ * 该类定义了新建数据项向导的 第2页
+ */
 public class NewDataItemWizardPage1 extends WizardPage
 {
 

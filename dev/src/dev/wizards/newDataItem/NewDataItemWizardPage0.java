@@ -29,7 +29,9 @@ import dev.db.DbConnectImpl;
 import dev.model.base.RootNode;
 import dev.model.base.TreeNode;
 import dev.views.NavView;
-
+/**
+ * 该类定义了新建数据项向导的 第1页
+ */
 public class NewDataItemWizardPage0 extends WizardPage
 {
 	private Combo dataItemUpProjectCombo;
@@ -253,15 +255,4 @@ public class NewDataItemWizardPage0 extends WizardPage
 			return false;
 		return true;
 	}
-	
-//	public static void main (String[] args)
-//	{
-//		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-//	    IWorkspaceRoot root = workspace.getRoot();
-//	  //  System.out.println(workspace);
-//	    System.out.println(root.getLocationURI().toString());
-//	  //  IProject project = root.getProject(prjId);
-//	   // propertyPath = project.getLocationURI().toString().substring(6) + '/' + prjId +".properties";
-//	}
-
 }
