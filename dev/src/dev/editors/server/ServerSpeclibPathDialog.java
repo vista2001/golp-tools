@@ -217,40 +217,16 @@ public class ServerSpeclibPathDialog extends TitleAreaDialog
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 300);
+		return new Point(550, 400);
 	}
 	
-//	private void initData() {
-//		DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
-//		ResultSet rs = null;
-//		dbConnectImpl.openConn();
-//		try {
-//			rs = dbConnectImpl.retrive("select * from dataItem order by dataItemId");
-//			java.util.List<String> contents = new ArrayList<String>();
-//			while (rs.next()) {
-//				contents.add(rs.getString(1));
-//			}
-//			listInDialog.setItems(contents.toArray(new String[0]));
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				dbConnectImpl.closeConn();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-
 	public void addInformDialogListener(InformDialogListener dl) {
 		listeners.add(dl);
-		//System.out.println("demo add");
 	}
 
 	public void notifyInformDialogEvent() {
 		for (InformDialogListener idl : listeners) {
 			idl.handleEvent(new InformDialogEvent(this));
-			//System.out.println(idl.toString() + " is informed");
 		}
 	}
 }

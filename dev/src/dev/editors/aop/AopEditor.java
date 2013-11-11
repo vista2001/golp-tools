@@ -1,6 +1,7 @@
 package dev.editors.aop;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,13 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -33,14 +38,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 
+import dev.db.DbConnFactory;
+import dev.db.DbConnectImpl;
 import dev.db.service.EditorAopServiceImpl;
 import dev.editors.ISearch;
 import dev.editors.Search;
 import dev.model.base.ResourceLeafNode;
+import dev.model.base.TreeNode;
+import dev.model.resource.AopNodes;
 import dev.views.NavView;
 /**
  * Aop表编辑器类
@@ -62,8 +72,8 @@ import dev.views.NavView;
  * */
 public class AopEditor extends EditorPart implements ISearch {
 	public static final String ID="dev.editor.Aop.AopEditor";//编辑器类的标识
-	//private Text upProject1;								 //查询部分所属工程文本框
-	//private Text searchText;								 //搜索文本框
+	private Text upProject1;								 //查询部分所属工程文本框
+	private Text searchText;								 //搜索文本框
 	private Text upProject;									 //表项部分所属工程文本框
 	private Text AopLevel;                                   //原子交易级别文本框
 	private Text upDll;                                      //所属动态库文本框
@@ -73,8 +83,8 @@ public class AopEditor extends EditorPart implements ISearch {
 	private Text AopDesc;                                    //原子交易说明文本框
 	private Button saveBtn;                                  //修改按钮
 	private Button clearBtn;                                 //解锁按钮
-	//private Button aopNameButton;                            //单选按钮（名称）
-	//private Button aopIDButton;                              //单选按钮（标识）
+	private Button aopNameButton;                            //单选按钮（名称）
+	private Button aopIDButton;                              //单选按钮（标识）
 	private Button restoreButton;							 //恢复按钮
 	private PreferenceStore ps;                              //数据库配置信息
 	private EditorAopServiceImpl impl;                       //数据库操作类对象
@@ -728,8 +738,8 @@ public class AopEditor extends EditorPart implements ISearch {
 		map=impl.queryAopByIdOrName(name, "", ps);
 		restoreMap=map;
 		//依次给控件赋值
-		AopId.setText(map.get("id"));
-		AopName.setText(map.get("name"));
+		AopId.setText(map.get("ID"));
+		AopName.setText(map.get("NAME"));
 		AopDesc.setText(map.get("aopdesc"));
 		AopErrRecover.setText(ErrRecoverItem[Integer.parseInt(map.get("aoperrrecover"))-1]);
 		AopExts.setText(map.get("aopexts"));
@@ -835,6 +845,7 @@ public class AopEditor extends EditorPart implements ISearch {
 	public void setTargetMap(Map<String, String> map) {
 		// TODO Auto-generated method stub
 		this.map=map;
+		this.restoreMap=map;
 	}
 
 	@Override
@@ -886,8 +897,8 @@ public class AopEditor extends EditorPart implements ISearch {
 	@Override
 	public void setControlsText() {
 		// TODO Auto-generated method stub
-		AopId.setText(map.get("id"));
-		AopName.setText(map.get("name"));
+		AopId.setText(map.get("ID"));
+		AopName.setText(map.get("NAME"));
 		AopDesc.setText(map.get("aopdesc"));
 		AopErrRecover.setText(ErrRecoverItem[Integer.parseInt(map.get("aoperrrecover"))-1]);
 		AopExts.setText(map.get("aopexts"));
@@ -923,16 +934,17 @@ public class AopEditor extends EditorPart implements ISearch {
 	@Override
 	public void setEnable(boolean b) {
 		// TODO Auto-generated method stub
-		if(!b){
-			clearBtn.setText("锁定");
-			AopErrRecover.setEnabled(true);
-			unlock(list);
-		}
-		else{
-			clearBtn.setText("编辑");
+		if(!b)
+		{	clearBtn.setText("编辑");
 			AopErrRecover.setEnabled(false);
 			lock(list);
 		}
+		else
+		{	clearBtn.setText("锁定");
+			AopErrRecover.setEnabled(true);
+			unlock(list);
+		}
+			
 	}
 
 	@Override

@@ -1,10 +1,16 @@
 package dev.editors.aopDll;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle.Control;
+
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -15,9 +21,13 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -34,6 +44,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
 
+import dev.db.DbConnFactory;
+import dev.db.DbConnectImpl;
 import dev.editors.ISearch;
 import dev.editors.Search;
 import dev.model.base.ResourceLeafNode;
@@ -57,8 +69,8 @@ public class AopDllEditor extends EditorPart implements ISearch{
 	}
 
 	public static final String ID="dev.editor.AopDll.AopDllEditor"; //编辑器类的标识
-	//private Text upProject1;										//查询部分所属工程文本框
-	//private Text searchText;										//搜索文本框
+	private Text upProject1;										//查询部分所属工程文本框
+	private Text searchText;										//搜索文本框
 	private Text upProject;											//表项部分所属工程文本框
 	private Text dllLevel;											//原子交易库级别文本框
 	private Text dllId;												//原子交易库标识文本框	
@@ -68,8 +80,8 @@ public class AopDllEditor extends EditorPart implements ISearch{
 	private Button saveBtn;											//修改按钮
 	private Button clearBtn;										//解锁按钮
 	private Button restoreBtn;										//恢复按钮
-	//private Button dllIDButton;										//单选按钮（根据标识）
-	//private Button dllNameButton;									//单选按钮（根据名称）
+	private Button dllIDButton;										//单选按钮（根据标识）
+	private Button dllNameButton;									//单选按钮（根据名称）
 	private AopDllEditorInput input;								//Input对象
 	private EditorAopDllServiceImpl impl;							//数据库操作类对象
 	private PreferenceStore ps;										//数据库配置信息
@@ -552,9 +564,9 @@ public class AopDllEditor extends EditorPart implements ISearch{
 		map=impl.queryAopDllByIdOrName(name, "", ps);
 		restoreMap=map;
 		//依次给控件赋值
-		dllId.setText(map.get("id"));
+		dllId.setText(map.get("ID"));
 		dllDesc.setText(map.get("dlldesc"));
-		dllName.setText(map.get("name"));
+		dllName.setText(map.get("NAME"));
 		dllType.setText(map.get("dlltype"));
 		//若aoplevel为零则设置为“APP”，否则设置为“GOLP”并将“解锁”与“修改”按钮设为不可见
 		if(map.get("dlllevel").equals("0"))
@@ -628,6 +640,7 @@ public class AopDllEditor extends EditorPart implements ISearch{
 	public void setTargetMap(Map<String, String> map) {
 		// TODO Auto-generated method stub
 		this.map=map;
+		this.restoreMap=map;
 	}
 
 	@Override
@@ -711,17 +724,19 @@ public class AopDllEditor extends EditorPart implements ISearch{
 	@Override
 	public void setEnable(boolean b) {
 		// TODO Auto-generated method stub
-		if(b){
+		if(!b){
+		clearBtn.setText("编辑");
+		dllName.setEnabled(false);
+		dllDesc.setEnabled(false);
+//		setDirty(false);
+		}
+		else{
 			clearBtn.setText("锁定");
 			dllName.setEnabled(true);
 			dllDesc.setEnabled(true);
-		}
-		else{
-			clearBtn.setText("编辑");
-			dllName.setEnabled(false);
-			dllDesc.setEnabled(false);
-		}
-		setDirty(false);
+//			setDirty(false);
+			}
+			
 	}
 
 	@Override

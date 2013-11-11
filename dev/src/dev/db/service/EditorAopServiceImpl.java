@@ -55,8 +55,8 @@ public class EditorAopServiceImpl implements EditorAopService {
 				map.put("aoperrrecover",
 						rs.getString(2) != null ? rs.getString(2) : "");
 				map.put("updll", rs.getString(3) != null ? rs.getString(3) : "");
-				map.put("id", rs.getString(4) != null ? rs.getString(4) : "");
-				map.put("name", rs.getString(5) != null ? rs.getString(5) : "");
+				map.put("ID", rs.getString(4) != null ? rs.getString(4) : "");
+				map.put("NAME", rs.getString(5) != null ? rs.getString(5) : "");
 				map.put("aopexts", rs.getString(6) != null ? rs.getString(6)
 						: "");
 				map.put("aopdesc", rs.getString(7) != null ? rs.getString(7)

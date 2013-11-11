@@ -49,8 +49,8 @@ public class EditorRetcodeServiceImpl implements EditorRetcodeService {
 			ResultSet rs = dbConnectImpl.retrive(sql);
 			//将获得的数据写到map里
 			if(rs.next()&&rs.getString(1)!=null){
-				map.put("id",rs.getString(1) !=null?rs.getString(1):"");
-				map.put("name",rs.getString(2)!=null?rs.getString(2):"");
+				map.put("ID",rs.getString(1) !=null?rs.getString(1):"");
+				map.put("NAME",rs.getString(2)!=null?rs.getString(2):"");
 				map.put("retcodedesc", rs.getString(3)!=null?rs.getString(3):"");
 				map.put("retcodelevel", rs.getString(4)!=null?rs.getString(4):"");
 			}

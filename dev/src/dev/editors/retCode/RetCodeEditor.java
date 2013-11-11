@@ -53,8 +53,8 @@ import dev.views.NavView;
  * */
 public class RetCodeEditor extends EditorPart implements ISearch{
 	public static final String ID="dev.editor.retcode.RetCodeEditor";	////编辑器类的标识
-	//private Text upProject1;											//查询部分所属工程文本框
-	//private Text searchText;											//搜索文本框
+	private Text upProject1;											//查询部分所属工程文本框
+	private Text searchText;											//搜索文本框
 	private Text retCodeId;												//响应码标识文本框
 	private Text retCodeValue;											//响应码值文本框
 	private Text retCodeDesc;											//响应码说明文本框
@@ -64,8 +64,8 @@ public class RetCodeEditor extends EditorPart implements ISearch{
 	private Button saveBtn;												//修改按钮
 	private Button clearBtn;											//解锁按钮
 	private Button restoreBtn;
-	//private Button retcodeValueButton;									//单选按钮（根据值）
-	//private Button retcodeIDButton;										//单选按钮（根据标识）
+	private Button retcodeValueButton;									//单选按钮（根据值）
+	private Button retcodeIDButton;										//单选按钮（根据标识）
 	private EditorRetcodeServiceImpl impl;								//数据库操作类对象
 	private Map<String,String> map;										//存储查询到数据的Map
 	private Map<String, String> restoreMap;
@@ -530,8 +530,8 @@ public class RetCodeEditor extends EditorPart implements ISearch{
 		map=impl.queryRetcodeByIdOrName(name, "", ps);
 		restoreMap=map;
 		//依次给控件赋值
-		retCodeId.setText(map.get("id"));
-		retCodeValue.setText(map.get("name"));
+		retCodeId.setText(map.get("ID"));
+		retCodeValue.setText(map.get("NAME"));
 		retCodeDesc.setText(map.get("retcodedesc"));
 		//若aoplevel为零则设置为“APP”，否则设置为“GOLP”并将“解锁”与“修改”按钮设为不可见
 		if(map.get("retcodelevel").equals("0"))
@@ -614,6 +614,7 @@ public class RetCodeEditor extends EditorPart implements ISearch{
 	public void setTargetMap(Map<String, String> map) {
 		// TODO Auto-generated method stub
 		this.map=map;
+		this.restoreMap=map;
 	}
 
 	@Override
@@ -665,8 +666,8 @@ public class RetCodeEditor extends EditorPart implements ISearch{
 	@Override
 	public void setControlsText() {
 		// TODO Auto-generated method stub
-		retCodeId.setText(map.get("id"));
-		retCodeValue.setText(map.get("name"));
+		retCodeId.setText(map.get("ID"));
+		retCodeValue.setText(map.get("NAME"));
 		retCodeDesc.setText(map.get("retcodedesc"));
 		/*
 		 判断aoplevel是否为0，为零则设置为"AOP"，将“解锁”于“修改”按钮设置为可见，
@@ -696,17 +697,17 @@ public class RetCodeEditor extends EditorPart implements ISearch{
 	@Override
 	public void setEnable(boolean b) {
 		// TODO Auto-generated method stub
-		if(b){
-			clearBtn.setText("锁定");
-			retCodeValue.setEnabled(true);
-			retCodeDesc.setEnabled(true);
-		}
-		else{
+		if(!b)
+		{
 			clearBtn.setText("编辑");
 			retCodeValue.setEnabled(false);
 			retCodeDesc.setEnabled(false);
 		}
-		setDirty(false);
+		else{
+			clearBtn.setText("锁定");
+			retCodeValue.setEnabled(true);
+			retCodeDesc.setEnabled(true);
+		}
 	}
 
 	@Override

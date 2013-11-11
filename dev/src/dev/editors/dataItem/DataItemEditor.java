@@ -61,8 +61,8 @@ public class DataItemEditor extends EditorPart implements ISearch {
 	
 	public static final String ID="dev.editor.DataItem.DataItem";	//编辑器类的标识
 	public DataItemInput input;									 	//Input类对象
-	//private Text upProject1;										//查询部分所属工程文本框
-	//private Text searchText;										//搜索文本框
+	private Text upProject1;										//查询部分所属工程文本框
+	private Text searchText;										//搜索文本框
 	private Text upProject;											//表项部分所属工程文本框
 	private Text dataItemId;										//数据项标识文本框
 	private Text FMLID;												//FML编号文本框
@@ -74,8 +74,8 @@ public class DataItemEditor extends EditorPart implements ISearch {
 	private Combo dataItemType;										//数据项类型下拉菜单
 	private Button saveBtn;											//修改按钮
 	private Button clearBtn;										//解锁按钮
-	//private Button dataitemNameButton;								//单选按钮（根据名称）
-	//private Button dataitemIDButton;								//单选按钮（根据标识）
+	private Button dataitemNameButton;								//单选按钮（根据名称）
+	private Button dataitemIDButton;								//单选按钮（根据标识）
 	private PreferenceStore ps;										//数据库配置信息
 	private EditorDataitemServiceImpl impl;							//数据库操作类对象
 	private Map< String, String> map;								//存储查询的数据的Map
@@ -516,7 +516,7 @@ public class DataItemEditor extends EditorPart implements ISearch {
 		clearBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
 				Button nButton=((Button)e.getSource());
-				if(nButton.getText()=="解锁"){
+				if(nButton.getText()=="编辑"){
 					nButton.setText("锁定");
 					dataItemName.setEnabled(true);
 					dataItemDesc.setEnabled(true);
@@ -528,7 +528,7 @@ public class DataItemEditor extends EditorPart implements ISearch {
 					saveBtn.setEnabled(true);
 				}
 				else{
-					nButton.setText("解锁");
+					nButton.setText("编辑");
 					dataItemName.setEnabled(false);
 					dataItemDesc.setEnabled(false);
 					dataItemType.setEnabled(false);
@@ -628,8 +628,8 @@ public class DataItemEditor extends EditorPart implements ISearch {
 		map=impl.queryDataitemByIdOrName(name, "", ps);
 		restoreMap=map;
 		//依次给控件赋值
-		dataItemId.setText(map.get("id"));
-		dataItemName.setText(map.get("name"));
+		dataItemId.setText(map.get("ID"));
+		dataItemName.setText(map.get("NAME"));
 		dataItemDesc.setText(map.get("datadesc"));
 		//若aoplevel为零则设置为“APP”，否则设置为“GOLP”并将“解锁”与“修改”按钮设为不可见
 		if(map.get("datalvl").equals("0")){
@@ -710,6 +710,7 @@ public class DataItemEditor extends EditorPart implements ISearch {
 	public void setTargetMap(Map<String, String> map) {
 		// TODO Auto-generated method stub
 		this.map=map;
+		this.restoreMap=map;
 	}
 
 	@Override
@@ -761,8 +762,8 @@ public class DataItemEditor extends EditorPart implements ISearch {
 	@Override
 	public void setControlsText() {
 		// TODO Auto-generated method stub
-		dataItemId.setText(map.get("id"));
-		dataItemName.setText(map.get("name"));
+		dataItemId.setText(map.get("ID"));
+		dataItemName.setText(map.get("NAME"));
 		dataItemDesc.setText(map.get("datadesc"));
 		/*
 		 判断aoplevel是否为0，为零则设置为"AOP"，将“解锁”于“修改”按钮设置为可见，
@@ -805,22 +806,20 @@ public class DataItemEditor extends EditorPart implements ISearch {
 	public void setEnable(boolean b) {
 		// TODO Auto-generated method stub
 		if(!b){
-			clearBtn.setText("锁定");
-			dataItemName.setEnabled(true);
-			dataItemDesc.setEnabled(true);
-			dataItemType.setEnabled(true);
-			if(dataItemType.getText().equals(dataItemTypeItem[4])||dataItemType.getText().equals(dataItemTypeItem[5]))
-			{
-				dataItemLen.setEnabled(true);
-			}
-		}
-		else{
 			clearBtn.setText("编辑");
 			dataItemName.setEnabled(false);
 			dataItemDesc.setEnabled(false);
 			dataItemType.setEnabled(false);
 			dataItemLen.setEnabled(false);
 			saveBtn.setEnabled(false);
+		}
+		else{
+			clearBtn.setText("锁定");
+			dataItemName.setEnabled(true);
+			dataItemDesc.setEnabled(true);
+			dataItemType.setEnabled(true);
+			dataItemLen.setEnabled(true);
+			saveBtn.setEnabled(true);
 		}
 	}
 

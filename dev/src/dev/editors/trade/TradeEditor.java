@@ -361,7 +361,7 @@ public class TradeEditor extends EditorPart implements ISearch
 	 * 给可编辑的对象增加ModifyListener,用于在值改变的时候给编辑器设定dirty属性
 	 */
 	private void addModify(){
-		List<Control> controlsCanModify=controlsForInput;
+		List<Control> controlsCanModify=new ArrayList<Control>(controlsForInput);
 		controlsCanModify.add(callServiceText);
 		controlsCanModify.add(tradeDescText);
 		controlsCanModify.add(preconditionText);

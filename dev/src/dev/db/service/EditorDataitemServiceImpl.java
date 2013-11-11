@@ -49,8 +49,8 @@ public class EditorDataitemServiceImpl implements EditorDataitemService {
 			ResultSet rs = dbConnectImpl.retrive(sql);
 			//将获得的数据写到map里
 			if(rs.next()&&rs.getString(1)!=null){
-				map.put("id",rs.getString(1)!=null?rs.getString(1):"" );
-				map.put("name",rs.getString(2)!=null?rs.getString(2):"");
+				map.put("ID",rs.getString(1)!=null?rs.getString(1):"" );
+				map.put("NAME",rs.getString(2)!=null?rs.getString(2):"");
 				map.put("datadesc", rs.getString(3)!=null?rs.getString(3):"");
 				map.put("datatype", rs.getString(4)!=null?rs.getString(5):"");
 				map.put("datalvl", rs.getString(5)!=null?rs.getString(4):"");

@@ -166,7 +166,7 @@ public class OthFunSourceDialog extends TitleAreaDialog
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 300);
+		return new Point(550, 400);
 	}
 	
 
