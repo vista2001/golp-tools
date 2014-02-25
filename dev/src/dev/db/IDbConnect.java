@@ -10,7 +10,7 @@ public interface IDbConnect {
 
 	public boolean isDbAutoCommit();
 
-	public void openConn();
+	public void openConn() throws SQLException;
 
 	/**
 	 * 关闭<code>JDBC</code>链接
@@ -48,6 +48,13 @@ public interface IDbConnect {
 	 * */
 	public boolean setPreparedInt(int i, int in) throws SQLException;
 
+	/**
+     * 设置PreparedStatement的long类型参数值
+     * 
+     * @throws Exception
+     * */
+	public boolean setPreparedLong(int i, long in) throws SQLException;
+	
 	/**
 	 * 设置PreparedStatement的double类型参数值
 	 * 

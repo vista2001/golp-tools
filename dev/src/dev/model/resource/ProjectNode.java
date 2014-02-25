@@ -3,6 +3,8 @@ package dev.model.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.model.IWorkbenchAdapter;
 import dev.model.base.ResourceNode;
 import dev.model.base.ResourcesNodeType;
 import dev.model.base.TreeNode;
@@ -31,7 +33,6 @@ public class ProjectNode extends ResourceNode{
 
 	@Override
 	public TreeNode getParent() {
-		System.out.println("prj get parent");
 		return this.parent;
 	}
 
@@ -42,16 +43,37 @@ public class ProjectNode extends ResourceNode{
 
 	@Override
 	public List<TreeNode> getChildren() {
-		/*if(this.children==null){
-			this.children = new ArrayList<TreeNode>();
-		}*/
 		return this.children;
 	}
 
 	@Override
 	public Object getAdapter(Class adapter) {
-		// TODO Auto-generated method stub
-		return null;
+		IWorkbenchAdapter a=new IWorkbenchAdapter() {
+			
+			@Override
+			public Object getParent(Object o) {
+				
+				return null;
+			}
+			
+			@Override
+			public String getLabel(Object o) {
+				return ((ProjectNode)o).getName();
+			}
+			
+			@Override
+			public ImageDescriptor getImageDescriptor(Object object) {
+				
+				return null;
+			}
+			
+			@Override
+			public Object[] getChildren(Object o) {
+				
+				return null;
+			}
+		};
+		return a;
 	}
 	
 	public void add(ServerNodes svr){
@@ -65,7 +87,6 @@ public class ProjectNode extends ResourceNode{
 
 	@Override
 	public boolean hasChildren() {
-		System.out.println("this children is"+ this.children);
 		if(this.children==null||this.children.isEmpty()){
 			return false;
 		}

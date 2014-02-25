@@ -1,3 +1,9 @@
+/* 文件名：       ApplicationWorkbenchWindowAdvisor.java
+ * 修改人：       rxy
+ * 修改时间：   2013.12.8
+ * 修改内容：    关闭动画功能，即首选项-常规-外观-动画。
+ */
+
 package dev;
 
 import org.eclipse.swt.graphics.Point;
@@ -11,7 +17,7 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-import dev.console.ConsoleFactory;
+import dev.editors.server.UnCloseableEditorPresentationFactory;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -26,13 +32,18 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     public void preWindowOpen() {
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
         PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.SHOW_TRADITIONAL_STYLE_TABS, false);
+        
+        //关闭动画功能，即首选项-常规-外观-动画。
+        PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.ENABLE_ANIMATIONS, false);
         configurer.setInitialSize(new Point(1024, 768));
         configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(true);
         configurer.setShowFastViewBars(true);
         configurer.setTitle("GOLP TOOL"); //$NON-NLS-1$
-        ConsoleFactory cf = new ConsoleFactory();
-		cf.openConsole();
+//        ConsoleFactory cf = new ConsoleFactory();
+//		cf.openConsole();
+        
+		configurer.setPresentationFactory(new UnCloseableEditorPresentationFactory());
 		
     }
     @Override  

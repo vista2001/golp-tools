@@ -1,0 +1,3 @@
+<#list trades as trade>
+	${trade}:TH${trade}
+</#list>

@@ -1,0 +1,83 @@
+## artifact NAME  0.制品名称，即生成的服务程序名称
+ART_NAME=${SAMP}  
+## objects for service entry function, and 
+## objects of SvrCallBack
+## the number in file name is trade-code 1.在下面的内容中输入交易的入口函数、服务程序的回调函数和OtherFunSource这三类源文件所对应的.o
+OBJS = \
+<#list OBJS as entry>
+<#if entry_has_next>
+	${entry}.o \
+<#else>
+	${entry}.o
+</#if>
+</#list>
+##
+
+## objects for all functional trade that bound in this server, and
+## objects for helper  helper是交易实现的一部分
+## the number in file name is trade-code 2.在下面的内容中输入用手工编码实现的交易的源文件对应的.o
+TRDOBJS =\
+<#list tradeObjs as func>
+<#if func_has_next>
+	${func}.o \
+<#else>
+	${func}.o 
+</#if>
+</#list>
+
+##
+## Other stuff objec(.o) files for this server
+## these objects must saved in ../lib 3.在下面的内容中输入服务程序的属性ServerSpecObj中的文件。
+                                       
+									 
+## for none objects:
+STUFFOBJS = 
+## for all others stuffs
+STUFFOBJS += 
+<#list specObjs as specObj>
+<#if specObj_has_next>
+	${specObj}.o \
+<#else>
+	${specObj}.o 
+</#if>
+</#list>
+
+##
+## search path for source codes of $TARGETS, and
+## use space character to separate two path  4.在VPATH中填入生成上述所有.o文件（除ServerSpecObj），
+##											 需要到哪里去查找源文件
+##											 应该用冒号分割路径（详见《跟我一起学Makefile》19页VPATH相关内容）？先用空格分隔
+VPATH=../AGservices 
+<#list pathes as path>
+<#if path_has_next>
+	${path} 
+<#else>
+	${path}
+</#if>
+</#list>
+
+
+## options to compiler for $TARGETS
+## -I for header files' search path
+## -D for define one MACRO   		5.MYDEF中指定了服务程序依赖的宏定义，其内容可能不止有1个，
+##									在此处的格式也应该用\换行来分割？ name-D  path -i
+##									-I 是用来指定服务程序依赖的的头文件的目录，那是否也应该在此定义一个变量，
+##									如MYHEADPATH，将-I的内容放到其中？(也放在MYDEF中)
+MYDEF=-DPRGNAME=\"$ART_NAME\"
+<#list hpathes as path>
+	-I${path} 
+</#list> 
+<#list Mpathes as path>
+	-D${path} 
+</#list> 
+## options to linker for $TARGETS
+## -L for library search path
+## -l for one library to be linked  6.服务程序个性依赖库路径和库名称。这个目录会有一个缺省的内容，即整个工程依赖的函数库路径。
+##									将库路径和库名称都放在MYLIB中 前面路径，后面名称。
+MYLIB=
+<#list spathes as path>
+	-L${path} 
+</#list> 
+<#list names as name>
+	-l${name} 
+</#list> 

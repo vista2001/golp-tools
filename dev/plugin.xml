@@ -32,42 +32,56 @@
             id="dev.views.NavView"
             name="资源视图">
       </view>
-      <view
-            category="dev"
-            class="dev.views.QueryView"
-            icon="icons/sample.gif"
-            id="dev.views.queryView"
-            name="查询视图">
-      </view>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="dev.editors.AopEditor"
-            contributorClass="dev.editors.AopEditorContribute"
-            default="false"
-            icon="icons/sample.gif"
-            id="dev.editors.aopEditor"
-            name="AopEditor">
+            class="dev.editors.trade.TradeEditor"
+            id="dev.editors.Trade.TradeEditor"
+            name="TradeEditor">
       </editor>
       <editor
-            class="dev.editors.ServerEditor"
-            contributorClass="dev.editors.ServerEditorContribute"
+            class="dev.editors.server.ServerEditor"
             default="false"
-            icon="icons/sample.gif"
-            id="dev.editors.serverEditor"
+            id="dev.editors.server.serverEditor"
             name="ServerEditor">
       </editor>
       <editor
-            class="dev.editors.AopMultiPageEditor"
-            id="dev.editors.AopMultiPageEditor"
-            name="New MultiPageEditorPart">
+            class="dev.editors.dataItem.DataItemEditor"
+            default="false"
+            id="dev.editor.DataItem.DataItem"
+            name="DataItem">
       </editor>
+      <editor
+            class="dev.editors.aop.AopEditor"
+            default="false"
+            id="dev.editor.aop.AopEditor"
+            name="AOP">
+      </editor>
+      <editor
+            class="dev.editors.retCode.RetCodeEditor"
+            default="false"
+            id="dev.editor.retcode.RetCodeEditor"
+            name="Retcode">
+      </editor>
+      <editor
+            class="dev.editors.aopDll.AopDllEditor"
+            default="false"
+            id="dev.editor.AopDll.AopDllEditor"
+            name="AopDll">
+      </editor>
+      <editor
+            class="dev.diagram.ui.DiagramEditor"
+            contributorClass="dev.diagram.actions.DiagramActionBarContributor"
+            default="false"
+            id="dev.diagram.ui.DiagramEditor"
+            name="DiagramEditor">
+      </editor>
+      
    </extension>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            allPopups="false"
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
                label="资源管理(S)"
@@ -79,6 +93,40 @@
                      commandId="dev.menu.resource.commands.newProject"
                      style="push">
                </command>
+                        <!--<command
+               commandId="dev.menu.project.makefilePush"
+               label="makefile生成"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activePart">
+                  <adapt
+                        type="dev.views.NavView">
+                     <with
+                           variable="selection">
+                        <test
+                              property="dev.model.base.name">
+                        </test>
+                     </with>
+                  </adapt>
+               </with>
+            </visibleWhen>
+         </command> -->
+         <!--<command
+               commandId="dev.menu.edit.commands.delete"
+               label="删除资源"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <test
+                        property="dev.model.base.count">
+                  </test>
+               </with>
+            </visibleWhen>
+         </command>-->
                <separator
                      name="dev.separator1"
                      visible="true">
@@ -121,6 +169,25 @@
                   visible="true">
             </separator>
             <command
+                  commandId="dev.menu.resource.commands.loadProject"
+                  label="载入工程"
+                  style="push">
+            </command>
+            <command
+                  commandId="dev.menu.resource.commands.deleteProject"
+                  style="push">
+            </command>
+            <command
+                  commandId="dev.menu.resource.commands.openProperty"
+                  label="工程属性(R)"
+                  mnemonic="R"
+                  style="push">
+            </command>
+            <separator
+                  name="dev.separator3"
+                  visible="true">
+            </separator>
+            <command
                   commandId="org.eclipse.ui.file.close"
                   label="关闭(C)"
                   mnemonic="C"
@@ -129,16 +196,6 @@
             <command
                   commandId="org.eclipse.ui.file.closeAll"
                   label="关闭所有"
-                  style="push">
-            </command>
-            <separator
-                  name="dev.separator3"
-                  visible="true">
-            </separator>
-            <command
-                  commandId="dev.menu.resource.commands.openProperty"
-                  label="属性(R)"
-                  mnemonic="R"
                   style="push">
             </command>
             <command
@@ -167,39 +224,41 @@
                   style="push">
             </command>
          </menu>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
-               label="编辑(E)"
-               mnemonic="E">
-            <command
-                  commandId="dev."
-                  style="push">
-            </command>
-            <command
+               label="编辑">
+               <command
                   commandId="dev.menu.edit.commands.delete"
                   label="删除(D)"
                   mnemonic="D"
                   style="push">
             </command>
          </menu>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               label="工程(P)"
+               mnemonic="P">
+            <command
+                  commandId="dev.menu.project.fmlid"
+                  label="fml生成"
+                  style="push">
+            </command>
+            <command
+                  commandId="dev.menu.project.makefile"
+                  label="makefile生成"
+                  style="push">
+            </command>
+            <command
+                  commandId="dev.menu.project.entryFunction"
+                  label="入口函数生成"
+                  style="push">
+            </command>
+         </menu>
          <menu
                label="查看(V)"
                mnemonic="V">
             <command
                   commandId="dev.menu.view.commands.openNavView"
+                  icon="icons/sample.gif"
                   label="资源视图"
-                  style="push">
-            </command>
-            <command
-                  commandId="dev.menu.view.commands.openQueryView"
-                  label="查询视图"
                   style="push">
             </command>
             <command
@@ -217,43 +276,47 @@
                   label="控制台"
                   style="push">
             </command>
-         </menu>
-         <menu
-               label="label">
-         </menu>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               label="工程(P)"
-               mnemonic="P">
             <command
-                  commandId="dev.command4"
+                  commandId="dev.menu.view.commands.openPropertySheet"
+                  label="属性表单"
+                  style="push">
+            </command>
+            <command
+                  commandId="dev.menu.view.commands.openContentOutline"
+                  label="大纲"
+                  style="push">
+            </command>
+         </menu>
+         <menu
+               label="关于">
+            <command
+                  commandId="org.eclipse.ui.help.aboutAction"
                   style="push">
             </command>
          </menu>
       </menuContribution>
       <menuContribution
-            allPopups="false"
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               label="帮助(H)"
-               mnemonic="H">
-            <command
-                  commandId="dev.command4"
-                  style="push">
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
             locationURI="popup:dev.views.NavView?after=additions">
          <menu
                label="新建">
             <command
                   commandId="dev.menu.resource.commands.newProject"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="NULL">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <separator
                   name="dev.separator1"
@@ -262,14 +325,59 @@
             <command
                   commandId="dev.menu.resource.commands.newDataItem"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.DataItemNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newDll"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.DllNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newRetCode"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.RetCodeNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <separator
                   name="dev.separator2"
@@ -278,20 +386,237 @@
             <command
                   commandId="dev.menu.resource.commands.newServer"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.ServerNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newTrade"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.TradeNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newAop"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.AopNodes">
+                           </instanceof>
+                        </or></iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="dev.menu.resource.commands.newTfm"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <or>
+                           <instanceof
+                                 value="dev.model.resource.TFMNodes">
+                           </instanceof>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
          </menu>
+          <command
+               commandId="dev.menu.project.makefilePush"
+               label="makefile生成"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activePart">
+                  <adapt
+                        type="dev.views.NavView">
+                     <with
+                           variable="selection">
+                        <test
+                              property="dev.model.base.name">
+                        </test>
+                     </with>
+                  </adapt>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="dev.menu.edit.commands.delete"
+               icon="icons/delete_edit.gif"
+               label="删除资源"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <test
+                        property="dev.model.base.count">
+                  </test>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="dev.menu.project.entryFunctionPush"
+               label="入口函数生成"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activePart">
+                  <adapt
+                        type="dev.views.NavView">
+                     <with
+                           variable="selection">
+                        <test
+                              property="dev.model.base.name1">
+                        </test>
+                     </with>
+                  </adapt>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="dev.menu.resource.commands.deleteProject"
+               label="移除工程"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <and>
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false"
+                           operator="and">
+                        <instanceof
+                              value="dev.model.resource.ProjectNode">
+                        </instanceof>
+                     </iterate>
+                  </and>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="dev.menu.resource.commands.openProperty"
+               label="属性"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <and>
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false"
+                           operator="and">
+                        <instanceof
+                              value="dev.model.resource.ProjectNode">
+                        </instanceof>
+                     </iterate>
+                  </and>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+
+      
+
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="dev.toolbar1">
+            <command
+                  commandId="dev.commands.referenceToMenuId"
+                  label="新建"
+                  style="pulldown">
+            </command>
+         </toolbar>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:dev.commands.referenceToMenuId">
+         <command
+               commandId="dev.menu.resource.commands.newProject"
+               style="push">
+         </command>
+         <separator
+               name="dev.separator1"
+               visible="true">
+         </separator>
+         <command
+               commandId="dev.menu.resource.commands.newDataItem"
+               style="push">
+         </command>
+         <command
+               commandId="dev.menu.resource.commands.newDll"
+               style="push">
+         </command>
+         <command
+               commandId="dev.menu.resource.commands.newRetCode"
+               style="push">
+         </command>
+         <separator
+               name="dev.separator2"
+               visible="true">
+         </separator>
+         <command
+               commandId="dev.menu.resource.commands.newServer"
+               style="push">
+         </command>
+         <command
+               commandId="dev.menu.resource.commands.newTrade"
+               style="push">
+         </command>
+         <command
+               commandId="dev.menu.resource.commands.newAop"
+               style="push">
+         </command>
+         <command
+               commandId="dev.menu.resource.commands.newTfm"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -340,7 +665,7 @@
             id="dev.menu.resource.commands.newTfm"
             name="新建流程图">
       </command>
-      <command
+      <!--<command
             categoryId="dev.menu.resource.commands"
             id="dev.menu.resource.commands.importProject"
             name="导入项目">
@@ -354,7 +679,7 @@
             categoryId="dev.menu.resource.commands"
             id="dev.menu.resource.commands.bakcProject"
             name="备份项目">
-      </command>
+      </command>-->
       <category
             id="dev.menu.view.commands"
             name="Menu Commands">
@@ -366,11 +691,6 @@
       </command>
       <command
             categoryId="dev.menu.view.commands"
-            id="dev.menu.view.commands.openQueryView"
-            name="查询视图">
-      </command>
-      <command
-            categoryId="dev.menu.view.commands"
             id="dev.menu.view.commands.openConsoleView"
             name="控制台">
       </command>
@@ -378,6 +698,16 @@
             categoryId="dev.menu.view.commands"
             id="dev.menu.view.commands.openPreference"
             name="首选项">
+      </command>
+      <command
+            categoryId="dev.menu.view.commands"
+            id="dev.menu.view.commands.openPropertySheet"
+            name="属性表单">
+      </command>
+      <command
+            categoryId="dev.menu.view.commands"
+            id="dev.menu.view.commands.openContentOutline"
+            name="大纲">
       </command>
       <category
             id="dev.menu.edit.commands"
@@ -392,6 +722,44 @@
             categoryId="dev.menu.resource.commands"
             id="dev.menu.resource.commands.openProperty"
             name="属性">
+      </command>
+      <command
+            id="org.eclipse.ui.edit.delete"
+            name="name">
+      </command>
+      <command
+            id="dev.menu.resource.commands.deleteProject"
+            name="移除工程">
+      </command>
+      <command
+            id="dev.menu.project.makefilePush"
+            name="MakeFile生成(弹出菜单)">
+      </command>
+      <command
+            id="dev.menu.project.makefile"
+            name="MakeFile生成(菜单栏)">
+      </command>
+      <command
+            categoryId="dev.menu.resource.commands"
+            id="dev.menu.resource.commands.loadProject"
+            name="载入工程">
+      </command>
+      <command
+            id="dev.menu.project.fmlid"
+            name="生成fmlId">
+      </command>
+      <command
+            id="dev.menu.project.entryFunctionPush"
+            name="入口函数生成(弹出菜单)">
+      </command>
+      <command
+            id="dev.menu.project.entryFunction"
+            name="入口函数生成(菜单栏)">
+      </command>
+      <command
+            defaultHandler="dev.commands.BlankHandler"
+            id="dev.commands.referenceToMenuId"
+            name="referenceToMenuId">
       </command>
    </extension>
    <extension
@@ -413,16 +781,123 @@
             commandId="dev.menu.resource.commands.delete">
       </handler>
       <handler
-            class="dev.commands.OpenQueryView"
-            commandId="dev.menu.view.commands.openQueryView">
+            class="dev.commands.OpenPropertySheet"
+            commandId="dev.menu.view.commands.openPropertySheet">
       </handler>
       <handler
             class="dev.commands.OpenConsoleView"
             commandId="dev.menu.view.commands.openConsoleView">
       </handler>
       <handler
+            class="dev.commands.NewServerHandler"
+            commandId="dev.menu.resource.commands.newServer">
+      </handler>
+      <handler
+            class="dev.commands.NewDataItemHandler"
+            commandId="dev.menu.resource.commands.newDataItem">
+      </handler>
+      <handler
+            class="dev.commands.NewRetCodeHandler"
+            commandId="dev.menu.resource.commands.newRetCode">
+      </handler>
+      <handler
+            class="dev.commands.NewAopHandler"
+            commandId="dev.menu.resource.commands.newAop">
+      </handler>
+      <handler
+            class="dev.commands.NewTradeHandler"
+            commandId="dev.menu.resource.commands.newTrade">
+      </handler>
+      <handler
+            class="dev.commands.NewDllHandler"
+            commandId="dev.menu.resource.commands.newDll">
+ 	  </handler>
+      <handler
+            class="dev.commands.DelPrjHandler"
+            commandId="dev.menu.resource.commands.deleteProject">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false"
+                     operator="and">
+                  <instanceof
+                        value="dev.model.resource.ProjectNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="dev.commands.OpenContentOutline"
+            commandId="dev.menu.view.commands.openContentOutline">
+      </handler>
+      <handler
+            class="dev.commands.NewTfmHandler"
+            commandId="dev.menu.resource.commands.newTfm">
+      </handler>
+      <handler
+            class="dev.commands.DeleteHandler"
+            commandId="dev.menu.edit.commands.delete">
+            <enabledWhen>
+            <with
+                  variable="activePart">
+               <adapt
+                     type="dev.views.NavView">
+                  <with
+                        variable="selection">
+                     <test
+                           property="dev.model.base.count">
+                     </test>
+                  </with>
+               </adapt>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="dev.commands.MakefileHandler"
+            commandId="dev.menu.project.makefile">
+      </handler>
+      <handler
+            class="dev.commands.MakefilePushHandler"
+            commandId="dev.menu.project.makefilePush">
+      </handler>
+      <handler
+            class="dev.commands.LoadProjectHandler"
+            commandId="dev.menu.resource.commands.loadProject">
+      </handler>
+      <handler
+            class="dev.commands.FmlIdHandler"
+            commandId="dev.menu.project.fmlid">
+      </handler>
+      <handler
+            class="dev.commands.EntryFunctionPushHandler"
+            commandId="dev.menu.project.entryFunctionPush">
+      </handler>
+      <handler
+            class="dev.commands.EntryFunctionHandler"
+            commandId="dev.menu.project.entryFunction">
+      </handler>
+      <handler
             class="dev.commands.OpenProperty"
             commandId="dev.menu.resource.commands.openProperty">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <and>
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <instanceof
+                           value="dev.model.resource.ProjectNode">
+                     </instanceof>
+                  </iterate>
+               </and>
+            </with>
+         </enabledWhen>
       </handler>
    </extension>
    <extension
@@ -440,73 +915,74 @@
       </page>
    </extension>
    <extension
+         id="check"
+         name="窗口"
          point="org.eclipse.ui.bindings">
+      <scheme
+            id="dev.scheme"
+            name="golpScheme"
+            parentId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </scheme>
+      <key
+            commandId="dev.menu.view.commands.openNavView"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="dev.scheme"
+            sequence="ctrl+shift+R">
+      </key>
       <key
             commandId="dev.menu.resource.commands.newProject"
             contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            schemeId="dev.scheme"
             sequence="alt+shift+P">
-      </key>
-      <key
-            commandId="dev.menu.resource.commands.newDataItem"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="alt+shift+I">
-      </key>
-      <key
-            commandId="dev.menu.resource.commands.newDll"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="alt+shift+D">
-      </key>
-      <key
-            commandId="dev.menu.resource.commands.newServer"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="alt+shift+S">
-      </key>
-      <key
-            commandId="dev.menu.resource.commands.newRetCode"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="alt+shift+R">
-      </key>
-      <key
-            commandId="dev.menu.resource.commands.newTrade"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="alt+shift+T">
-      </key>
-      <key
-            commandId="dev.menu.resource.commands.newAop"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="alt+shift+A">
       </key>
       <key
             commandId="dev.menu.resource.commands.newTfm"
             contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            schemeId="dev.scheme"
             sequence="alt+shift+F">
       </key>
-   </extension>
-   <extension
-         id="check"
-         name="窗口"
-         point="org.eclipse.ui.bindings">
       <key
-            commandId="dev.menu.view.commands.openNavView"
+            commandId="dev.menu.resource.commands.newAop"
             contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="ctrl+shift+R">
+            schemeId="dev.scheme"
+            sequence="alt+shift+A">
       </key>
       <key
-            commandId="dev.menu.view.commands.openQueryView"
+            commandId="dev.menu.resource.commands.newTrade"
             contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="ctrl+shift+Q">
+            schemeId="dev.scheme"
+            sequence="alt+shift+T">
       </key>
-   </extension>
+      <key
+            commandId="dev.menu.resource.commands.newRetCode"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="dev.scheme"
+            sequence="alt+shift+R">
+      </key>
+      <key
+            commandId="dev.menu.resource.commands.newServer"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="dev.scheme"
+            sequence="alt+shift+S">
+      </key>
+      <key
+            commandId="dev.menu.resource.commands.newDll"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="dev.scheme"
+            sequence="alt+shift+D">
+      </key>
+      <key
+            commandId="dev.menu.resource.commands.newDataItem"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="dev.scheme"
+            sequence="alt+shift+I">
+      </key>
+      <key
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="dev.scheme"
+            sequence="ctrl+N">
+      </key>
+   </extension> 
   <!-- <extension
          point="org.eclipse.ui.console.consoleFactories">
       <consoleFactory
@@ -515,15 +991,36 @@
       </consoleFactory>
    </extension>-->
    <extension
+         id="dev.project.properties"
+         name="工程的属性"
          point="org.eclipse.ui.propertyPages">
       <page
-            class="dev.properties.TreeObjectPropertyPage"
-            id="dev.properties.samplePropertyPage"
-            name="TreeObject Page"
-            nameFilter="*.*">
+            class="dev.properties.PrjPropertyPage1"
+            id="dev.properties.PrjPropertyPage1"
+            name="工程常规属性">
          <enabledWhen>
             <instanceof
-                  value="dev.model.provider.TreeObject">
+                  value="dev.model.resource.ProjectNode">
+            </instanceof>
+         </enabledWhen>
+      </page>
+      <page
+            class="dev.properties.PrjPropertyPage2"
+            id="dev.properties.PrjPropertyPage2"
+            name="工程数据库/服务器属性">
+         <enabledWhen>
+            <instanceof
+                  value="dev.model.resource.ProjectNode">
+            </instanceof>
+         </enabledWhen>
+      </page>
+      <page
+            class="dev.properties.PrjPropertyPage3"
+            id="dev.properties.PrjPropertyPage3"
+            name="工程路径属性">
+         <enabledWhen>
+            <instanceof
+                  value="dev.model.resource.ProjectNode">
             </instanceof>
          </enabledWhen>
       </page>
@@ -556,7 +1053,84 @@
                name="appName"
                value="dev">
          </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="FFFFFF">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="7,360,445,20">
+         </property>
+         <property
+               name="aboutText"
+               value="golpTools 二次开发工具&#x0A;陕西易普科技有限责任公司">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/about.png">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="5,380,590,15">
+         </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="dev.perspective">
+         <view
+               closeable="true"
+               id="org.eclipse.ui.views.PropertySheet"
+               minimized="true"
+               moveable="true"
+               ratio="0.7f"
+               relationship="bottom"
+               relative="org.eclipse.ui.editorss"
+               standalone="false"
+               visible="true">
+         </view>
+         <view
+               closeable="true"
+               id="org.eclipse.ui.views.ContentOutline"
+               minimized="true"
+               moveable="true"
+               ratio="0.7f"
+               relationship="right"
+               relative="org.eclipse.ui.editorss"
+               standalone="false"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="dev.commands.MakefilePushTest"
+            id="dev.commands.MakefilePushTest"
+            namespace="dev.model.base"
+            properties="name"
+            type="org.eclipse.jface.viewers.ISelection">
+      </propertyTester>
+      <propertyTester
+            class="dev.commands.DeleteTest"
+            id="dev.commands.DeleteTest"
+            namespace="dev.model.base"
+            properties="count"
+            type="org.eclipse.jface.viewers.ISelection">
+      </propertyTester>
+      <propertyTester
+            class="dev.commands.EntryFunctionPushTest"
+            id="dev.commands.EntryFunctionTest"
+            namespace="dev.model.base"
+            properties="name1"
+            type="org.eclipse.jface.viewers.ISelection">
+      </propertyTester>
+   </extension>
+   
 
 </plugin>

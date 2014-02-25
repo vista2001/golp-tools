@@ -9,7 +9,7 @@ public class DeleteHandler extends AbstractHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		// TODO Auto-generated method stub
+		
 		
 		return null;
 	}

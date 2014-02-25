@@ -1,3 +1,9 @@
+/* 文件名：       Application.java
+ * 修改人：       rxy
+ * 修改时间：   2013.12.6
+ * 修改内容：    增加声明public static final String PLUGIN_ID = "dev";
+ */
+
 package dev;
 
 import org.eclipse.equinox.app.IApplication;
@@ -14,6 +20,7 @@ public class Application implements IApplication {
 	/* (non-Javadoc)
 	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
 	 */
+    public static final String PLUGIN_ID = "dev";
 	public Object start(IApplicationContext context) throws Exception {
 		Display display = PlatformUI.createDisplay();
 		try {

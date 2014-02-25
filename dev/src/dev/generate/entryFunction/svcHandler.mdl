@@ -1,0 +1,48 @@
+#include "if_golp/golpItradeInfo.hpp"
+
+using namespace GOLPSystem;
+
+extern void golpGeneralTradeHandler(golpT_tradeDef* , void*);
+
+#ifdef __cplusplus
+extern "C"
+#endif
+void  TH${trade.tradeID}(void * pReqInfo)
+{
+    golpT_reqData  reqDatas [] = { // datas for request
+	 
+	<#list trade.req as data>
+	<#if data.isNeed=="0">
+ 		{${data.reqID},true}
+ 	<#else>
+ 		{${data.reqID},false}
+ 	</#if>
+ 	<#if data_has_next>
+ 	,
+ 	</#if>
+    </#list>
+    };
+    golpT_respData respDatas[] = { // datas for response
+    <#list trade.resp as data>
+    	<#if data.isNeed=="0">
+ 			{${data.respID},true,${data.comes}}
+ 		<#else>
+ 			{${data.respID},false,${data.comes}}
+ 		</#if>
+ 		<#if data_has_next>
+ 		,
+ 		</#if>
+ 		
+    </#list>
+    };
+    golpT_tradeDef  trade = {
+        ${trade.tradeID},
+        ${trade.tradeType},
+        "${trade.actionName}",
+        0,
+        reqDatas,
+        respDatas
+    };
+
+    golpGeneralTradeHandler(&trade, pReqInfo);
+}

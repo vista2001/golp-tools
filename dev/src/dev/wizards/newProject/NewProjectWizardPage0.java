@@ -1,3 +1,9 @@
+/* 文件名：       NewProjectWizardPage0.java
+ * 修改人：       rxy
+ * 修改时间：   2013.12.14
+ * 修改内容：   修改构造函数中，调用super方法时的参数为本类的类名。 
+ */
+
 package dev.wizards.newProject;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -6,7 +12,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -19,7 +24,7 @@ public class NewProjectWizardPage0 extends WizardPage{
 	private ISelection selection;
 
 	public NewProjectWizardPage0(ISelection selection) {
-		super("wizardPage");
+		super("NewProjectWizardPage0");
 		setTitle("新建工程向导");
 		setDescription("这个向导将指导你完成GOLP工程的创建");
 		this.selection = selection;
@@ -47,22 +52,19 @@ public class NewProjectWizardPage0 extends WizardPage{
 		new Label(container, SWT.NONE);
 		
 		Label prjIdLabel = new Label(container, SWT.NONE);
-		prjIdLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		prjIdLabel.setText("*工程标识符");
+		prjIdLabel.setText("*工程标识符：");
 		
 		prjIdText = new Text(container, SWT.BORDER);
 		prjIdText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label prjNameLabel = new Label(container, SWT.NONE);
-		prjNameLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		prjNameLabel.setText("*工程名称");
+		prjNameLabel.setText("*工程名称：");
 		
 		prjNameText = new Text(container, SWT.BORDER);
 		prjNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label prjDescLabel = new Label(container, SWT.NONE);
-		prjDescLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		prjDescLabel.setText("*描述");
+		prjDescLabel.setText("*描述：");
 		
 		prjDescText = new Text(container, SWT.BORDER);
 		prjDescText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -86,10 +88,10 @@ public class NewProjectWizardPage0 extends WizardPage{
 
 	// 输入项校验
 	private void dialogChanged() {
-		if (getPrjDescText().getText().length() == 0||getPrjIdText().getText().length()==0||getPrjNameText().getText().length()==0) {
+		/*if (getPrjDescText().getText().isEmpty()||getPrjIdText().getText().isEmpty()||getPrjNameText().getText().isEmpty()) {
 			updateStatus("File container must be specified");
 			return;
-		}
+		}*/
 		updateStatus(null);
 	}
 
@@ -101,7 +103,7 @@ public class NewProjectWizardPage0 extends WizardPage{
 
 	@Override
 	public boolean canFlipToNextPage() {
-		if(getPrjDescText().getText().length()==0||getPrjIdText().getText().length()==0||getPrjNameText().getText().length()==0)
+		if(getPrjDescText().getText().isEmpty()||getPrjIdText().getText().isEmpty()||getPrjNameText().getText().isEmpty())
 			return false;
 		return true;
 	}

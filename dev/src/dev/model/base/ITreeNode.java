@@ -10,5 +10,6 @@ public  interface ITreeNode extends IAdaptable{
 	public  TreeNode getParent();
 	public  TreeNode getRootProject();
 	public  List<TreeNode> getChildren();
+	public  void removeAllChildren();
 	public boolean hasChildren();
 }

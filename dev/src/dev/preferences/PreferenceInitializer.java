@@ -8,7 +8,7 @@ import dev.Activator;
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	public PreferenceInitializer() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
