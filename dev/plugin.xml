@@ -37,36 +37,42 @@
          point="org.eclipse.ui.editors">
       <editor
             class="dev.editors.trade.TradeEditor"
+            icon="icons/model_class.gif"
             id="dev.editors.Trade.TradeEditor"
             name="TradeEditor">
       </editor>
       <editor
             class="dev.editors.server.ServerEditor"
             default="false"
+            icon="icons/server.gif"
             id="dev.editors.server.serverEditor"
             name="ServerEditor">
       </editor>
       <editor
             class="dev.editors.dataItem.DataItemEditor"
             default="false"
+            icon="icons/Data.gif"
             id="dev.editor.DataItem.DataItem"
             name="DataItem">
       </editor>
       <editor
             class="dev.editors.aop.AopEditor"
             default="false"
+            icon="icons/meta_file.gif"
             id="dev.editor.aop.AopEditor"
             name="AOP">
       </editor>
       <editor
             class="dev.editors.retCode.RetCodeEditor"
             default="false"
+            icon="icons/stepreturn_co(1).gif"
             id="dev.editor.retcode.RetCodeEditor"
             name="Retcode">
       </editor>
       <editor
             class="dev.editors.aopDll.AopDllEditor"
             default="false"
+            icon="icons/th_automatic(1).gif"
             id="dev.editor.AopDll.AopDllEditor"
             name="AopDll">
       </editor>
@@ -74,6 +80,7 @@
             class="dev.diagram.ui.DiagramEditor"
             contributorClass="dev.diagram.actions.DiagramActionBarContributor"
             default="false"
+            icon="icons/graphView.gif"
             id="dev.diagram.ui.DiagramEditor"
             name="DiagramEditor">
       </editor>
@@ -87,10 +94,12 @@
                label="资源管理(S)"
                mnemonic="S">
             <menu
+                  icon="icons/new.gif"
                   label="新建"
                   mnemonic="N">
                <command
                      commandId="dev.menu.resource.commands.newProject"
+                     icon="icons/new_appclient_project.gif"
                      style="push">
                </command>
                         <!--<command
@@ -133,14 +142,17 @@
                </separator>
                <command
                      commandId="dev.menu.resource.commands.newDataItem"
+                     icon="icons/Data.gif"
                      style="push">
                </command>
                <command
                      commandId="dev.menu.resource.commands.newDll"
+                     icon="icons/th_automatic(1).gif"
                      style="push">
                </command>
                <command
                      commandId="dev.menu.resource.commands.newRetCode"
+                     icon="icons/stepreturn_co(1).gif"
                      style="push">
                </command>
                <separator
@@ -149,18 +161,22 @@
                </separator>
                <command
                      commandId="dev.menu.resource.commands.newServer"
+                     icon="icons/server.gif"
                      style="push">
                </command>
                <command
                      commandId="dev.menu.resource.commands.newTrade"
+                     icon="icons/model_class.gif"
                      style="push">
                </command>
                <command
                      commandId="dev.menu.resource.commands.newAop"
+                     icon="icons/meta_file.gif"
                      style="push">
                </command>
                <command
                      commandId="dev.menu.resource.commands.newTfm"
+                     icon="icons/graphView.gif"
                      style="push">
                </command>
             </menu>
@@ -170,15 +186,19 @@
             </separator>
             <command
                   commandId="dev.menu.resource.commands.loadProject"
+                  icon="icons/import.gif"
                   label="载入工程"
                   style="push">
             </command>
             <command
                   commandId="dev.menu.resource.commands.deleteProject"
+                  icon="icons/export_wiz.gif"
+                  label="移除工程"
                   style="push">
             </command>
             <command
                   commandId="dev.menu.resource.commands.openProperty"
+                  icon="icons/common_tab.gif"
                   label="工程属性(R)"
                   mnemonic="R"
                   style="push">
@@ -198,27 +218,13 @@
                   label="关闭所有"
                   style="push">
             </command>
-            <command
-                  commandId="dev.menu.resource.commands.bakcProject"
-                  label="备份项目"
-                  style="push">
-            </command>
-            <command
-                  commandId="dev.menu.resource.commands.importProject"
-                  label="导入项目"
-                  style="push">
-            </command>
-            <command
-                  commandId="dev.menu.resource.commands.exportProject"
-                  label="导出项目"
-                  style="push">
-            </command>
             <separator
                   name="dev.separator4"
                   visible="true">
             </separator>
             <command
                   commandId="org.eclipse.ui.file.exit"
+                  icon="icons/titlebar-button-help-exit.gif"
                   label="退出(X)"
                   mnemonic="X"
                   style="push">
@@ -227,27 +233,40 @@
          <menu
                label="编辑">
                <command
-                  commandId="dev.menu.edit.commands.delete"
-                  label="删除(D)"
-                  mnemonic="D"
-                  style="push">
+                     commandId="dev.menu.edit.commands.delete"
+                     icon="icons/delete_edit.gif"
+                     label="删除(D)"
+                     mnemonic="D"
+                     style="push">
             </command>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activePartId">
+                     <equals
+                           value="dev.diagram.ui.DiagramEditor">
+                     </equals>
+                  </with>
+               </visibleWhen>
          </menu>
          <menu
                label="工程(P)"
                mnemonic="P">
             <command
                   commandId="dev.menu.project.fmlid"
+                  icon="icons/generate_code.gif"
                   label="fml生成"
                   style="push">
             </command>
             <command
                   commandId="dev.menu.project.makefile"
+                  icon="icons/CreateActionSet_actions_Generate.gif"
                   label="makefile生成"
                   style="push">
             </command>
             <command
                   commandId="dev.menu.project.entryFunction"
+                  icon="icons/generatecode.gif"
                   label="入口函数生成"
                   style="push">
             </command>
@@ -263,26 +282,25 @@
             </command>
             <command
                   commandId="dev.menu.view.commands.openPreference"
+                  icon="icons/sample.gif"
                   label="首选项"
                   style="push">
             </command>
             <command
                   commandId="org.eclipse.ui.window.resetPerspective"
+                  icon="icons/reset.gif"
                   label="重置透视图"
                   style="push">
             </command>
             <command
-                  commandId="dev.menu.view.commands.openConsoleView"
-                  label="控制台"
-                  style="push">
-            </command>
-            <command
                   commandId="dev.menu.view.commands.openPropertySheet"
+                  icon="icons/properties.gif"
                   label="属性表单"
                   style="push">
             </command>
             <command
                   commandId="dev.menu.view.commands.openContentOutline"
+                  icon="icons/outline_co.gif"
                   label="大纲"
                   style="push">
             </command>
@@ -301,6 +319,7 @@
                label="新建">
             <command
                   commandId="dev.menu.resource.commands.newProject"
+                  icon="icons/new_appclient_project.gif"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -324,6 +343,7 @@
             </separator>
             <command
                   commandId="dev.menu.resource.commands.newDataItem"
+                  icon="icons/Data.gif"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -343,6 +363,7 @@
             </command>
             <command
                   commandId="dev.menu.resource.commands.newDll"
+                  icon="icons/th_automatic(1).gif"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -362,6 +383,7 @@
             </command>
             <command
                   commandId="dev.menu.resource.commands.newRetCode"
+                  icon="icons/stepreturn_co(1).gif"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -385,6 +407,7 @@
             </separator>
             <command
                   commandId="dev.menu.resource.commands.newServer"
+                  icon="icons/server.gif"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -404,6 +427,7 @@
             </command>
             <command
                   commandId="dev.menu.resource.commands.newTrade"
+                  icon="icons/model_class.gif"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -423,6 +447,7 @@
             </command>
             <command
                   commandId="dev.menu.resource.commands.newAop"
+                  icon="icons/meta_file.gif"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -441,6 +466,7 @@
             </command>
             <command
                   commandId="dev.menu.resource.commands.newTfm"
+                  icon="icons/graphView.gif"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -460,9 +486,10 @@
             </command>
          </menu>
           <command
-               commandId="dev.menu.project.makefilePush"
-               label="makefile生成"
-               style="push">
+                commandId="dev.menu.project.makefilePush"
+                icon="icons/CreateActionSet_actions_Generate.gif"
+                label="makefile生成"
+                style="push">
             <visibleWhen
                   checkEnabled="false">
                <with
@@ -496,6 +523,7 @@
          </command>
          <command
                commandId="dev.menu.project.entryFunctionPush"
+               icon="icons/generatecode.gif"
                label="入口函数生成"
                style="push">
             <visibleWhen
@@ -516,6 +544,7 @@
          </command>
          <command
                commandId="dev.menu.resource.commands.deleteProject"
+               icon="icons/export_wiz.gif"
                label="移除工程"
                style="push">
             <visibleWhen
@@ -539,7 +568,8 @@
          </command>
          <command
                commandId="dev.menu.resource.commands.openProperty"
-               label="属性"
+               icon="icons/common_tab.gif"
+               label="工程属性"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -560,6 +590,23 @@
                </with>
             </visibleWhen>
          </command>
+         <command
+               commandId="dev.menu.project.fmlid"
+               icon="icons/generate_code.gif"
+               label="fml生成"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate>
+                     <instanceof
+                           value="dev.model.resource.ProjectNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
       </menuContribution>
 
       
@@ -570,6 +617,7 @@
                id="dev.toolbar1">
             <command
                   commandId="dev.commands.referenceToMenuId"
+                  icon="icons/new.gif"
                   label="新建"
                   style="pulldown">
             </command>
@@ -579,6 +627,7 @@
             locationURI="menu:dev.commands.referenceToMenuId">
          <command
                commandId="dev.menu.resource.commands.newProject"
+               icon="icons/new_appclient_project.gif"
                style="push">
          </command>
          <separator
@@ -587,14 +636,17 @@
          </separator>
          <command
                commandId="dev.menu.resource.commands.newDataItem"
+               icon="icons/Data.gif"
                style="push">
          </command>
          <command
                commandId="dev.menu.resource.commands.newDll"
+               icon="icons/th_automatic(1).gif"
                style="push">
          </command>
          <command
                commandId="dev.menu.resource.commands.newRetCode"
+               icon="icons/stepreturn_co(1).gif"
                style="push">
          </command>
          <separator
@@ -603,18 +655,22 @@
          </separator>
          <command
                commandId="dev.menu.resource.commands.newServer"
+               icon="icons/server.gif"
                style="push">
          </command>
          <command
                commandId="dev.menu.resource.commands.newTrade"
+               icon="icons/model_class.gif"
                style="push">
          </command>
          <command
                commandId="dev.menu.resource.commands.newAop"
+               icon="icons/meta_file.gif"
                style="push">
          </command>
          <command
                commandId="dev.menu.resource.commands.newTfm"
+               icon="icons/graphView.gif"
                style="push">
          </command>
       </menuContribution>

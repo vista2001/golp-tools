@@ -27,6 +27,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -75,33 +77,55 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 
 	@Override
 	public boolean performFinish() {
-		
+		//获得向导中的数据
 	    getData();
+	    //检验数据库表中project表是否有记录
+	   if( checkHasRecord()==0){
+		    //创建工程工作区文件
+			createProject(project.getPrjId());
+			//创建工程工作目录
+			createDirectorys();
+			
+			//创建工程属性文件
+			createProperties();
+			
+			
+	        try
+	        {
+	            //创建数据库记录，此处之所以把创建数据库记录放在最后，是因为写数据库时，需要本地属性文件中的信息。
+	            createDbRecord(project);
+	            
+	            //通知其它视图或编辑器等
+	            informParts(project.getPrjId(), project.getPrjName(), project.getPrjDesc());
+	        }
+	        catch (SQLException e)
+	        {
+	            e.printStackTrace();
+	        }
+	   }else{
+		   showMessage(SWT.ICON_INFORMATION | SWT.YES, "提示", "数据库中已有工程记录，请载入工程！");
+	   }
 		
-		//创建工程工作区文件
-		createProject(project.getPrjId());
-		//创建工程工作目录
-		createDirectorys();
 		
-		//创建工程属性文件
-		createProperties();
-		
-		
-        try
-        {
-            //创建数据库记录，此处之所以把创建数据库记录放在最后，是因为写数据库时，需要本地属性文件中的信息。
-            createDbRecord(project);
-            
-            //通知其它视图或编辑器等
-            informParts(project.getPrjId(), project.getPrjName(), project.getPrjDesc());
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
 		return true;
 	}
 	
+	private int checkHasRecord() {
+		ProjectDaoServiceImpl projectDaoServiceImpl=new ProjectDaoServiceImpl();
+		int count=0;
+		try {
+			count=projectDaoServiceImpl.countProject(
+					page1.getDbAddressText().getText()
+					, page1.getDbPortText().getText()
+					, page1.getDbInstanceText().getText()
+					, page1.getDbUserText().getText()
+					, page1.getDbPwdText().getText());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
 	private void getData()
 	{
 	    String prjId = page0.getPrjIdText().getText();
@@ -182,7 +206,7 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
         // 读取路径
         String targetPath = projectAbsPath;
         String sourcePath = (new File(projectAbsPath).getParentFile().getParent())
-                            + File.separator + "temp";
+                            + File.separator + "sampleWorkDir";
         System.out.println(targetPath);
         System.out.println(sourcePath);
         Process p = null;
@@ -256,4 +280,12 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 		PropertiesUtil.rewriteProperties1(properties, map);
 		
 	}
+	private int showMessage(int style, String title, String message)
+    {
+        MessageBox box = new MessageBox(workbench.getActiveWorkbenchWindow().getShell(),
+                                        style);
+        box.setText(title);
+        box.setMessage(message);
+        return box.open();
+    }
 }

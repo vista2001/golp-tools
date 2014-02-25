@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.PreferenceStore;
 
 import dev.db.DbConnFactory;
@@ -31,6 +32,7 @@ import dev.db.DbConnectImpl;
 import dev.generate.fml.FmlId;
 import dev.model.base.ResourceLeafNode;
 import dev.util.DebugOut;
+import dev.util.LogUtils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -140,7 +142,16 @@ public class EntryFunction {
 				Writer out = null;
 				out = new BufferedWriter(new OutputStreamWriter(
 						new FileOutputStream(outFile), "UTF-8"));
+				if(root==null){
+					
+				}
+				System.out.println(testfile.toString());
+				System.out.println(root.toString());
+				System.out.println(out.toString());
+				System.out.println(out.toString());
+				
 				testfile.process(root, out);
+				out.flush();
 				out.close();
 			}
 		} catch (SQLException e) {
@@ -157,7 +168,7 @@ public class EntryFunction {
 			Configuration tempConfiguration = new Configuration();
 			tempConfiguration.setClassicCompatible(true);
 			tempConfiguration.setClassForTemplateLoading(this.getClass(),
-					"/dev/generate/EntryFunction");
+					"/dev/generate/entryFunction");
 			tempConfiguration.setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 			tempConfiguration.setNumberFormat("");
 			// tempConfiguration.setDefaultEncoding("utf-8");

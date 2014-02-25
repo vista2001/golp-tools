@@ -1,0 +1,143 @@
+#
+# Definations for compile & generate codes 
+# for 'make' application based on GOLP.
+#
+# WXQ@XDU 2013.5
+#
+
+#
+# Notice: 
+# FIRST, answer questions:
+#  1) GOLPHOME    in environment is OK?
+#  2) GOLPAPPHOME in environment is OK?
+#  3) TUXDIR      in environment is OK?
+#
+#  -- VPATH' MUST be edited first
+#
+#  Do you sure all above is OK ? (Y/N)____
+#
+#
+
+
+#
+# PART I  Directories
+#
+
+  # directory for GOLP installation
+GOLPHOME:=$(GOLPHOME)
+GOLPBINDIR=${GOLPHOME}/bin
+  # directory for GOLP libs(.so, .a)
+GOLPLIBDIR=${GOLPHOME}/lib
+  # directory for GOLP headers exported
+GOLPINCDIR=${GOLPHOME}/src/incPUB
+  # directory for templates from GOLP
+TEMPLATEDIR=${GOLPHOME}/build/template
+
+
+  # directory for GOLP-based application
+APPHOME =$(if $(GOLPAPPHOME),$(GOLPAPPHOME),$(HOME))
+  # release directory for executable server program.
+INSTBINDIR=${APPHOME}/bin
+  # release directory for libraries and shared objects.
+INSTLIBDIR=${APPHOME}/lib
+
+  # directory for application source codes that manual
+TOPSRC=${APPHOME}/src
+  # directory for application headers
+APPINCDIR=${TOPSRC}/include
+  # top directory for build
+BUILDDIR=${APPHOME}/build
+  # directory of source codes for auto-generated
+GENSVCDIR=${BUILDDIR}/AGservices
+  # directory prefix for auto-generated server
+SVRDIR_P=${BUILDDIR}/AGsvr_
+  # build directory for application library and shared objects.
+APPLIBDIR=${BUILDDIR}/lib
+  # build directory for executable server program.
+APPBINDIR=${BUILDDIR}/bin
+
+
+TUXDIR :=$(if $(TUXDIR),$(TUXDIR),/home/tuxedo)
+
+#
+# PART II  compiler and linkers
+#
+SHELL = /bin/sh
+CC = g++
+LD = g++ 
+AR  = ar
+AROPT= -crus
+CP  = cp -f
+RM = rm -rf
+RANLIB = ranlib
+ECHO = /bin/echo
+ECHOF = -n
+STRIP   = strip
+
+SLLEXT = .a
+DLLEXT = .so
+DLLLDOPT = -shared -fPIC 
+
+MAKE=make
+MAKEOPT=
+
+
+
+INCFLG=-I${APPINCDIR} -I${GOLPINCDIR} 
+
+# all library by GOLP and application
+GOLPLIBS=-L$(GOLPLIBDIR) -lgolptp -lgolp -lpclog -locilib -L$(ORACLE_HOME)/lib -lclntsh \
+-L$(TUXDIR) -latmi -ldl -lpthead -lm -lc
+APPLIBS=-L${APPLIBDIR} -lapp 
+
+# all macro-definitions for application creation
+APPMDS = -DHAS_ORACLE=1
+
+# flags for CC.
+CFLAGS = -Wall -O1 -c -fmessage-length=0 ${INCFLG} ${APPMDS}
+
+# flag for LD
+# cmd: LD $LIBOPTS
+LIBOPTS= ${APPLIBS} ${GOLPLIBS}
+
+#this object file should be linked within application server
+TUXBOOT=$(APPLIBDIR)/tuxboot0.o
+
+#used to make tuxedo-based server, like this
+#  CFLAGS="${TUXSVR_CFLAG}" \
+#  $(TUXSVR_MK) -o$@ ... -f $(TUXBOOT) ...
+
+# TODO: 修改 TUXEDO 的头文件目录
+TUXSVR_CFLAG= $(CFLAGS) $(LIBOPTS)
+TUXSVR_MK=buildserver
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#SHOULD edit this to all sub-directories under TOPSRC,
+# and seperated by :
+#VPATH=${TOPSRC}/.......
+
+.SUFFIXES: .cpp .c .o
+
+
+
+#
+# define all phony targets
+#  - all, make all artifacts
+#  - clean, clean all artifacts and intermedia files
+#           (object file, dependency file,...)
+#  - mostlyclean, clean all intermedia files
+#  - install, copy all artifacts into release directory
+#
+.PHONY : all clean mostlyclean install
+#
+# define default make goal(target)
+#
+.DEFAULT_GOAL := all
+
+
+
+
+#
+# end of the common Makefile.
+# <-- Here is the Last Line.
+

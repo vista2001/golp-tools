@@ -196,4 +196,38 @@ public class ProjectDaoServiceImpl implements ProjectDaoService
         }
         return prjId;
     }
+    /**获得数据库中工程记录数目*/
+    public int countProject(String dbAddress, String dbPort,
+            String dbInstance, String dbUser, String dbPwd) throws SQLException
+    {
+        int count=0;
+    	DbConnectImpl dbConnImpl = new DbConnectImpl();
+        String url = "jdbc:oracle:thin:@" + dbAddress + ":" + dbPort + ":"
+                + dbInstance;
+        String driver = "oracle.jdbc.driver.OracleDriver";
+        dbConnImpl.openConn(url, dbUser, dbPwd, driver);
+        try
+        {
+            ResultSet rs = dbConnImpl.retrive("select count(*) from project");
+            if (rs.next() && rs.getString(1) != null)
+            {
+                count = rs.getInt(1);
+            }
+        }
+        finally
+        {
+            if(dbConnImpl != null)
+            {
+                try
+                {
+                    dbConnImpl.closeConn();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                } 
+            }
+        }
+        return count;
+    }
 }

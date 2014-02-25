@@ -37,8 +37,8 @@ public class FmlId {
 		System.out.println(path);
 		CommonDialogServiceImpl impl = new CommonDialogServiceImpl();
 		List<TDataItem> list = impl.dataItemDialogQuery(prjId);
-		File outFile = new File(path + separator + prjId + separator + prjId
-				+ "fmlid.fml");
+		File outFile = new File(path + separator + prjId + separator + "FML"
+				+ separator + "fmlid.fml");
 		Writer out = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(outFile), "UTF-8"));
 		for (int i = 0; i < list.size(); i++) {
@@ -55,8 +55,8 @@ public class FmlId {
 		out.close();
 		Process child = Runtime.getRuntime().exec(
 				"cmd.exe /c mkfldhdr32.exe -d " + path + separator + prjId
-						+ " " + path + separator + prjId + separator + prjId
-						+ "fmlid.fml", null,
+						+ separator + "FML" + " " + path + separator + prjId
+						+ separator + "FML" + separator + "fmlid.fml", null,
 				new File(path + separator + ".." + separator + "FML"));
 		child.waitFor();
 		BufferedReader bufferedReader = new BufferedReader(
@@ -108,11 +108,11 @@ public class FmlId {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
 		path = root.getRawLocationURI().toString().substring(6);
-		String pathClone="";
-		String se="";
-		for(String autom:path.split("/"))
-			pathClone+=autom+separator;
-		path=pathClone;
+		String pathClone = "";
+		String se = "";
+		for (String autom : path.split("/"))
+			pathClone += autom + separator;
+		path = pathClone;
 		return pathClone;
 	}
 }

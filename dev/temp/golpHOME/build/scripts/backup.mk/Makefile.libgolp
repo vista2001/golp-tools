@@ -1,0 +1,100 @@
+#
+# Make for libGOLP
+#
+
+include ../scripts/makefile.def
+
+
+
+OBJS = \
+$(TO_OBJ)/golpCdbColumn.o \
+$(TO_OBJ)/golpCdbConnection.o \
+$(TO_OBJ)/golpCdbError.o \
+$(TO_OBJ)/golpCdbErrorWithData.o \
+$(TO_OBJ)/golpCdbms.o \
+$(TO_OBJ)/golpCdbResultSet.o \
+$(TO_OBJ)/golpCdbStatement.o \
+$(TO_OBJ)/golpCTimeANSI.o \
+$(TO_OBJ)/golpCTimeOracle.o \
+$(TO_OBJ)/golpCTimeOS.o \
+$(TO_OBJ)/golpCTimeSpan.o \
+$(TO_OBJ)/ocilibError.o
+
+OBJS += \
+$(TO_OBJ)/golpCFileLogger.o \
+$(TO_OBJ)/golpCLogger.o \
+$(TO_OBJ)/golpCLogManager.o \
+$(TO_OBJ)/golpClogsys.o \
+$(TO_OBJ)/golpIlogger.o \
+$(TO_OBJ)/golpboot.o \
+$(TO_OBJ)/golpCdataBufferTux.o \
+$(TO_OBJ)/golpCdataBufferTuxTP.o \
+$(TO_OBJ)/golpCError.o \
+$(TO_OBJ)/golpCmdLine.o \
+$(TO_OBJ)/golpCOSDir.o \
+$(TO_OBJ)/golpCOSFile.o \
+$(TO_OBJ)/golpCOSLinux.o \
+$(TO_OBJ)/golpCOSLockOfPosixThread.o \
+$(TO_OBJ)/golpCOSMutexPosix.o \
+$(TO_OBJ)/golpCOSthreadPosix.o \
+$(TO_OBJ)/golpCserver.o \
+$(TO_OBJ)/golpCserverCfg.o \
+$(TO_OBJ)/golpCsvrEnv.o \
+$(TO_OBJ)/golpCthread.o \
+$(TO_OBJ)/golpCtradeInfo.o \
+$(TO_OBJ)/golpinit.o \
+$(TO_OBJ)/svcboot.o \
+$(TO_OBJ)/timesvr.o \
+$(TO_OBJ)/tuxboot.o \
+$(TO_OBJ)/buildver.o
+
+C_DEPS=$(OBJS:.o=.d)
+
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(strip $(C_DEPS)),)
+-include $(C_DEPS)
+endif
+endif
+
+TARGETS=$(TO_LIB)/$(LIBGOLP_AR) $(TO_LIB)/$(LIBGOLP_SO)
+
+
+VPATH=$(SRCTOP)/libgolp/dbms $(SRCTOP)/libgolp/sys $(SRCTOP)/libgolp/logsys $(SRCTOP)/libgolp/ipc
+
+MYDEF=-DHAS_ORACLE=1 -DSVCTHREADS=1 -I$(SRCTOP)/libpclog/pclog -I$(TUXDIR)/include
+
+
+all: $(TARGETS)
+
+$(TO_LIB)/$(LIBGOLP_AR): $(OBJS)
+	@$(ECHO) 'Building target: $@'
+	@$(AR) $(AROPT) $@ $(OBJS)
+	@$(ECHO) 'Finished building target: $@'
+	@$(ECHO) ' '
+
+$(TO_LIB)/$(LIBGOLP_SO): $(OBJS)
+	@$(ECHO) 'Building target: $@'
+	$(LD) -o $@ $(SOFLAG) $(OBJS) -L$(TO_LIB) -l$(LIBLOG)  $(ORALIBS)
+	@$(ECHO) 'Finished building target: $@'
+	@$(ECHO) ' '
+
+
+$(TO_OBJ)/%.o: %.cpp
+	$(CC) -c -o $@ $(CFLAGS) $(MYDEF) $(SYSDEF) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" $<
+	@$(ECHO) ' '
+
+
+clean:
+	-$(RM) $(OBJS) $(C_DEPS) $(TARGETS)
+	-@echo ' '
+
+mostlyclean:
+	-$(RM) $(OBJS) $(C_DEPS)
+	-@$(ECHO) ' '
+
+install: $(TARGETS)
+	@$(CP) $(TO_LIB)/$(LIBGOLP_SO) $(INSTLIBDIR)/
+	@$(CP) $(TO_LIB)/$(LIBGOLP_AR) $(INSTLIBDIR)/
+	@$(ECHO) 'The libgolp has installed into $(INSTLIBDIR) from $(TO_LIB).'
+	@$(ECHO) ' '
+

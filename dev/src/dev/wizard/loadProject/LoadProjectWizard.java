@@ -297,7 +297,7 @@ public class LoadProjectWizard extends Wizard implements INewWizard
         // ¶ÁÈ¡Â·¾¶
         String targetPath = projectAbsPath;
         String sourcePath = (new File(projectAbsPath).getParentFile().getParent())
-                            + File.separator + "temp";
+                            + File.separator + "sampleWorkDir";
         System.out.println(targetPath);
         System.out.println(sourcePath);
         Process p = null;

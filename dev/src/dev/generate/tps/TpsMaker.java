@@ -182,6 +182,7 @@ public class TpsMaker {
 				names.add(str);
 			}
 		}
+		dbConnectImpl.closeConn();
 		// 将查到的数据放入map中
 		removeDuplicate(objs);
 		removeDuplicate(tradeObjs);

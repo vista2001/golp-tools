@@ -3,22 +3,33 @@ package dev.commands;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PlatformUI;
 
 import dev.db.DbConnFactory;
 import dev.db.DbConnectImpl;
+import dev.generate.entryFunction.EntryFunction;
 import dev.generate.tps.TpsMaker;
 import dev.model.base.ResourceLeafNode;
 import dev.model.base.RootNode;
@@ -31,7 +42,7 @@ public class MakefileHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) {
-		
+
 		List<TreeNode> obj;
 
 		NavView view = (NavView) PlatformUI.getWorkbench()
@@ -84,13 +95,13 @@ public class MakefileHandler extends AbstractHandler {
 				information += obj.get(count).id + "\n";
 			}
 		} catch (TemplateException e) {
-			
+
 			e.printStackTrace();
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		} finally {
 			MessageBox box = new MessageBox(Display.getCurrent()
@@ -100,8 +111,9 @@ public class MakefileHandler extends AbstractHandler {
 				information = "生成makefile操作成功";
 			} else {
 				box.setText("失败");
-				information = "生成第" + count + "makefile操作出现问题\n成功生成：\n"
-						+ information + "\n失败" + (obj.size() - count) + "个";
+				information = "生成第" + count
+						+ "makefile操作出现问题,请检查数据是否符合规定\n成功生成：\n" + information
+						+ "\n失败" + (obj.size() - count) + "个";
 			}
 			box.setMessage(information);
 			box.open();
@@ -126,11 +138,11 @@ public class MakefileHandler extends AbstractHandler {
 		DbConnectImpl impl = DbConnFactory.dbConnCreator();
 		ResultSet rs = null;
 		try {
-		    impl.openConn(ps);
-		    rs = impl
+			impl.openConn(ps);
+			rs = impl
 					.retrive("select servername,serverid from server order by serverid");
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
@@ -139,7 +151,7 @@ public class MakefileHandler extends AbstractHandler {
 				map.put(rs.getString(2), rs.getString(1));
 			}
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		return map;

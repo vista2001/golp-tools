@@ -10,11 +10,15 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 import dev.editors.IGetUpProject;
 import dev.model.base.RootNode;
@@ -28,7 +32,16 @@ public class DelPrjHandler extends AbstractHandler
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException
     {
-        IWorkspace workspace = ResourcesPlugin.getWorkspace();
+    	int a=showMessage(event,SWT.ICON_INFORMATION | SWT.YES|SWT.NO|SWT.CANCEL, "提示", "移除工程将删除当工程文件夹，确定继续吗？");
+    	if(a==SWT.OK){
+    		System.out.println("ok");
+    	}
+    	if(a==SWT.CANCEL){
+    		System.out.println("cancel");
+    	}
+    	
+    	
+    	IWorkspace workspace = ResourcesPlugin.getWorkspace();
         IWorkspaceRoot root = workspace.getRoot();
 
         NavView navView = (NavView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(
@@ -43,8 +56,8 @@ public class DelPrjHandler extends AbstractHandler
             {
                 String delId = ((ProjectNode) o).getId();
                 IProject project = root.getProject(delId);
-                System.out.println(((ProjectNode) o).getId());
-                System.out.println(project.getName());
+               // System.out.println(((ProjectNode) o).getId());
+                //System.out.println(project.getName());
                 if (project.exists())
                 {
                     try
@@ -79,7 +92,6 @@ public class DelPrjHandler extends AbstractHandler
                                     if (((IGetUpProject) editorPart).getUpProject().equals(
                                             delId))
                                     {
-
                                         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor(
                                                 editorPart, false);
 
@@ -101,5 +113,12 @@ public class DelPrjHandler extends AbstractHandler
             }
         }
         return null;
+    }
+    private int showMessage(ExecutionEvent event, int style, String title, String message)
+    {
+        MessageBox box = new MessageBox(HandlerUtil.getActiveShell(event),style);
+        box.setText(title);
+        box.setMessage(message);
+        return box.open();
     }
 }

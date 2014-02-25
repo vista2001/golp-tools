@@ -1,0 +1,51 @@
+/* This is an auto-generated TRADE ENTRY source file. 
+ *
+ *      DON'T edit me. 
+ *
+ * Created by @genName@   at @genTime@.
+ */
+
+/* *****************************************************************
+FILE: @tradeCode@
+LANG: C/C++
+DESC: implementation for service "@tradeName@".
+@tradeDesc@
+********************************************************************
+*/
+
+#include "atmi.h"
+#include "if_golp/golpItradeInfo.hpp"
+
+using namespace GOLPSystem;
+
+extern void golpGeneralTradeHandler(golpT_tradeDef* , TPSVCINFO*);
+
+#ifdef __cplusplus
+extern "C"
+#endif
+void  TH@tradeCode@ (TPSVCINFO * pReqInfo)
+{
+    golpT_tradeDef  trade = {
+    @tradeCode@,
+    @tradeType@,
+    "@actionName@",
+    "@tradeSOName@",
+    { // datas for request
+
+      @reqDatas@
+
+    {0, false}  //结尾标志数据，必须存在
+    },
+
+    { // datas for response
+
+      @respDatas@
+
+	{0, false, 0} //结尾标志数据，必须存在
+    }
+    };
+
+    golpGeneralTradeHandler(&trade, pReqInfo);
+}
+
+/* end of file */
