@@ -63,7 +63,7 @@ public class DeleteCommand extends Command
 		elementModel = (ElementModel) model;
 	}
 
-	@Override
+	// Override
 	public void undo()
 	{
 		// undo

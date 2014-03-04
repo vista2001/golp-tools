@@ -77,4 +77,13 @@ public interface CommonDialogService
      * @throws SQLException
      */
     public TAopDll getNewAopDllId(String prjId) throws SQLException;
+   
+    /**
+     * 该方法用于在设置数据项发布状态的对话框中，用户点击ok后根据设定的结果更新数据库状态字段
+     * @param prjId 特定工程的工程Id
+     * @param published 已经发布的数据项
+     * @param nonPublished 未发布的数据项
+     * @throws SQLException
+     */
+    public void updateDataItemState(String prjId, String[] published, String[] nonPublished) throws SQLException;
 }

@@ -21,6 +21,9 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.TextCellEditor;
 
 import dev.diagram.figures.Circle;
@@ -226,11 +229,13 @@ public class ElementEditPart extends EditPartWithListener implements
 		{
 			// 直接编辑
 			performDirectEdit();
-			((CommonModel)getModel()).setText(((MyFigure)getFigure()).getText());
+			((CommonModel) getModel()).setText(((MyFigure) getFigure())
+					.getText());
 		}
 		// 双击后根据不同模型打开不同的模型属性配置对话框
 		else if (req.getType().equals(RequestConstants.REQ_OPEN))
 		{
+			Dialog dialog = null;
 			// 异常和补偿 实现的是打开与折叠
 			if (getModel() instanceof ExAndComModel)
 			{
@@ -246,43 +251,47 @@ public class ElementEditPart extends EditPartWithListener implements
 				}
 			} else if (getModel() instanceof CommonModel)
 			{
-				 ContentsModel contentsModel=((CommonModel)getModel()).getContentModel();
+				ContentsModel contentsModel = ((CommonModel) getModel())
+						.getContentModel();
 				// 条件模型
 				if (((CommonModel) getModel()).getTypeId() == 0)
 				{
 					// 打开条件模型对话框
-					ConditionBlockConfigurDialong IDialog = new ConditionBlockConfigurDialong(
-							getViewer().getControl().getShell(),
-							(CommonModel) getModel(),contentsModel);
-					IDialog.open();
+					dialog = new ConditionBlockConfigurDialong(getViewer()
+							.getControl().getShell(), (CommonModel) getModel(),
+							contentsModel);
 				}
 				// AOP，返回模型
-				else if (!(((CommonModel) getModel()).getTypeId() == 4 || ((CommonModel) getModel())
-						.getTypeId() == 5))
+				else if (((CommonModel) getModel()).getTypeId() == 1
+						|| ((CommonModel) getModel()).getTypeId() == 2)
 				{
 					// 打开模型属性对话框
-					BlockConfigureDialog IDialog = new BlockConfigureDialog(
-							getViewer().getControl().getShell(),
-							(CommonModel) getModel(),contentsModel);
-					IDialog.open();
+					dialog = new BlockConfigureDialog(getViewer().getControl()
+							.getShell(), (CommonModel) getModel(),
+							contentsModel);
 				}
 				// TFM
-				else if(((CommonModel) getModel()).getTypeId() == 3)
+				else if (((CommonModel) getModel()).getTypeId() == 3)
 				{
 					// 打开开始或结束模型属性对话框
-					TfmCongigureDialog IDialog = new TfmCongigureDialog(
-							getViewer().getControl().getShell(),
-							(CommonModel) getModel(),contentsModel);
-					IDialog.open();
+					dialog = new TfmCongigureDialog(getViewer().getControl()
+							.getShell(), (CommonModel) getModel(),
+							contentsModel);
 				}
-				//开始或结束模型
+				// 开始或结束模型
 				else
 				{
 					// 打开开始或结束模型属性对话框
-					StartAndEndDialog IDialog = new StartAndEndDialog(
-							getViewer().getControl().getShell(),
-							(CommonModel) getModel(),contentsModel);
-					IDialog.open();
+					dialog = new StartAndEndDialog(getViewer().getControl()
+							.getShell(), (CommonModel) getModel(),
+							contentsModel);
+				}
+				if (dialog.open() == IDialogConstants.OK_ID)
+				{
+					getViewer().getEditDomain().getCommandStack()
+							.execute(new Command()
+							{
+							});
 				}
 			}
 		}
@@ -302,7 +311,7 @@ public class ElementEditPart extends EditPartWithListener implements
 					new CustomCellEditLocator(getFigure()));
 		}
 		directManager.show();
-		
+
 	}
 
 	/**
@@ -315,6 +324,7 @@ public class ElementEditPart extends EditPartWithListener implements
 
 		return new ChopboxAnchor(getFigure());
 	}
+
 	/**
 	 * 返回边的终点模型的连接锚点
 	 */

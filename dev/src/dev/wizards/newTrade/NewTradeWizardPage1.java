@@ -292,7 +292,7 @@ public class NewTradeWizardPage1 extends WizardPage
                         .getTradeUpProjectCombo().getText();
                 OutputDataItemDialog outputDataItemDialog = new OutputDataItemDialog(
                         e.display.getActiveShell(), e.getSource(),
-                        outputDataText.getText(), upProjectId);
+                        outputDataText.getText(), upProjectId,inputDataText.getText());
                 outputDataItemDialog
                         .addInformDialogListener(new InformDialogListener()
                         {

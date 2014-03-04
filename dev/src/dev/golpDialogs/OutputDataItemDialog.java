@@ -30,8 +30,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 import dev.db.pojo.TDataItem;
 import dev.db.service.CommonDialogServiceImpl;
@@ -112,6 +114,8 @@ public class OutputDataItemDialog extends TitleAreaDialog
     {
         return listForReturn;
     }
+    
+    private java.util.List<String> inputDatas=new ArrayList<String>();
 
     /**
      * 构造函数，在该函数中，会将参数alreadyHaveString以竖线（|）分隔后，保存在alreadyHaveList中。
@@ -122,7 +126,7 @@ public class OutputDataItemDialog extends TitleAreaDialog
      *            传入的字符串。
      */
     public OutputDataItemDialog(Shell parentShell, Object obj,
-            String alreadyHaveString, String prjId)
+            String alreadyHaveString, String prjId,String inputData)
     {
         super(parentShell);
         setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.PRIMARY_MODAL);
@@ -132,6 +136,11 @@ public class OutputDataItemDialog extends TitleAreaDialog
         for (String s : tmp)
         {
             alreadyHaveList.add(s);
+        }
+        tmp=inputData.split("\\|");
+        for(String s:tmp){
+        	inputDatas.add(s.substring(0,s.indexOf('@')));
+        	System.out.println(s.substring(0,s.indexOf('@')));
         }
     }
 
@@ -214,6 +223,7 @@ public class OutputDataItemDialog extends TitleAreaDialog
                 false, 1, 1));
         fromReqCombo.add("1-请求数据");
         fromReqCombo.add("2-交换区");
+        fromReqCombo.add("3-应用自行填写");
         
         Label dataItemInfoLabel = new Label(container, SWT.NONE);
         dataItemInfoLabel.setText("数据项详细信息：");
@@ -269,7 +279,7 @@ public class OutputDataItemDialog extends TitleAreaDialog
                         if (!repeat)
                         {
                             // 将s（数据项ID）拼接上“@@”，添加到outputDataItemList中。
-                            outputDataItemList.add(s + "@@");
+                            outputDataItemList.add(s + "@1@3");
                         }
 
                     }
@@ -399,8 +409,19 @@ public class OutputDataItemDialog extends TitleAreaDialog
                         {
                             String s = outputDataItemList.getItem(i);
                             String sub = s.substring(0, s.lastIndexOf("@") + 1);
-                            outputDataItemList.setItem(i,
-                                    sub + (fromReqCombo.getSelectionIndex() + 1));
+                            
+                            //System.out.println(fromReqCombo.getSelectionIndex());
+                            if(fromReqCombo.getSelectionIndex()==0){
+                            		String selected=s.substring(0,s.indexOf('@'));
+                            		if(!inputDatas.contains(selected)){
+                            			MessageBox messageBox=new MessageBox(getShell(),SWT.ICON_ERROR);
+                            			messageBox.setMessage(selected+" 未在输入数据项中配置,因此来源不能为输入数据!");
+                            			messageBox.open();
+                            		}
+                            }else{
+                            	outputDataItemList.setItem(i,
+                                        sub + (fromReqCombo.getSelectionIndex() + 1));
+                            }
                         }
                     }
                 }

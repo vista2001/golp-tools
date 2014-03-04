@@ -3,12 +3,14 @@ package dev.diagram.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import dev.diagram.beans.TfmBean;
+import dev.diagram.beans.TfmEdge;
 import dev.views.NavView;
 
 /**
@@ -25,7 +27,7 @@ public class ContentsModel extends AbstractModel
 	private List<Object> children = new ArrayList<Object>();
 	public final String projectId;
 	// 流程图的Id
-	public final int  diagramId;
+	public final int diagramId;
 	// 流程图xml文件名称
 	public final String fileName;
 
@@ -44,8 +46,7 @@ public class ContentsModel extends AbstractModel
 		children.add(exAndComModel);
 	}
 
-	public void init(String name, String desc, String type,
-			String tradeid)
+	public void init(String name, String desc, String type, String tradeid)
 	{
 		tfmBean.setTfmName(name);
 		tfmBean.setTfmdesc(desc);
@@ -72,16 +73,45 @@ public class ContentsModel extends AbstractModel
 	 */
 	public boolean isComplete()
 	{
+		int defEdgeNum = 0;
+		for (TfmEdge edge : getTfmBean().getTfmEdgesList())
+		{
+			if (edge.getWeight().equals("999"))
+				defEdgeNum++;
+		}
+		if (defEdgeNum < children.size() - 2)
+		{
+			MessageDialog.openError(PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow().getShell(), "ERROR",
+					"图的信息不完整，节点的默认边没有完成！");
+			return false;
+		}
 		for (int i = 1; i < children.size(); i++)
 		{
 			if (!((CommonModel) children.get(i)).isConnected())
+			{
+				MessageDialog.openError(PlatformUI.getWorkbench()
+						.getActiveWorkbenchWindow().getShell(), "ERROR",
+						"图的信息不完整，请确保所有节点都已连接！");
 				return false;
+			}
 		}
 		return true;
 	}
 
 	public TfmBean getTfmBean()
 	{
+		for (int i = 1; i < getChildren().size(); i++)
+		{
+			List<AbstractConnectionModel> nodeList = ((ElementModel) (getChildren()
+					.get(i))).getSourceConnection();
+			for (AbstractConnectionModel edgeModel : nodeList)
+			{
+				TfmEdge edge = edgeModel.getTfmEdge();
+				if (!tfmBean.getTfmEdgesList().contains(edge))
+					tfmBean.getTfmEdgesList().add(edge);
+			}
+		}
 		return tfmBean;
 	}
 
@@ -127,7 +157,6 @@ public class ContentsModel extends AbstractModel
 		{
 			getTfmBean().getTfmBlockList().add(
 					((CommonModel) child).getTfmBlock());
-			((CommonModel) child).setEdgeList(tfmBean.getTfmEdgesList());
 		}
 		// 内容模型中加入子模型
 		children.add(child);

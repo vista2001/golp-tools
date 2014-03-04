@@ -52,7 +52,7 @@ public class EditorDataitemServiceImpl implements EditorDataitemService
         DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
         
         // 设置数据库查询语句
-        String sql = "select dataitemid,dataname,datadesc,datalvl,datatype,datalen,dataaop,fmlid from dataitem where ";
+        String sql = "select dataitemid,dataname,datadesc,datalvl,datatype,datalen,dataaop,fmlid, isPublished from dataitem where ";
         // 判断是通过名称还是标识查询
         if (id.equals("") && name.equals(""))
         {
@@ -84,6 +84,7 @@ public class EditorDataitemServiceImpl implements EditorDataitemService
                 map.put("dataaop", rs.getString(7) != null ? rs.getString(7)
                         : "");
                 map.put("fmlid", rs.getString(8) != null ? rs.getString(8) : "");
+                map.put("isPublished", rs.getString(9) !=null ? rs.getString(9) : "0");
             }
             else
                 map = null;
@@ -166,7 +167,7 @@ public class EditorDataitemServiceImpl implements EditorDataitemService
             dbConnectImpl.openConn(ps);
             dbConnectImpl
                     .setPrepareSql("insert into dataitem (DATAITEMID, DATANAME, DATADESC,"
-                            + "DATALVL, DATATYPE, DATALEN, DATAAOP, FMLID) values(?,?,?,?,?,?,?,?)");
+                            + "DATALVL, DATATYPE, DATALEN, DATAAOP, FMLID, ISPUBLISHED) values(?,?,?,?,?,?,?,?,?)");
             dbConnectImpl.setPreparedInt(1, dataItem.getDataItemId());
             dbConnectImpl.setPreparedString(2, dataItem.getDataName());
             dbConnectImpl.setPreparedString(3, dataItem.getDataDesc());
@@ -175,6 +176,7 @@ public class EditorDataitemServiceImpl implements EditorDataitemService
             dbConnectImpl.setPreparedInt(6, dataItem.getDataLen());
             dbConnectImpl.setPreparedString(7, dataItem.getDataAop());
             dbConnectImpl.setPreparedLong(8, dataItem.getFmlId());
+            dbConnectImpl.setPreparedString(9, dataItem.getIsPublished());
             dbConnectImpl.executeExceptPreparedQuery();
         }
         finally

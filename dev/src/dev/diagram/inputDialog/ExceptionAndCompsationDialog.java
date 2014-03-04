@@ -55,7 +55,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 			ContentsModel contentsModel)
 	{
 		super(parentShell);
-		setShellStyle(SWT.SHELL_TRIM | SWT.BORDER);
+		setShellStyle(SWT.DIALOG_TRIM);
 		this.shell = parentShell;
 		this.contentsModel = contentsModel;
 	}
@@ -119,8 +119,10 @@ public class ExceptionAndCompsationDialog extends Dialog
 		area.setLayout(new GridLayout(1, false));
 
 		TabFolder tabFolder = new TabFolder(area, SWT.NONE);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
-				1));
+		GridData gd_tabFolder = new GridData(SWT.FILL, SWT.FILL, true, true, 1,
+				1);
+		gd_tabFolder.widthHint = 437;
+		tabFolder.setLayoutData(gd_tabFolder);
 
 		TabItem tabItem_3 = new TabItem(tabFolder, SWT.NONE);
 		tabItem_3.setText("\u6D41\u7A0B\u56FE");
@@ -129,7 +131,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 		tabItem_3.setControl(composite_1);
 
 		Label label = new Label(composite_1, SWT.NONE);
-		label.setBounds(10, 161, 97, 17);
+		label.setBounds(10, 183, 97, 17);
 		label.setText("\u5DF2\u5B9A\u4E49");
 
 		Label lblNewLabel_4 = new Label(composite_1, SWT.NONE);
@@ -158,17 +160,17 @@ public class ExceptionAndCompsationDialog extends Dialog
 		exbt.setText("...");
 
 		up = new Button(composite_1, SWT.ARROW_UP);
-		up.setBounds(122, 158, 28, 23);
+		up.setBounds(113, 180, 28, 23);
 		up.setText("\u4E0A\u79FB");
 		up.setEnabled(false);
 
 		del = new Button(composite_1, SWT.NONE);
-		del.setBounds(344, 158, 45, 23);
+		del.setBounds(350, 177, 45, 23);
 		del.setText("\u5220\u9664");
 		del.setEnabled(false);
 
 		down = new Button(composite_1, SWT.ARROW_DOWN);
-		down.setBounds(150, 158, 28, 23);
+		down.setBounds(147, 180, 28, 23);
 		down.setText("\u4E0B\u79FB");
 		down.setEnabled(false);
 
@@ -190,26 +192,25 @@ public class ExceptionAndCompsationDialog extends Dialog
 		lblNewLabel_10.setText("\u540D\u79F0\uFF1A");
 
 		name = new Text(composite_1, SWT.BORDER);
-		name.setBounds(10, 56, 202, 50);
+		name.setBounds(10, 56, 202, 46);
 
 		desc = new Text(composite_1, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL
 				| SWT.MULTI);
 		desc.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
-		desc.setText("\u63CF\u8FF0\u4FE1\u606F\u3002\u3002\u3002");
-		desc.setBounds(10, 109, 385, 46);
+		desc.setBounds(10, 125, 385, 52);
 
 		newb = new Button(composite_1, SWT.NONE);
-		newb.setBounds(234, 158, 45, 23);
+		newb.setBounds(233, 180, 45, 23);
 		newb.setText("\u65B0\u5EFA");
 
 		save = new Button(composite_1, SWT.NONE);
-		save.setBounds(289, 158, 45, 23);
+		save.setBounds(289, 180, 45, 23);
 		save.setText("\u4FDD\u5B58");
 		save.setEnabled(false);
 
 		table = new Table(composite_1, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setHeaderVisible(true);
-		table.setBounds(10, 184, 385, 127);
+		table.setBounds(9, 206, 385, 127);
 
 		final TableColumn t_seqno = new TableColumn(table, SWT.NONE);
 		t_seqno.setWidth(100);
@@ -320,7 +321,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 			{
 
 				DllIdConfigureDialog dialog = new DllIdConfigureDialog(
-						getShell(),contentsModel);
+						getShell(), contentsModel);
 				if (Window.OK == dialog.open())
 				{
 					dllid.setText(dialog.getText());
@@ -479,48 +480,55 @@ public class ExceptionAndCompsationDialog extends Dialog
 					seqno.setText(Integer.toString(table.getItemCount() + 1));
 					name.setText("");
 					desc.setText("");
+					dllid.setText("");
+					funcname.removeAll();
 					name.setFocus();
 					return;
 				} else if (b.getText().equals("±£´æ"))
 				{
 					int no = Integer.parseInt(seqno.getText());
-					if (Integer.parseInt(seqno.getText()) == table
-							.getItemCount() + 1)
+					if (exception.getSelection())
 					{
-						if (exception.getSelection())
+						TfmException newExtend = new TfmException();
+						newExtend.setDesc(desc.getText());
+						newExtend.setDllId(dllid.getText());
+						newExtend.setFuncname(funcname.getText());
+						newExtend.setSeqNo(seqno.getText());
+						newExtend.setName(name.getText());
+						newExtend.setTfmId(tfmid.getText());
+						if (tfmExceptionMap.containsKey(no))
+							tfmExceptionMap.remove(no);
+						tfmExceptionMap.put(no, newExtend);
+						if (no <= table.getItemCount())
+							table.remove(no - 1);
+						TableItem curr = new TableItem(table, SWT.NONE);
+						curr.setText(new String[] {
+								tfmExceptionMap.get(no).getSeqNo(),
+								tfmExceptionMap.get(no).getName(),
+								tfmExceptionMap.get(no).getDllId(),
+								tfmExceptionMap.get(no).getFuncname() });
+					} else
+					{
+						TfmCompersation newExtend = new TfmCompersation();
+						newExtend.setDesc(desc.getText());
+						newExtend.setDllId(dllid.getText());
+						newExtend.setFuncname(funcname.getText());
+						newExtend.setSeqNo(seqno.getText());
+						newExtend.setName(name.getText());
+						newExtend.setTfmId(tfmid.getText());
+						if (tfmComprasationMap.containsKey(no))
 						{
-							TfmException newExtend = new TfmException();
-							newExtend.setDesc(desc.getText());
-							newExtend.setDllId(dllid.getText());
-							newExtend.setFuncname(funcname.getText());
-							newExtend.setSeqNo(seqno.getText());
-							newExtend.setName(name.getText());
-							newExtend.setTfmId(tfmid.getText());
-							tfmExceptionMap.put(no, newExtend);
-							TableItem curr = new TableItem(table, SWT.NONE);
-							curr.setText(new String[] {
-									tfmExceptionMap.get(no).getSeqNo(),
-									tfmExceptionMap.get(no).getName(),
-									tfmExceptionMap.get(no).getDllId(),
-									tfmExceptionMap.get(no).getFuncname() });
-						} else
-						{
-							TfmCompersation newExtend = new TfmCompersation();
-							newExtend.setDesc(desc.getText());
-							newExtend.setDllId(dllid.getText());
-							newExtend.setFuncname(funcname.getText());
-							newExtend.setSeqNo(seqno.getText());
-							newExtend.setName(name.getText());
-							newExtend.setTfmId(tfmid.getText());
-							tfmComprasationMap.put(no,
-									(TfmCompersation) newExtend);
-							TableItem curr = new TableItem(table, SWT.NONE);
-							curr.setText(new String[] {
-									tfmComprasationMap.get(no).getSeqNo(),
-									tfmComprasationMap.get(no).getName(),
-									tfmComprasationMap.get(no).getDllId(),
-									tfmComprasationMap.get(no).getFuncname() });
+							tfmComprasationMap.remove(no);
 						}
+						tfmComprasationMap.put(no, (TfmCompersation) newExtend);
+						if (no <= table.getItemCount())
+							table.remove(no - 1);
+						TableItem curr = new TableItem(table, SWT.NONE);
+						curr.setText(new String[] {
+								tfmComprasationMap.get(no).getSeqNo(),
+								tfmComprasationMap.get(no).getName(),
+								tfmComprasationMap.get(no).getDllId(),
+								tfmComprasationMap.get(no).getFuncname() });
 					}
 					name.setText("");
 					desc.setText("");
@@ -534,6 +542,26 @@ public class ExceptionAndCompsationDialog extends Dialog
 						getButton(IDialogConstants.OK_ID).setEnabled(true);
 					}
 				}
+				up.setEnabled(true);
+				down.setEnabled(true);
+				if (table.getSelectionIndex() == 0 && table.getItemCount() == 1)
+				{
+					up.setEnabled(false);
+					down.setEnabled(false);
+				} else if (table.getSelectionIndex() == table.getItemCount() - 1
+						&& table.getItemCount() > 1)
+				{
+					down.setEnabled(false);
+				} else if (table.getSelectionIndex() == 0
+						&& table.getItemCount() > 1)
+				{
+					up.setEnabled(false);
+				} else
+				{
+					up.setEnabled(true);
+					down.setEnabled(true);
+				}
+
 			}
 		};
 		table.addSelectionListener(new SelectionListener()
@@ -613,7 +641,11 @@ public class ExceptionAndCompsationDialog extends Dialog
 		up.addSelectionListener(listener);
 		newb.addSelectionListener(listener);
 		save.addSelectionListener(listener);
-		tfmid.setText(contentsModel.diagramId+"");
+		tfmid.setText(contentsModel.diagramId + "");
+
+		Label lblNewLabel_1 = new Label(composite_1, SWT.NONE);
+		lblNewLabel_1.setBounds(10, 108, 61, 17);
+		lblNewLabel_1.setText("\u63CF\u8FF0\uFF1A");
 		for (TfmException curr : contentsModel.getTfmBean()
 				.getTfmExceptionList())
 		{

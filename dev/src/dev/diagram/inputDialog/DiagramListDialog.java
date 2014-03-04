@@ -96,7 +96,6 @@ public class DiagramListDialog extends Dialog
 			dbConnectImpl.closeConn();
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}

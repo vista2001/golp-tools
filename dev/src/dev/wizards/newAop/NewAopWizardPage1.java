@@ -200,7 +200,7 @@ public class NewAopWizardPage1 extends WizardPage
             {
                 String upProjectId = ((NewAopWizardPage0)getWizard().getPage("NewAopWizardPage0")).getUpProjectCombo().getText();
                 OutputDataItemDialog outputDataItemDialog = new OutputDataItemDialog(
-                        e.display.getActiveShell(), e.getSource(), outPutData.getText(), upProjectId);
+                        e.display.getActiveShell(), e.getSource(), outPutData.getText(), upProjectId, inputData.getText());
                 outputDataItemDialog.addInformDialogListener(new InformDialogListener()
                 {
 

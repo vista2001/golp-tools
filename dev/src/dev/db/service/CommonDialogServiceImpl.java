@@ -7,6 +7,7 @@
 
 package dev.db.service;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -43,8 +44,8 @@ public class CommonDialogServiceImpl implements CommonDialogService
         {
             dbConnectImpl.openConn(ps);
             rs = dbConnectImpl.retrive("select dataItemId, dataName, dataType,"
-                                       + "dataLen, fmlId, dataAop, dataDesc, "
-                                       + "dataLvL from dataItem order by "
+                                       + "dataLen, fmlId, dataAop, dataDesc,  "
+                                       + "dataLvL, isPublished from dataItem order by "
                                        + "dataItemId");
 
             while (rs.next())
@@ -58,6 +59,7 @@ public class CommonDialogServiceImpl implements CommonDialogService
                 dataItem.setDataAop(rs.getString(6));
                 dataItem.setDataDesc(rs.getString(7));
                 dataItem.setDataLvL(rs.getString(8));
+                dataItem.setIsPublished(rs.getString(9));
                 contents.add(dataItem);
             }
         }
@@ -296,4 +298,37 @@ public class CommonDialogServiceImpl implements CommonDialogService
         }
         return aopDll;
     }
+
+	@Override
+	public void updateDataItemState(String prjId,String[] published,String[] nonPublished) throws SQLException {
+		DbConnectImpl dbConnectImpl = new DbConnectImpl();
+        PreferenceStore ps = CommonUtil.initPs(prjId);
+        try
+        {
+        	dbConnectImpl.openConn(ps);
+        	for(String tmp : published){
+        		String sql ="update dataItem set ISPUBLISHED ='1' where DATAITEMID ="+Integer.parseInt(tmp);
+        		dbConnectImpl.executeExceptQuery(sql);
+        	}
+        	for(String tmp : nonPublished){
+        		String sql ="update dataItem set ISPUBLISHED ='0' where DATAITEMID ="+Integer.parseInt(tmp);
+        		dbConnectImpl.executeExceptQuery(sql);
+        	}
+        	dbConnectImpl.commit();
+        }
+        finally
+        {
+            if (dbConnectImpl != null)
+            {
+                try
+                {
+                    dbConnectImpl.closeConn();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+	}
 }

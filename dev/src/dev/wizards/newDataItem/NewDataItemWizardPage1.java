@@ -73,12 +73,12 @@ public class NewDataItemWizardPage1 extends WizardPage
 		dataItemTypeCombo = new Combo(container, SWT.READ_ONLY);
 		dataItemTypeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
-		dataItemTypeCombo.add("0-int");
+		//dataItemTypeCombo.add("0-int");
 		dataItemTypeCombo.add("1-long");
 		dataItemTypeCombo.add("2-double");
 		dataItemTypeCombo.add("3-char");
-		dataItemTypeCombo.add("4-char[]");
-		dataItemTypeCombo.add("5-String");
+		//dataItemTypeCombo.add("4-char[]");
+		//dataItemTypeCombo.add("5-String");
 		
 //		Label dataItemLenFixedLabel = new Label(container, SWT.NONE);
 //		dataItemLenFixedLabel.setText("*数据是否定长：");

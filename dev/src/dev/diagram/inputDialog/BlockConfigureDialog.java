@@ -205,7 +205,7 @@ public class BlockConfigureDialog extends Dialog
 			{
 
 				DllIdConfigureDialog dialog = new DllIdConfigureDialog(
-						getShell(),contentsModel);
+						getShell(), contentsModel);
 				if (Window.OK == dialog.open())
 				{
 					dllid.setText(dialog.getText());
@@ -255,7 +255,7 @@ public class BlockConfigureDialog extends Dialog
 		dllid.setText(block.getDllId());
 		nodetype.setText(commonModel.getTypeName());
 		funcname.setText(block.getAopName());
-		tfmid.setText(contentsModel.diagramId+"");
+		tfmid.setText(contentsModel.diagramId + "");
 
 		TabItem tablefold_2 = new TabItem(tabFolder, SWT.NONE);
 		tablefold_2.setText("\u6269\u5C55\u70B9");
@@ -264,7 +264,7 @@ public class BlockConfigureDialog extends Dialog
 		tablefold_2.setControl(composite_1);
 
 		Label label = new Label(composite_1, SWT.NONE);
-		label.setBounds(10, 161, 97, 17);
+		label.setBounds(10, 178, 97, 17);
 		label.setText("\u5DF2\u5B9A\u4E49\u7684\u6269\u5C55\u70B9");
 
 		Label lblNewLabel_4 = new Label(composite_1, SWT.NONE);
@@ -293,17 +293,17 @@ public class BlockConfigureDialog extends Dialog
 		exbt.setText("...");
 
 		up = new Button(composite_1, SWT.NONE);
-		up.setBounds(122, 158, 28, 23);
+		up.setBounds(116, 175, 28, 23);
 		up.setText("\u4E0A\u79FB");
 		up.setEnabled(false);
 
 		del = new Button(composite_1, SWT.NONE);
-		del.setBounds(344, 158, 45, 23);
+		del.setBounds(344, 175, 45, 23);
 		del.setText("\u5220\u9664");
 		del.setEnabled(false);
 
 		down = new Button(composite_1, SWT.NONE);
-		down.setBounds(150, 158, 28, 23);
+		down.setBounds(151, 175, 28, 23);
 		down.setText("\u4E0B\u79FB");
 		down.setEnabled(false);
 
@@ -325,23 +325,23 @@ public class BlockConfigureDialog extends Dialog
 		lblNewLabel_10.setText("\u6269\u5C55\u70B9\u540D\u79F0\uFF1A");
 
 		extendname = new Text(composite_1, SWT.BORDER);
-		extendname.setBounds(10, 56, 226, 50);
+		extendname.setBounds(10, 56, 226, 28);
 
 		extenddesc = new Text(composite_1, SWT.BORDER | SWT.V_SCROLL);
-		extenddesc.setBounds(10, 109, 379, 46);
+		extenddesc.setBounds(10, 112, 379, 60);
 
 		newb = new Button(composite_1, SWT.NONE);
-		newb.setBounds(234, 158, 45, 23);
+		newb.setBounds(242, 175, 45, 23);
 		newb.setText("\u65B0\u5EFA");
 
 		save = new Button(composite_1, SWT.NONE);
-		save.setBounds(289, 158, 45, 23);
+		save.setBounds(293, 175, 45, 23);
 		save.setText("\u4FDD\u5B58");
 		save.setEnabled(false);
 
 		table = new Table(composite_1, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setHeaderVisible(true);
-		table.setBounds(10, 184, 379, 127);
+		table.setBounds(10, 201, 379, 110);
 
 		t_seqno = new TableColumn(table, SWT.NONE);
 		t_seqno.setWidth(100);
@@ -360,6 +360,10 @@ public class BlockConfigureDialog extends Dialog
 		TableColumn t_func = new TableColumn(table, SWT.NONE);
 		t_func.setWidth(100);
 		t_func.setText("\u51FD\u6570\u540D\u79F0");
+
+		Label lblNewLabel_6 = new Label(composite_1, SWT.NONE);
+		lblNewLabel_6.setBounds(10, 89, 61, 17);
+		lblNewLabel_6.setText("\u63CF\u8FF0\uFF1A");
 		/**
 		 * 节点dll配置，打开一个子对话框，选择dll并保存在map里面，用于根据当前dll，提供原子交易名称
 		 */
@@ -432,11 +436,11 @@ public class BlockConfigureDialog extends Dialog
 		// 扩展节点的dllid监听器 同节点的dllidModifyListener
 		extenddllid.addModifyListener(new ModifyListener()
 		{
-
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-
+				if (extenddllid.getText().isEmpty())
+					return;
 				extendfuncname.removeAll();
 				DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
 
@@ -465,7 +469,7 @@ public class BlockConfigureDialog extends Dialog
 			{
 
 				DllIdConfigureDialog dialog = new DllIdConfigureDialog(
-						getShell(),contentsModel);
+						getShell(), contentsModel);
 				if (Window.OK == dialog.open())
 				{
 					extenddllid.setText(dialog.getText());
@@ -509,12 +513,13 @@ public class BlockConfigureDialog extends Dialog
 			{
 
 				super.widgetSelected(e);
+				int index = table.getSelectionIndex();
 				Button b = (Button) e.widget;
 				// 点击上移
 				if (b.getText().equals("上移"))
 				{
 					// table中的已选行的索引
-					int index = table.getSelectionIndex();
+
 					int no = Integer.parseInt(table.getItem(index).getText(0));
 					if (index <= 0)
 						return;
@@ -544,7 +549,6 @@ public class BlockConfigureDialog extends Dialog
 					// 点击下移，所做的操作类似上移，请参考上移操作，其实此处可以写个函数来操作移动，上移和下移时传递不同的参数即可
 				} else if (b.getText().equals("下移"))
 				{
-					int index = table.getSelectionIndex();
 					int no = Integer.parseInt(table.getItem(index).getText(0));
 					if (index == table.getItemCount() - 1)
 						return;
@@ -568,7 +572,6 @@ public class BlockConfigureDialog extends Dialog
 					// 点击删除
 				} else if (b.getText().equals("删除"))
 				{
-					int index = table.getSelectionIndex();
 					if (index < 0)
 						return;
 					else
@@ -603,6 +606,8 @@ public class BlockConfigureDialog extends Dialog
 								.setText(String.valueOf(table.getItemCount() + 101));
 					extendname.setText("");
 					extenddesc.setText("");
+					extenddllid.setText("");
+					extendfuncname.removeAll();
 					extendname.setFocus();
 					return;
 
@@ -638,7 +643,6 @@ public class BlockConfigureDialog extends Dialog
 					// 判断是对已存在信息的修改
 					else
 					{
-						int index = table.getSelectionIndex();
 						// 修改table中的行
 						table.getItem(index).setText(
 								new String[] { extendseqno.getText(),
@@ -665,6 +669,26 @@ public class BlockConfigureDialog extends Dialog
 						getButton(IDialogConstants.OK_ID).setEnabled(true);
 					}
 				}
+				up.setEnabled(true);
+				down.setEnabled(true);
+				if (table.getSelectionIndex() == 0 && table.getItemCount() == 1)
+				{
+					up.setEnabled(false);
+					down.setEnabled(false);
+				} else if (table.getSelectionIndex() == table.getItemCount() - 1
+						&& table.getItemCount() > 1)
+				{
+					down.setEnabled(false);
+				} else if (table.getSelectionIndex() == 0
+						&& table.getItemCount() > 1)
+				{
+					up.setEnabled(false);
+				} else
+				{
+					up.setEnabled(true);
+					down.setEnabled(true);
+				}
+
 			}
 		};
 		// table的选择监听器
@@ -741,6 +765,7 @@ public class BlockConfigureDialog extends Dialog
 			{
 
 				save.setEnabled(false);
+
 			}
 		});
 		del.addSelectionListener(listener);

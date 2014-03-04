@@ -3,6 +3,7 @@ package dev.diagram.inputDialog;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import dev.db.DbConnFactory;
 import dev.db.DbConnectImpl;
+import dev.diagram.model.AbstractConnectionModel;
 import dev.diagram.model.CommonModel;
 import dev.diagram.model.ContentsModel;
 import dev.util.CommonUtil;
@@ -62,21 +64,25 @@ public class EdgeListLimitDialog extends Dialog
 		TabFolder tabFolder = new TabFolder(area, SWT.NONE);
 		GridData gd_tabFolder = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1);
-		gd_tabFolder.widthHint = 280;
+		gd_tabFolder.widthHint = 298;
 		gd_tabFolder.heightHint = 128;
 		tabFolder.setLayoutData(gd_tabFolder);
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("\u8FB9\u6743\u503C\u9009\u62E9");
 
-		table = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
-		tabItem.setControl(table);
-		table.setHeaderVisible(true);
+		table = new Table(tabFolder, SWT.BORDER);
 		table.setLinesVisible(true);
+		table.setHeaderVisible(true);
+		tabItem.setControl(table);
 
 		TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
-		tblclmnNewColumn.setWidth(156);
+		tblclmnNewColumn.setWidth(171);
 		tblclmnNewColumn.setText("\u8FB9\u6743\u503C");
+
+		TableColumn tblclmnNewColumn_1 = new TableColumn(table, SWT.NONE);
+		tblclmnNewColumn_1.setWidth(100);
+		tblclmnNewColumn_1.setText("\u72B6\u6001");
 		table.addSelectionListener(new SelectionListener()
 		{
 
@@ -84,7 +90,9 @@ public class EdgeListLimitDialog extends Dialog
 			public void widgetSelected(SelectionEvent e)
 			{
 				int index = table.getSelectionIndex();
-				if (index >= 0)
+				if (index >= 0
+						&& !table.getItem(index).getBackground()
+								.equals(ColorConstants.gray))
 				{
 					text = table.getItem(index).getText(0);
 					getButton(OK).setEnabled(true);
@@ -98,17 +106,27 @@ public class EdgeListLimitDialog extends Dialog
 
 			}
 		});
-		String[] edgeList =SetEdgeList().split("\\|");
+
+		String[] edgeList = SetEdgeList().split("\\|");
 		for (int i = 0; i < edgeList.length; i++)
 		{
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			tableItem.setText(edgeList[i]);
+			if (findEdge(edgeList[i]))
+			{
+				tableItem.setBackground(ColorConstants.gray);
+				tableItem.setText(1, "已存在");
+			} else
+			{
+				tableItem.setText(1, "可以选择");
+			}
 		}
 		return area;
 	}
 
 	public String SetEdgeList()
-	{	String str="";
+	{
+		String str = "999|";
 		String aopId = commonModel.getTfmBlock().getAopName();
 		DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
 		String sql = "select aopretval from aop where aopid ='" + aopId + "'";
@@ -119,7 +137,7 @@ public class EdgeListLimitDialog extends Dialog
 			rs = dbConnectImpl.retrive(sql);
 			if (rs.next())
 			{
-				str = rs.getString(1);
+				str += rs.getString(1);
 			}
 		} catch (SQLException e)
 		{
@@ -133,11 +151,21 @@ public class EdgeListLimitDialog extends Dialog
 		return text;
 	}
 
+	private boolean findEdge(String val)
+	{
+		for (AbstractConnectionModel edge : commonModel.getSourceConnection())
+		{
+			if (val.equals((edge.getWeight() + "")))
+				return true;
+		}
+		return false;
+	}
+
 	@Override
 	protected void okPressed()
 	{
-		
+
 		super.okPressed();
 	}
-	
+
 }

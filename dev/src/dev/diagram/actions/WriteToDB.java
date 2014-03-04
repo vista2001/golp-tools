@@ -101,12 +101,18 @@ public class WriteToDB
 				dbConnectImpl.setPreparedInt(2,
 						Integer.parseInt(curr.getNodeId()));
 				dbConnectImpl.setPreparedString(3, curr.getNodeType());
-				dbConnectImpl.setPreparedString(4, curr.getAopName());
+				
 				dbConnectImpl.setPreparedInt(5,
 						Integer.parseInt(curr.getNestedtfm()));
 				dbConnectImpl.setPreparedString(6, curr.getCondition());
-				dbConnectImpl.setPreparedInt(7,
-						Integer.parseInt(curr.getDllId()));
+				if( !curr.getDllId().equals("")){
+					dbConnectImpl.setPreparedString(4, curr.getAopName());
+					dbConnectImpl.setPreparedInt(7,
+							Integer.parseInt(curr.getDllId()));
+				}else{
+					dbConnectImpl.setPreparedString(4, "");
+					dbConnectImpl.setPreparedInt(7, -1);
+				}
 				dbConnectImpl.executeExceptPreparedQuery();
 				// 扩展节点信息插入T_extendofblock表
 				String _sql = "insert into T_extendofblock values(?,?,?,?,?)";
@@ -189,7 +195,6 @@ public class WriteToDB
 			}
 		} catch (SQLException | IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -100,11 +100,14 @@ public class DataItemEditor extends EditorPart implements ISearch, IGetUpProject
 	private EditorDataitemServiceImpl impl;							//数据库操作类对象
 	private Map< String, String> map;								//存储查询的数据的Map
 	private Map<String, String> restoreMap;
-	private String[] dataItemTypeItem={"0-int", "1-long", "2-double",
-	                                   "3-char", "4-char[]", "5-String"};
+	private String[] dataItemTypeItem={ "1-long", "2-double",
+	                                   "3-char"};
+	/*private String[] dataItemTypeItem={"0-int", "1-long", "2-double",
+            "3-char", "4-char[]", "5-String"};*/
 	private Button restoreButton;
 	private boolean bDirty;
 	private Search search;
+	private Text publishStateText;
 	//数据项类型下拉菜单选项字符串数组
 	@Override
 	public void doSave(IProgressMonitor monitor) {
@@ -400,6 +403,21 @@ public class DataItemEditor extends EditorPart implements ISearch, IGetUpProject
 		new Label(dataItemGroup, SWT.NONE);
 		new Label(dataItemGroup, SWT.NONE);
 		
+		Label publishStatelabel = new Label(dataItemGroup, SWT.NONE);
+		publishStatelabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		publishStatelabel.setText("发布状态");
+		
+		publishStateText = new Text(dataItemGroup, SWT.BORDER);
+		publishStateText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		publishStateText.setEnabled(false);
+		
+		new Label(dataItemGroup, SWT.NONE);
+		new Label(dataItemGroup, SWT.NONE);
+		new Label(dataItemGroup, SWT.NONE);
+		new Label(dataItemGroup, SWT.NONE);
+		new Label(dataItemGroup, SWT.NONE);
+		new Label(dataItemGroup, SWT.NONE);
+		
 		Label dataItemDescLabel = new Label(dataItemGroup, SWT.NONE);
 		dataItemDescLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		dataItemDescLabel.setText("*描述");
@@ -432,11 +450,6 @@ public class DataItemEditor extends EditorPart implements ISearch, IGetUpProject
 		gd_clearBtn.widthHint = 80;
 		unlockButton.setLayoutData(gd_clearBtn);
 		unlockButton.setText("编辑");
-		/*
-		 * 为“解锁”按钮设置行为，当按下按钮时，若按钮为“解锁”，则改为锁定，并将可以
-		 * 编辑的控件设置为可用，将“修改”按钮设置为可用；否则改为解锁，将可以编辑的
-		 * 控件设置为不可用，将修改按钮设置为不可用。
-		 */
 		unlockButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
 				Button nButton=((Button)e.getSource());
@@ -445,10 +458,10 @@ public class DataItemEditor extends EditorPart implements ISearch, IGetUpProject
 					dataItemNameText.setEnabled(true);
 					dataItemDescText.setEnabled(true);
 					dataItemTypeCombo.setEnabled(true);
-					if(dataItemTypeCombo.getText().equals(dataItemTypeItem[4])||dataItemTypeCombo.getText().equals(dataItemTypeItem[5]))
+					/*if(dataItemTypeCombo.getText().equals(dataItemTypeItem[4])||dataItemTypeCombo.getText().equals(dataItemTypeItem[5]))
 					{
 						dataItemLenText.setEnabled(true);
-					}
+					}*/
 					dataItemAopText.setEnabled(true);
 				}
 				else{
@@ -573,6 +586,15 @@ public class DataItemEditor extends EditorPart implements ISearch, IGetUpProject
 		dataItemAopText.setText(map.get("dataaop"));
 		FMLIDText.setText(map.get("fmlid"));
 		upProjectText.setText(input.getSource().getRootProject().getId());
+		if(map.get("isPublished").equals("0")){
+			publishStateText.setText("未发布");
+		}else{
+			publishStateText.setText("已发布");
+		}
+		if(publishStateText.getText().equals("已发布")){
+			unlockButton.setEnabled(false);
+		}
+		
 //		upProject1.setText(upProject.getText());
 		setDirty(false);
 	}
@@ -590,12 +612,12 @@ public class DataItemEditor extends EditorPart implements ISearch, IGetUpProject
         {
             showMessage(SWT.ICON_WARNING | SWT.YES, "警告", "必填项不能为空");
         }
-        else if(( dataItemTypeCombo.getText().equals("4-char[]")
+        /*else if(( dataItemTypeCombo.getText().equals("4-char[]")
                 || dataItemTypeCombo.getText().equals("5-String"))
                 && (RegExpCheck.isPositiveInteger(dataItemLenText.getText()) == false))
         {
             showMessage(SWT.ICON_WARNING | SWT.YES, "警告", "数据项长度为正整数");
-        }
+        }*/
         else
         {
             List<String> datalist = new ArrayList<String>();

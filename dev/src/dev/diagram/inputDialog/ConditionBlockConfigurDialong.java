@@ -46,8 +46,7 @@ import dev.util.CommonUtil;
  */
 public class ConditionBlockConfigurDialong extends Dialog
 {
-	private Text tfmid, nodetype, nodeid, dllid, desc;
-	private Combo funcname;
+	private Text tfmid, nodetype, nodeid, desc;
 	private Text extenddllid, extendseqno, extendname, extenddesc;
 	private Button up, down, del, newb, save;
 	private Combo extendfuncname;
@@ -133,10 +132,6 @@ public class ConditionBlockConfigurDialong extends Dialog
 		tfmid.setBounds(88, 7, 110, 23);
 		tfmid.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 
-		Button addbt = new Button(composite, SWT.NONE);
-		addbt.setBounds(200, 65, 19, 23);
-		addbt.setText("...");
-
 		Label lblNewLabel_2 = new Label(composite, SWT.NONE);
 		lblNewLabel_2.setBounds(229, 10, 53, 17);
 		lblNewLabel_2.setBackground(SWTResourceManager
@@ -144,30 +139,20 @@ public class ConditionBlockConfigurDialong extends Dialog
 		lblNewLabel_2.setText("\u5757\u7F16\u53F7\uFF1A");
 
 		nodeid = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		nodeid.setBounds(286, 7, 93, 23);
+		nodeid.setBounds(286, 7, 114, 23);
 		nodeid.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		nodeid.setEditable(false);
 
 		Label lblNewLabel_6 = new Label(composite, SWT.NONE);
-		lblNewLabel_6.setBounds(10, 97, 53, 17);
+		lblNewLabel_6.setBounds(10, 62, 53, 17);
 		lblNewLabel_6.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WHITE));
 		lblNewLabel_6.setText("\u63CF\u8FF0\uFF1A");
 
-		Label lblNewLabel_5 = new Label(composite, SWT.NONE);
-		lblNewLabel_5.setBounds(229, 68, 53, 17);
-		lblNewLabel_5.setBackground(SWTResourceManager
-				.getColor(SWT.COLOR_WHITE));
-		lblNewLabel_5.setText("AOP\uFF1A");
-
-		funcname = new Combo(composite, SWT.READ_ONLY);
-		funcname.setBounds(286, 65, 93, 25);
-		funcname.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
 		desc = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL
 				| SWT.MULTI);
 		desc.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
-		desc.setBounds(10, 120, 369, 72);
+		desc.setBounds(10, 85, 390, 107);
 		desc.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 
@@ -182,19 +167,8 @@ public class ConditionBlockConfigurDialong extends Dialog
 		nodetype.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		nodetype.setEditable(false);
 
-		Label lblNewLabel_3 = new Label(composite, SWT.NONE);
-		lblNewLabel_3.setBounds(10, 68, 72, 17);
-		lblNewLabel_3.setBackground(SWTResourceManager
-				.getColor(SWT.COLOR_WHITE));
-		lblNewLabel_3.setText("\u52A8\u6001\u5E93\uFF1A");
-
-		dllid = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		dllid.setBounds(88, 65, 110, 23);
-		dllid.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		dllid.setEditable(false);
-
 		condition = new Text(composite, SWT.BORDER | SWT.V_SCROLL);
-		condition.setBounds(9, 221, 369, 90);
+		condition.setBounds(9, 221, 391, 90);
 
 		TabItem tablefold_2 = new TabItem(tabFolder, SWT.NONE);
 		tablefold_2.setText("\u6269\u5C55\u70B9");
@@ -203,7 +177,7 @@ public class ConditionBlockConfigurDialong extends Dialog
 		tablefold_2.setControl(composite_1);
 
 		Label label = new Label(composite_1, SWT.NONE);
-		label.setBounds(10, 161, 97, 17);
+		label.setBounds(10, 168, 97, 17);
 		label.setText("\u5DF2\u5B9A\u4E49\u7684\u6269\u5C55\u70B9");
 
 		Label lblNewLabel_4 = new Label(composite_1, SWT.NONE);
@@ -232,17 +206,17 @@ public class ConditionBlockConfigurDialong extends Dialog
 		exbt.setText("...");
 
 		up = new Button(composite_1, SWT.NONE);
-		up.setBounds(122, 158, 28, 23);
+		up.setBounds(116, 165, 28, 23);
 		up.setText("\u4E0A\u79FB");
 		up.setEnabled(false);
 
 		del = new Button(composite_1, SWT.NONE);
-		del.setBounds(344, 158, 45, 23);
+		del.setBounds(344, 165, 45, 23);
 		del.setText("\u5220\u9664");
 		del.setEnabled(false);
 
 		down = new Button(composite_1, SWT.NONE);
-		down.setBounds(150, 158, 28, 23);
+		down.setBounds(152, 165, 28, 23);
 		down.setText("\u4E0B\u79FB");
 		down.setEnabled(false);
 
@@ -264,23 +238,23 @@ public class ConditionBlockConfigurDialong extends Dialog
 		lblNewLabel_10.setText("\u6269\u5C55\u70B9\u540D\u79F0\uFF1A");
 
 		extendname = new Text(composite_1, SWT.BORDER);
-		extendname.setBounds(10, 56, 226, 50);
+		extendname.setBounds(10, 56, 226, 32);
 
 		extenddesc = new Text(composite_1, SWT.BORDER | SWT.V_SCROLL);
-		extenddesc.setBounds(10, 109, 379, 46);
+		extenddesc.setBounds(10, 109, 379, 53);
 
 		newb = new Button(composite_1, SWT.NONE);
-		newb.setBounds(234, 158, 45, 23);
+		newb.setBounds(242, 165, 45, 23);
 		newb.setText("\u65B0\u5EFA");
 
 		save = new Button(composite_1, SWT.NONE);
-		save.setBounds(289, 158, 45, 23);
+		save.setBounds(293, 165, 45, 23);
 		save.setText("\u4FDD\u5B58");
 		save.setEnabled(false);
 
 		table = new Table(composite_1, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setHeaderVisible(true);
-		table.setBounds(10, 184, 379, 127);
+		table.setBounds(10, 191, 379, 120);
 
 		t_seqno = new TableColumn(table, SWT.NONE);
 		t_seqno.setWidth(100);
@@ -299,27 +273,10 @@ public class ConditionBlockConfigurDialong extends Dialog
 		TableColumn t_func = new TableColumn(table, SWT.NONE);
 		t_func.setWidth(100);
 		t_func.setText("\u51FD\u6570\u540D\u79F0");
-
-		addbt.addSelectionListener(new SelectionListener()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-
-				DllIdConfigureDialog dialog = new DllIdConfigureDialog(
-						getShell(),contentsModel);
-				if (Window.OK == dialog.open())
-				{
-					dllid.setText(dialog.getText());
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
-
-			}
-		});
+		
+		Label lblNewLabel_3 = new Label(composite_1, SWT.NONE);
+		lblNewLabel_3.setBounds(10, 89, 61, 17);
+		lblNewLabel_3.setText("\u63CF\u8FF0\uFF1A");
 		extentsSelectLististner = new SelectionListener()
 		{
 
@@ -376,42 +333,14 @@ public class ConditionBlockConfigurDialong extends Dialog
 		};
 		firstextend.addSelectionListener(extentsSelectLististner);
 		endextend.addSelectionListener(extentsSelectLististner);
-		dllid.addModifyListener(new ModifyListener()
-		{
-
-			@Override
-			public void modifyText(ModifyEvent e)
-			{
-				if (dllid.getText().length() != 0)
-				{
-					funcname.removeAll();
-					DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
-
-					String sql = "select aopid from aop where upaopdll="
-							+ dllid.getText();
-					ResultSet rs;
-					try
-					{
-						dbConnectImpl.openConn(CommonUtil
-								.initPs(contentsModel.projectId));
-						rs = dbConnectImpl.retrive(sql);
-						while (rs.next())
-							funcname.add(rs.getString(1));
-						dbConnectImpl.closeConn();
-					} catch (SQLException e1)
-					{
-						e1.printStackTrace();
-					}
-				}
-			}
-		});
 		extenddllid.addModifyListener(new ModifyListener()
 		{
 
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-
+				if(extenddllid.getText().isEmpty())
+					return;
 				extendfuncname.removeAll();
 				DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
 
@@ -440,7 +369,7 @@ public class ConditionBlockConfigurDialong extends Dialog
 			{
 
 				DllIdConfigureDialog dialog = new DllIdConfigureDialog(
-						getShell(),contentsModel);
+						getShell(), contentsModel);
 				if (Window.OK == dialog.open())
 				{
 					extenddllid.setText(dialog.getText());
@@ -563,6 +492,8 @@ public class ConditionBlockConfigurDialong extends Dialog
 								.setText(String.valueOf(table.getItemCount() + 101));
 					extendname.setText("");
 					extenddesc.setText("");
+					extenddllid.setText("");
+					extendfuncname.removeAll();
 					extendname.setFocus();
 					return;
 				} else if (b.getText().equals("±£´æ"))
@@ -610,6 +541,26 @@ public class ConditionBlockConfigurDialong extends Dialog
 					extendseqno.setText("");
 					save.setEnabled(false);
 				}
+				up.setEnabled(true);
+				down.setEnabled(true);
+				if (table.getSelectionIndex() == 0 && table.getItemCount() == 1)
+				{
+					up.setEnabled(false);
+					down.setEnabled(false);
+				} else if (table.getSelectionIndex() == table.getItemCount() - 1
+						&& table.getItemCount() > 1)
+				{
+					down.setEnabled(false);
+				} else if (table.getSelectionIndex() == 0
+						&& table.getItemCount() > 1)
+				{
+					up.setEnabled(false);
+				} else
+				{
+					up.setEnabled(true);
+					down.setEnabled(true);
+				}
+
 				Button btn = getButton(APPLICATION_ID);
 				Button btnOK = getButton(IDialogConstants.OK_ID);
 				if ((btn != null) && (btnOK != null))
@@ -718,9 +669,7 @@ public class ConditionBlockConfigurDialong extends Dialog
 			}
 		}
 		nodeid.setText(block.getNodeId());
-		dllid.setText(block.getDllId());
 		nodetype.setText(commonModel.getTypeName());
-		funcname.setText(block.getAopName());
 		condition.setText(block.getCondition());
 		tfmid.setText(block.getTfmId());
 		ModifyListener confirm = new ModifyListener()
@@ -730,9 +679,7 @@ public class ConditionBlockConfigurDialong extends Dialog
 			public void modifyText(ModifyEvent e)
 			{
 
-				if (dllid.getText().length() != 0
-						&& funcname.getText().length() != 0
-						&& condition.getText().length() != 0)
+				if (condition.getText().length() != 0)
 				{
 					Button btn = getButton(APPLICATION_ID);
 					Button btnOK = getButton(IDialogConstants.OK_ID);
@@ -754,7 +701,6 @@ public class ConditionBlockConfigurDialong extends Dialog
 				}
 			}
 		};
-		funcname.addModifyListener(confirm);
 		desc.addModifyListener(confirm);
 		condition.addModifyListener(confirm);
 		if (block.getDesc().isEmpty())
@@ -796,9 +742,6 @@ public class ConditionBlockConfigurDialong extends Dialog
 
 	protected void store()
 	{
-
-		block.setDllId(dllid.getText());
-		block.setAopName(funcname.getText());
 		block.setTfmId(tfmid.getText());
 		block.setDesc(desc.getText());
 		block.setCondition(condition.getText());

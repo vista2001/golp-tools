@@ -9,6 +9,7 @@ import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.EventObject;
 
 import org.dom4j.DocumentException;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -19,6 +20,8 @@ import org.eclipse.draw2d.parts.ScrollableThumbnail;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.KeyHandler;
+import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
@@ -30,9 +33,9 @@ import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
+import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -43,21 +46,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.UIPlugin;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-import org.omg.CORBA.ULongSeqHelper;
 
 import dev.db.DbConnFactory;
 import dev.db.DbConnectImpl;
 import dev.diagram.actions.GenerateCodeAction;
 import dev.diagram.actions.GraphAutoLayout;
+import dev.diagram.actions.SaveAction;
+import dev.diagram.actions.WriteToXML;
 import dev.diagram.helper.Palette;
 import dev.diagram.model.ContentsModel;
 import dev.diagram.outline.TreeEditPartFactory;
@@ -70,7 +73,8 @@ import dev.util.CommonUtil;
  * @author 木木
  * 
  */
-public class DiagramEditor extends GraphicalEditorWithFlyoutPalette implements ISaveablePart2
+public class DiagramEditor extends GraphicalEditorWithFlyoutPalette 
+//implements		ISaveablePart2
 {
 	// 编辑器ID
 	public static final String ID = "dev.diagram.ui.DiagramEditor";
@@ -84,7 +88,6 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette implements I
 	private String fileName;
 	// 声明视图
 	GraphicalViewer viewer;
-
 	public DiagramEditor()
 	{
 		// 设置编辑域
@@ -125,6 +128,10 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette implements I
 		// 注册缩小IAction
 		action = new ZoomOutAction(manager);
 		getActionRegistry().registerAction(action);
+		
+		getGraphicalViewer().setKeyHandler(
+				new GraphicalViewerKeyHandler(getGraphicalViewer())
+						.setParent(getCommonKeyHandler()));
 	}
 
 	/**
@@ -142,7 +149,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette implements I
 
 	public void doSave(IProgressMonitor monitor)
 	{
-
+		WriteToXML.writeToXML(model);
 	}
 
 	public void doSaveAs()
@@ -303,6 +310,9 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette implements I
 		// 注册写入数据库action
 		action = new GenerateCodeAction(model);
 		registry.registerAction(action);
+		//注册SaveAction
+		action = new SaveAction(model,this);
+		registry.registerAction(action);
 	}
 
 	/**
@@ -371,8 +381,8 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette implements I
 			{
 				tfmName = rs.getString(1);
 				tfmDesc = rs.getString(2);
-				tfmType = rs.getInt(3)+"";
-				tfmTradeId = rs.getInt(4)+"";
+				tfmType = rs.getInt(3) + "";
+				tfmTradeId = rs.getInt(4) + "";
 				// 存入内容模型中
 				model.init(tfmName, tfmDesc, tfmType, tfmTradeId);
 				// 获得数据库中流程图的xml文件的二进制文件
@@ -407,23 +417,68 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette implements I
 			}
 		} catch (SQLException | IOException | DocumentException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+//	@Override
+//	public int promptToSaveOnClose()
+//	{
+//		if (isDirty())
+//		{
+//			boolean answer = MessageDialog.openQuestion(PlatformUI
+//					.getWorkbench().getActiveWorkbenchWindow().getShell(),
+//					"Close Virtual Terminal", "内容已经修改，你要保存吗?");
+//			if (!answer)
+//			{
+//				return ISaveablePart2.CANCEL;
+//			}
+//			else
+//			{
+//				WriteToXML.writeToXML(model);
+//			}
+//		}
+//		return ISaveablePart2.NO;
+//	}
+
 	@Override
-	public int promptToSaveOnClose()
+	public boolean isDirty()
 	{
-		  if (isDirty())
-		  {
-		    boolean answer = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Close Virtual Terminal", "内容已经修改，你要保存吗?");
-		    if (!answer)
-		    {
-		      return ISaveablePart2.CANCEL;
-		    }
-		  }
-		  return ISaveablePart2.NO;
+		return isDirty;
 	}
+
+	@Override
+	public void commandStackChanged(EventObject event)
+	{
+		super.commandStackChanged(event);
+		getCommandStack().isDirty();
+		setIsDirty(getCommandStack().isDirty());
+	}
+	private boolean isDirty=false;
 	
+	public void setIsDirty(boolean flag)
+	{
+		isDirty=flag;
+		firePropertyChange(IEditorPart.PROP_DIRTY);
+	}
+	@Override
+	public boolean isSaveOnCloseNeeded()
+	{
+		return getCommandStack().isDirty();
+	}
+
+	KeyHandler sharedKeyHandler;
+
+	protected KeyHandler getCommonKeyHandler()
+	{
+		if (sharedKeyHandler == null)
+		{
+			sharedKeyHandler = new KeyHandler();
+			sharedKeyHandler
+					.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
+							getActionRegistry().getAction(
+									ActionFactory.DELETE.getId()));
+		}
+		return sharedKeyHandler;
+	}
 }

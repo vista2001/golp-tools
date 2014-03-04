@@ -823,7 +823,7 @@ public class TradeEditor extends EditorPart implements ISearch, IGetUpProject
                 String upProjectId = upProjectText1.getText();
                 OutputDataItemDialog outputDataItemDialog = new OutputDataItemDialog(
                         e.display.getActiveShell(), e.getSource(),
-                        outputDataText.getText(), upProjectId);
+                        outputDataText.getText(), upProjectId, inputDataText.getText());
                 outputDataItemDialog
                         .addInformDialogListener(new InformDialogListener()
                         {

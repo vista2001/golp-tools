@@ -10,6 +10,7 @@ public class TDataItem
     private int dataLen;
     private String dataAop;
     private long fmlId;
+    private String isPublished;//0-未发布,1-已发布
 
     public int getDataItemId()
     {
@@ -199,5 +200,13 @@ public class TDataItem
         stringBuilder.append("描述：" + dataDesc);
         return stringBuilder.toString();
     }
+
+	public String getIsPublished() {
+		return isPublished;
+	}
+
+	public void setIsPublished(String isPublished) {
+		this.isPublished = isPublished;
+	}
 
 }

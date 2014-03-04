@@ -1,13 +1,10 @@
 package dev.diagram.model;
 
-import java.util.List;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import dev.diagram.beans.TfmBlock;
-import dev.diagram.beans.TfmEdge;
 
 /**
  * 一般模型。包含流程图中节点的全部信息，继承于基本模型
@@ -22,8 +19,6 @@ public abstract class CommonModel extends ElementModel
 {
 	// 流程图中节点的数据(块的信息)，最终会以此为基础写入XML
 	private TfmBlock tfmBlock = new TfmBlock();
-	// 与节点相连的边的链表
-	private List<TfmEdge> edgeList;
 	// 节点的类型名称
 	private String typeName;
 	private ContentsModel contentModel;
@@ -73,16 +68,6 @@ public abstract class CommonModel extends ElementModel
 				|| (getTargetConnection().size() == 0 && getTypeId() != 4))
 			return false;
 		return true;
-	}
-
-	public List<TfmEdge> getEdgeList()
-	{
-		return edgeList;
-	}
-
-	public void setEdgeList(List<TfmEdge> edgeList)
-	{
-		this.edgeList = edgeList;
 	}
 
 	public void setTfmBlock(TfmBlock tfmBlock)
@@ -182,8 +167,8 @@ public abstract class CommonModel extends ElementModel
 	@Override
 	public void addTargetConnection(AbstractConnectionModel connx)
 	{
-		// 边加入模型的边链表中
-		edgeList.add(connx.getTfmEdge());
+		// 边加入节点模型的边链表中
+//		edgeList.add(connx.getTfmEdge());
 		super.addTargetConnection(connx);
 
 	}
@@ -195,7 +180,7 @@ public abstract class CommonModel extends ElementModel
 	public void removeTargetConnection(AbstractConnectionModel connx)
 	{
 		// 将边从模型的边链表中删除
-		edgeList.remove(connx.getTfmEdge());
+//		edgeList.remove(connx.getTfmEdge());
 		super.removeTargetConnection(connx);
 	}
 

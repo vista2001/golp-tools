@@ -18,7 +18,7 @@ public class TfmEdge {
 		tfmId = "";
 		sourceid= "";
 		targetid = "";
-		weight = "";
+		weight = "-1";
 	}
 	public String getTfmId() {
 		return tfmId;

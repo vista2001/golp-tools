@@ -35,6 +35,8 @@ public class DiagramActionBarContributor extends ActionBarContributor
 		addRetargetAction(new ZoomOutRetargetAction());
 		// 写入数据库action
 		addRetargetAction(new LabelRetargetAction(GenerateCodeAction.ID, null));
+		//保存xml
+		addRetargetAction(new LabelRetargetAction(SaveAction.ID, null));
 	}
 
 	@Override
@@ -43,6 +45,7 @@ public class DiagramActionBarContributor extends ActionBarContributor
 
 		addGlobalActionKey(GraphAutoLayout.ID);
 		addGlobalActionKey(GenerateCodeAction.ID);
+		addGlobalActionKey(SaveAction.ID);
 	}
 
 	/**
@@ -61,6 +64,7 @@ public class DiagramActionBarContributor extends ActionBarContributor
 		toolBarManager.add(new Separator());
 		toolBarManager.add(getAction(GraphAutoLayout.ID));
 		toolBarManager.add(getAction(GenerateCodeAction.ID));
+		toolBarManager.add(getAction(SaveAction.ID));
 	}
 
 }

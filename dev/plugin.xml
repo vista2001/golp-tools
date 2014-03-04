@@ -270,6 +270,12 @@
                   label="入口函数生成"
                   style="push">
             </command>
+            <command
+                  commandId="dev.menu.project.setDataItemState"
+                  icon="icons/logo.gif"
+                  label="数据项发布状态设定"
+                  style="push">
+            </command>
          </menu>
          <menu
                label="查看(V)"
@@ -817,6 +823,10 @@
             id="dev.commands.referenceToMenuId"
             name="referenceToMenuId">
       </command>
+      <command
+            id="dev.menu.project.setDataItemState"
+            name="数据项发布状态设定">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -937,6 +947,27 @@
       <handler
             class="dev.commands.OpenProperty"
             commandId="dev.menu.resource.commands.openProperty">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <and>
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <instanceof
+                           value="dev.model.resource.ProjectNode">
+                     </instanceof>
+                  </iterate>
+               </and>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="dev.commands.SetDataItemState"
+            commandId="dev.menu.project.setDataItemState">
          <enabledWhen>
             <with
                   variable="selection">

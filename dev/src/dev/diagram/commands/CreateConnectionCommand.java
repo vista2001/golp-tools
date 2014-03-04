@@ -91,18 +91,16 @@ public class CreateConnectionCommand extends Command
 	 */
 	public void execute()
 	{
-
-		connection.attachSource();
-		connection.attachTarget();
 		EdgeListLimitDialog dialog = new EdgeListLimitDialog(PlatformUI
 				.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				(CommonModel) source);
 		if(dialog.open()==Window.OK)
 		{
+			connection.attachSource();
+			connection.attachTarget();
 			connection.setWeight(dialog.getText());
+			
 		}
-		else
-			undo();
 
 	}
 

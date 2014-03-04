@@ -101,6 +101,7 @@ public class NewDataItemWizard extends Wizard implements INewWizard
 		String dataItemAOP = page1.getDataItemAOPText().getText();
 		dataItem.setDataAop(dataItemAOP);
 		dataItemType = dataItemType.substring(2);
+		dataItem.setIsPublished("0");
 		try
         {
             long fmlId = FmlId.getFmlId(dataItemName, dataItemId, dataItemType);

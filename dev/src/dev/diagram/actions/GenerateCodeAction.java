@@ -46,15 +46,7 @@ public class GenerateCodeAction extends Action
 			//然后将contentsModel里面的信息插入数据库
 			WriteToXML.writeToXML(contentModel);
 			WriteToDB.writeToDB(contentModel);
-		} else
-		{
-			//图的信息不完成 弹出对话框
-			MessageDialog.openError(PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow().getShell(), "ERROR",
-					"图的信息不完整，请完成连接后再试！");
-
 		}
-
 	}
 
 	@Override

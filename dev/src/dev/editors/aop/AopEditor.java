@@ -527,7 +527,7 @@ public class AopEditor extends EditorPart implements ISearch, IGetUpProject
             {
                 String upProjectId = upProjectText.getText();
                 OutputDataItemDialog outputDataItemDialog = new OutputDataItemDialog(
-                        e.display.getActiveShell(), e.getSource(), outputDataText.getText(), upProjectId);
+                        e.display.getActiveShell(), e.getSource(), outputDataText.getText(), upProjectId, inputDataText.getText());
                 outputDataItemDialog.addInformDialogListener(new InformDialogListener()
                 {
 
