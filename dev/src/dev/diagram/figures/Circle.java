@@ -12,8 +12,7 @@ import org.eclipse.swt.SWT;
  * @author 木木
  * 
  */
-public class Circle extends Shape implements MyFigure
-{
+public class Circle extends Shape implements MyFigure {
 	// 图形的名称
 	private String text = "开始";
 
@@ -21,8 +20,7 @@ public class Circle extends Shape implements MyFigure
 	 * 图形的填充为一个圆
 	 */
 	@Override
-	protected void fillShape(Graphics graphics)
-	{
+	protected void fillShape(Graphics graphics) {
 
 		Rectangle rec = getBounds();
 		int r = (rec.width > rec.height) ? rec.height : rec.width;
@@ -31,10 +29,9 @@ public class Circle extends Shape implements MyFigure
 		graphics.setLineStyle(SWT.LINE_SOLID);
 	}
 
-	//图形的轮廓是圆
+	// 图形的轮廓是圆
 	@Override
-	protected void outlineShape(Graphics graphics)
-	{
+	protected void outlineShape(Graphics graphics) {
 
 		Rectangle rec = getBounds();
 		int r = (rec.width > rec.height) ? rec.height : rec.width;
@@ -45,16 +42,14 @@ public class Circle extends Shape implements MyFigure
 
 	}
 
-	public void setText(String text)
-	{
+	public void setText(String text) {
 
 		this.text = text;
 		repaint();
 	}
 
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		// TODO Auto-generated method stub
 		return text;
 	}

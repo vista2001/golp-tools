@@ -18,6 +18,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import dev.db.pojo.TDataItem;
 import dev.db.service.CommonDialogServiceImpl;
+import dev.util.DevLogger;
 
 public class FmlId {
 	private static String path;
@@ -34,7 +35,7 @@ public class FmlId {
 	public static void generateFml(String prjId) throws SQLException,
 			IOException, InterruptedException {
 		getPath();
-		System.out.println(path);
+		DevLogger.printDebugMsg(path);
 		CommonDialogServiceImpl impl = new CommonDialogServiceImpl();
 		List<TDataItem> list = impl.dataItemDialogQuery(prjId);
 		File outFile = new File(path + separator + prjId + separator + "FML"
@@ -63,7 +64,7 @@ public class FmlId {
 				new InputStreamReader(child.getInputStream()));
 		String ls;
 		while ((ls = bufferedReader.readLine()) != null)
-			System.out.println(ls);
+			DevLogger.printDebugMsg(ls);
 	}
 
 	private static void writeFile(String name, int id, String type)

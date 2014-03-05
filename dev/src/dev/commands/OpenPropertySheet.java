@@ -14,33 +14,33 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class OpenPropertySheet extends AbstractHandler
-{
-    @Override
-    public Object execute(ExecutionEvent event) throws ExecutionException
-    {
-        
-        IWorkbenchWindow window = HandlerUtil
-                .getActiveWorkbenchWindowChecked(event);
-        if (window == null)
-            return null;
+import dev.util.DevLogger;
 
-        // Get the active page
+public class OpenPropertySheet extends AbstractHandler {
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
 
-        IWorkbenchPage page = window.getActivePage();
-        if (page == null)
-            return null;
+		IWorkbenchWindow window = HandlerUtil
+				.getActiveWorkbenchWindowChecked(event);
+		if (window == null)
+			return null;
 
-        // Open and activate the Favorites view
+		// Get the active page
 
-        try
-        {
-            page.showView("org.eclipse.ui.views.PropertySheet");
-        } catch (PartInitException e)
-        {
-            // FavoritesLog.logError("Failed to open the Favorites view", e);
-            e.printStackTrace();
-        }
-        return null;
-    }
+		IWorkbenchPage page = window.getActivePage();
+		if (page == null)
+			return null;
+
+		// Open and activate the Favorites view
+
+		try {
+			page.showView("org.eclipse.ui.views.PropertySheet");
+		} catch (PartInitException e) {
+			// FavoritesLog.logError("Failed to open the Favorites view", e);
+
+			e.printStackTrace();
+			DevLogger.printError(e);
+		}
+		return null;
+	}
 }

@@ -3,38 +3,28 @@ package dev.commands;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PlatformUI;
 
 import dev.db.DbConnFactory;
 import dev.db.DbConnectImpl;
-import dev.generate.entryFunction.EntryFunction;
 import dev.generate.tps.TpsMaker;
 import dev.model.base.ResourceLeafNode;
 import dev.model.base.RootNode;
 import dev.model.base.TreeNode;
 import dev.model.resource.ServerNodes;
+import dev.util.DevLogger;
 import dev.views.NavView;
 import freemarker.template.TemplateException;
 
@@ -71,11 +61,7 @@ public class MakefileHandler extends AbstractHandler {
 			}
 		}
 		if (!hasServer) {
-			MessageBox box = new MessageBox(Display.getCurrent()
-					.getActiveShell(), SWT.ICON_INFORMATION | SWT.OK);
-			box.setMessage("还没有创建服务程序。\n请创建完服务程序后再执行此操作");
-			box.setText("找不到服务程序");
-			box.open();
+			DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.OK, "找不到服务程序", "还没有创建服务程序。\n请创建完服务程序后再执行此操作");
 			return null;
 		}
 		MakefileDialog dialog = new MakefileDialog(Display.getCurrent()
@@ -97,12 +83,15 @@ public class MakefileHandler extends AbstractHandler {
 		} catch (TemplateException e) {
 
 			e.printStackTrace();
+			DevLogger.printError(e);
 		} catch (IOException e) {
 
 			e.printStackTrace();
+			DevLogger.printError(e);
 		} catch (SQLException e) {
 
 			e.printStackTrace();
+			DevLogger.printError(e);
 		} finally {
 			MessageBox box = new MessageBox(Display.getCurrent()
 					.getActiveShell(), SWT.ICON_INFORMATION | SWT.OK);
@@ -133,7 +122,9 @@ public class MakefileHandler extends AbstractHandler {
 		try {
 			ps.load();
 		} catch (IOException e) {
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		DbConnectImpl impl = DbConnFactory.dbConnCreator();
 		ResultSet rs = null;
@@ -144,6 +135,7 @@ public class MakefileHandler extends AbstractHandler {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 		try {
@@ -153,6 +145,7 @@ public class MakefileHandler extends AbstractHandler {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		return map;
 	}

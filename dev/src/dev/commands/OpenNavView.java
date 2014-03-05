@@ -15,13 +15,14 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import dev.util.DevLogger;
 import dev.views.NavView;
 
 public class OpenNavView extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+
 		IWorkbenchWindow window = HandlerUtil
 				.getActiveWorkbenchWindowChecked(event);
 		if (window == null)
@@ -36,11 +37,13 @@ public class OpenNavView extends AbstractHandler {
 		// Open and activate the Favorites view
 
 		try {
-//			page.showView("org.eclipse.ui.views.PropertySheet");
+			// page.showView("org.eclipse.ui.views.PropertySheet");
 			page.showView(NavView.ID);
 		} catch (PartInitException e) {
-			//FavoritesLog.logError("Failed to open the Favorites view", e);
+			// FavoritesLog.logError("Failed to open the Favorites view", e);
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		return null;
 	}

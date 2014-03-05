@@ -7,26 +7,26 @@ import org.eclipse.gef.editparts.AbstractTreeEditPart;
 
 import dev.diagram.model.AbstractModel;
 
-public class CustomTreeEditPart extends AbstractTreeEditPart implements PropertyChangeListener{
+public class CustomTreeEditPart extends AbstractTreeEditPart implements
+		PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		
-		
+
 	}
 
 	@Override
 	public void activate() {
-		
-		((AbstractModel)getModel()).addPropertyChangeListener(this);
+
+		((AbstractModel) getModel()).addPropertyChangeListener(this);
 		super.activate();
 	}
 
 	@Override
 	public void deactivate() {
-		
-		((AbstractModel)getModel()).removePropertyChangeListener(this);
+
+		((AbstractModel) getModel()).removePropertyChangeListener(this);
 		super.deactivate();
 	}
-	
+
 }

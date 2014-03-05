@@ -35,11 +35,13 @@ public interface IDbConnect {
 
 	/**
 	 * 设置PreparedStatement的String类型参数值
-	 * @return 
+	 * 
+	 * @return
 	 * 
 	 * @throws Exception
 	 */
-	public boolean setPreparedString(int i, String inString) throws SQLException;
+	public boolean setPreparedString(int i, String inString)
+			throws SQLException;
 
 	/**
 	 * 设置PreparedStatement的int类型参数值
@@ -49,12 +51,12 @@ public interface IDbConnect {
 	public boolean setPreparedInt(int i, int in) throws SQLException;
 
 	/**
-     * 设置PreparedStatement的long类型参数值
-     * 
-     * @throws Exception
-     * */
+	 * 设置PreparedStatement的long类型参数值
+	 * 
+	 * @throws Exception
+	 * */
 	public boolean setPreparedLong(int i, long in) throws SQLException;
-	
+
 	/**
 	 * 设置PreparedStatement的double类型参数值
 	 * 

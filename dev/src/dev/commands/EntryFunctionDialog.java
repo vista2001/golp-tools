@@ -28,6 +28,7 @@ public class EntryFunctionDialog extends Dialog {
 	protected EntryFunctionDialog(Shell parentShell) {
 		super(parentShell);
 	}
+
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Ñ¡Ôñ½»Ò×");
@@ -66,7 +67,8 @@ public class EntryFunctionDialog extends Dialog {
 			}
 		});
 		new Label(comp, SWT.NONE);
-		trade = new org.eclipse.swt.widgets.List(comp, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		trade = new org.eclipse.swt.widgets.List(comp, SWT.BORDER
+				| SWT.V_SCROLL | SWT.MULTI);
 		trade.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 6));
 		NavView view = (NavView) PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage()
@@ -123,4 +125,3 @@ public class EntryFunctionDialog extends Dialog {
 	org.eclipse.swt.widgets.List trade;
 	String[] str;
 }
-

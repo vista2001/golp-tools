@@ -9,11 +9,9 @@ package dev.diagram.model;
  * @author ľľ
  * 
  */
-public class LineConnectionModel extends AbstractConnectionModel
-{
-	public LineConnectionModel()
-	{
+public class LineConnectionModel extends AbstractConnectionModel {
+	public LineConnectionModel() {
 		super();
 	}
-	
+
 }

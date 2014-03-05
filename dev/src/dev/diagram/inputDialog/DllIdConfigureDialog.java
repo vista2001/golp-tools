@@ -19,32 +19,29 @@ import dev.db.DbConnFactory;
 import dev.db.DbConnectImpl;
 import dev.diagram.model.ContentsModel;
 import dev.util.CommonUtil;
+import dev.util.DevLogger;
 
-public class DllIdConfigureDialog extends Dialog
-{
+public class DllIdConfigureDialog extends Dialog {
 	Shell shell;
 	private Table table;
 	private String text;
 	private ContentsModel contentsModel;
 
 	protected DllIdConfigureDialog(Shell parentShell,
-			ContentsModel contentsModel)
-	{
+			ContentsModel contentsModel) {
 		super(parentShell);
 		this.shell = parentShell;
 		this.contentsModel = contentsModel;
 	}
 
 	@Override
-	protected void createButtonsForButtonBar(Composite parent)
-	{
+	protected void createButtonsForButtonBar(Composite parent) {
 		super.createButtonsForButtonBar(parent);
 		getButton(OK).setEnabled(false);
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent)
-	{
+	protected Control createDialogArea(Composite parent) {
 		Composite area = (Composite) super.createDialogArea(parent);
 		table = new Table(area, SWT.BORDER | SWT.FULL_SELECTION);
 		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
@@ -53,20 +50,17 @@ public class DllIdConfigureDialog extends Dialog
 		table.setLayoutData(gd_table);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		table.addSelectionListener(new SelectionListener()
-		{
+		table.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				if (table.getSelectionIndex() >= 0)
 					getButton(OK).setEnabled(true);
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
@@ -86,12 +80,10 @@ public class DllIdConfigureDialog extends Dialog
 
 		String sql = "select aopdllid,aopdllname,aopdlldesc from Aopdll";
 		ResultSet rs;
-		try
-		{
+		try {
 			dbConnectImpl.openConn(CommonUtil.initPs(contentsModel.projectId));
 			rs = dbConnectImpl.retrive(sql);
-			while (rs.next())
-			{
+			while (rs.next()) {
 				int id = rs.getInt(1);
 				String name = rs.getString(2);
 				String desc = rs.getString(3);
@@ -99,17 +91,16 @@ public class DllIdConfigureDialog extends Dialog
 				tableItem.setText(new String[] { id + "", name, desc });
 			}
 			dbConnectImpl.closeConn();
-		} catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 
 		}
 		return area;
 	}
 
 	@Override
-	protected void okPressed()
-	{
+	protected void okPressed() {
 
 		int id = table.getSelectionIndex();
 		text = table.getItem(id).getText(0);
@@ -117,8 +108,7 @@ public class DllIdConfigureDialog extends Dialog
 		super.okPressed();
 	}
 
-	public String getText()
-	{
+	public String getText() {
 		return text;
 	}
 }

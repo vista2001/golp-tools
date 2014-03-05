@@ -17,14 +17,12 @@ import dev.diagram.model.ElementModel;
  * @author 木木
  * 
  */
-public class CustomXYLayoutEditPolicy extends XYLayoutEditPolicy
-{
+public class CustomXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	/**
 	 * 创建新模型
 	 */
 	@Override
-	protected Command getCreateCommand(CreateRequest request)
-	{
+	protected Command getCreateCommand(CreateRequest request) {
 
 		CreateCommand command = new CreateCommand();
 		// 要创建的模型
@@ -48,8 +46,7 @@ public class CustomXYLayoutEditPolicy extends XYLayoutEditPolicy
 	 */
 	@Override
 	protected Command createChangeConstraintCommand(EditPart child,
-			Object constraint)
-	{
+			Object constraint) {
 		// 得到改变命令
 		ChangeConstraintCommand command = new ChangeConstraintCommand();
 		// 设置被改变的模型

@@ -12,11 +12,11 @@ public class OpenPreference extends AbstractHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
-		IWorkbenchWindow window=HandlerUtil.getActiveWorkbenchWindow(event);
-		//IWorkbenchAction ref=
+
+		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
+		// IWorkbenchAction ref=
 		ActionFactory.PREFERENCES.create(window).run();
-		//ActionFactory.PREFERENCES.create(getSite().getWorkbenchWindow()).run();
+		// ActionFactory.PREFERENCES.create(getSite().getWorkbenchWindow()).run();
 		return null;
 	}
 

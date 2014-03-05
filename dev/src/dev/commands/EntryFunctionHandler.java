@@ -16,7 +16,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
 
 import dev.db.DbConnFactory;
@@ -26,6 +25,7 @@ import dev.model.base.ResourceLeafNode;
 import dev.model.base.RootNode;
 import dev.model.base.TreeNode;
 import dev.model.resource.ServerNodes;
+import dev.util.DevLogger;
 import dev.views.NavView;
 import freemarker.template.TemplateException;
 
@@ -61,11 +61,8 @@ public class EntryFunctionHandler extends AbstractHandler {
 			}
 		}
 		if (!hasServer) {
-			MessageBox box = new MessageBox(Display.getCurrent()
-					.getActiveShell(), SWT.ICON_INFORMATION | SWT.OK);
-			box.setMessage("还没有创建服务程序。\n请创建完服务程序后再执行此操作");
-			box.setText("找不到服务程序");
-			box.open();
+			DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.OK,"找不到服务程序",
+					"还没有创建服务程序。\n请创建完服务程序后再执行此操作");
 			return null;
 		}
 		MakefileDialog dialog = new MakefileDialog(Display.getCurrent()
@@ -86,23 +83,18 @@ public class EntryFunctionHandler extends AbstractHandler {
 				information += obj.get(count).id + "\n";
 			}
 		} catch (TemplateException e) {
-			
 			e.printStackTrace();
+			DevLogger.printError(e);
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
-		}finally {
-			MessageBox box = new MessageBox(Display.getCurrent()
-					.getActiveShell(), SWT.ICON_INFORMATION | SWT.OK);
+			DevLogger.printError(e);
+		} finally {
 			if (count == obj.size()) {
-				box.setText("成功");
-				information = "生成交易入口函数操作成功";
+				DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.OK,"成功","生成交易入口函数操作成功");
 			} else {
-				box.setText("失败");
-				information = "生成第" + count + "个服务程序的交易入口函数操作出现问题\n某些交易没有绑定流程图";
+				DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.OK,"失败","生成第" + count + "个服务程序的交易入口函数操作出现问题\n某些交易没有绑定流程图");
 			}
-			box.setMessage(information);
-			box.open();
 		}
 		return obj;
 	}
@@ -118,17 +110,20 @@ public class EntryFunctionHandler extends AbstractHandler {
 		try {
 			ps.load();
 		} catch (IOException e) {
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		DbConnectImpl impl = DbConnFactory.dbConnCreator();
 		ResultSet rs = null;
 		try {
-		    impl.openConn(ps);
-		    rs = impl
+			impl.openConn(ps);
+			rs = impl
 					.retrive("select servername,serverid from server order by serverid");
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 		try {
@@ -136,8 +131,9 @@ public class EntryFunctionHandler extends AbstractHandler {
 				map.put(rs.getString(2), rs.getString(1));
 			}
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		return map;
 	}

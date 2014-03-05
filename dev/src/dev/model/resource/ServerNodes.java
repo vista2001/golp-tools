@@ -41,7 +41,7 @@ public class ServerNodes extends ResourceNode {
 
 	@Override
 	public Object getAdapter(Class adapter) {
-		
+
 		return null;
 	}
 

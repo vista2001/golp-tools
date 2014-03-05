@@ -11,71 +11,66 @@ import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.Session;
 import ch.ethz.ssh2.StreamGobbler;
 import ch.ethz.ssh2.log.Logger;
+import dev.util.DevLogger;
 
-public class RemoteUtil
-{
-    private static final Logger logger = Logger.getLogger(RemoteUtil.class);
+public class RemoteUtil {
+	private static final Logger logger = Logger.getLogger(RemoteUtil.class);
 
-    public RemoteUtil(String host, String username, String password)
-            
-    {
+	public RemoteUtil(String host, String username, String password)
 
-        this.host = host;
-        this.password = password;
-        this.username = username;
-        if (logger.isDebugEnabled())
-        {
-            logger.debug("connecting to " + host + " with user " + username
-                         + " and pwd " + password);
-        }
-    }
+	{
 
-    public void connection() throws IOException
-    {
+		this.host = host;
+		this.password = password;
+		this.username = username;
+		if (logger.isDebugEnabled()) {
+			logger.debug("connecting to " + host + " with user " + username
+					+ " and pwd " + password);
+		}
+	}
 
-        conn = new Connection(host);
-        conn.connect();
-        boolean isAuthenticated;
-        isAuthenticated = conn.authenticateWithPassword(username, password);
-        if (isAuthenticated == false)
-            throw new IOException("Authentication failed.");
-    }
+	public void connection() throws IOException {
 
-    public void disConnetion()
-    {
-        conn.close();
-    }
+		conn = new Connection(host);
+		conn.connect();
+		boolean isAuthenticated;
+		isAuthenticated = conn.authenticateWithPassword(username, password);
+		if (isAuthenticated == false)
+			throw new IOException("Authentication failed.");
+	}
 
-    public List<String> getRemoteDirs(String cmd) throws IOException
-    {
-        List<String> dirs = new ArrayList<String>();
-        if (logger.isDebugEnabled())
-        {
-            logger.debug("running SSH cmd [" + cmd + "]");
-        }
-        Session sess = conn.openSession();
-        sess.execCommand(cmd);
-        System.out.println("Here is some information about the remote host:");
+	public void disConnetion() {
+		conn.close();
+	}
 
-        InputStream stdout = new StreamGobbler(sess.getStdout());
+	public List<String> getRemoteDirs(String cmd) throws IOException {
+		List<String> dirs = new ArrayList<String>();
+		if (logger.isDebugEnabled()) {
+			logger.debug("running SSH cmd [" + cmd + "]");
+		}
+		Session sess = conn.openSession();
+		sess.execCommand(cmd);
+		DevLogger
+				.printDebugMsg("Here is some information about the remote host:");
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
-        while (true)
-        {
-            String line = br.readLine();
-            if (line == null)
-                break;
-            System.out.println(line);
-            dirs.add(line);
-        }
-        System.out.println("ExitCode: " + sess.getExitStatus());
-        sess.close();
+		InputStream stdout = new StreamGobbler(sess.getStdout());
 
-        return dirs;
-    }
+		BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
+		while (true) {
+			String line = br.readLine();
+			if (line == null)
+				break;
+			DevLogger.printDebugMsg(line);
+			dirs.add(line);
+		}
+		DevLogger.printDebugMsg("ExitCode: " + sess.getExitStatus());
+		sess.close();
 
-    private Connection conn;
-    private String host;
-    private String username;
-    private String password;
+		return dirs;
+	}
+
+	private Connection conn;
+	private String host;
+	private String username;
+	private String password;
 }

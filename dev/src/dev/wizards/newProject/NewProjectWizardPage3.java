@@ -20,11 +20,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class NewProjectWizardPage3 extends WizardPage{
+public class NewProjectWizardPage3 extends WizardPage {
 	private ISelection selection;
 	private Text appHomeText;
 	private Text golpHomeText;
-	
+
 	public Text getAppHomeText() {
 		return appHomeText;
 	}
@@ -48,22 +48,25 @@ public class NewProjectWizardPage3 extends WizardPage{
 		Composite container = new Composite(parent, SWT.NULL);
 		setControl(container);
 		container.setLayout(new GridLayout(2, false));
-		
+
 		Label appHomeLabel = new Label(container, SWT.NONE);
 		appHomeLabel.setText("AppHome的路径：");
-		
+
 		appHomeText = new Text(container, SWT.BORDER);
-		appHomeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+		appHomeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+
 		Label golpHomeLabel = new Label(container, SWT.NONE);
 		golpHomeLabel.setText("GolpHome的路径：");
-		
+
 		golpHomeText = new Text(container, SWT.BORDER);
-		golpHomeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		golpHomeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
 		list.add(appHomeText);
 		list.add(golpHomeText);
 	}
-	//更新状态
+
+	// 更新状态
 
 	// 检测页面输入是否完成
 	@Override

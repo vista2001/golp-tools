@@ -45,8 +45,7 @@ import dev.util.CommonUtil;
  * @author 木木
  * 
  */
-public class TfmCongigureDialog extends Dialog
-{
+public class TfmCongigureDialog extends Dialog {
 	private Text tfmid, nodetype, nodeid, desc;
 	private Text extenddllid, extendseqno, extendname, extenddesc;
 	private Button up, down, del, newb, save, nestedBt;
@@ -73,42 +72,37 @@ public class TfmCongigureDialog extends Dialog
 	 * 创建工具栏按钮，包括 确定，保存，取消
 	 */
 	@Override
-	protected void createButtonsForButtonBar(Composite parent)
-	{
+	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, "确定", false);
 		createButton(parent, iAPPLICATION_ID, "保存", false);
 		createButton(parent, IDialogConstants.CANCEL_ID, "取消", false);
 		getButton(iAPPLICATION_ID).setEnabled(false);
 		getButton(CANCEL).setEnabled(true);
 		getButton(OK).setEnabled(false);
-		getButton(iAPPLICATION_ID).addSelectionListener(new SelectionListener()
-		{
+		getButton(iAPPLICATION_ID).addSelectionListener(
+				new SelectionListener() {
 
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				store();
-				getButton(iAPPLICATION_ID).setEnabled(false);
-			}
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						store();
+						getButton(iAPPLICATION_ID).setEnabled(false);
+					}
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
 
-			}
-		});
+					}
+				});
 	}
 
 	@Override
-	protected void configureShell(Shell newShell)
-	{
+	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(block.getName());
 	}
 
 	public TfmCongigureDialog(Shell parentShell, CommonModel commonModel,
-			ContentsModel contentsModel)
-	{
+			ContentsModel contentsModel) {
 		super(parentShell);
 		this.commonModel = commonModel;
 		this.block = commonModel.getTfmBlock();
@@ -116,8 +110,7 @@ public class TfmCongigureDialog extends Dialog
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent)
-	{
+	protected Control createDialogArea(Composite parent) {
 
 		Composite area = (Composite) super.createDialogArea(parent);
 		area.setLayout(null);
@@ -185,12 +178,10 @@ public class TfmCongigureDialog extends Dialog
 		nodetype.setBounds(88, 36, 110, 23);
 		nodetype.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		nodetype.setEditable(false);
-		nestedBt.addSelectionListener(new SelectionListener()
-		{
+		nestedBt.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				DiagramListDialog dialog = new DiagramListDialog(getShell(),
 						contentsModel);
 				if (Window.OK == dialog.open())
@@ -199,8 +190,7 @@ public class TfmCongigureDialog extends Dialog
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
@@ -320,12 +310,10 @@ public class TfmCongigureDialog extends Dialog
 		 * 节点dll配置，打开一个子对话框，选择dll并保存在map里面，用于根据当前dll，提供原子交易名称
 		 */
 		// 前扩展点和后扩展点选择监听器
-		extentsSelectLististner = new SelectionListener()
-		{
+		extentsSelectLististner = new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				extendname.setText("");
 				extenddesc.setText("");
@@ -335,16 +323,14 @@ public class TfmCongigureDialog extends Dialog
 				Button temp = (Button) e.widget;
 				if (temp.getSelection())
 					// 当前选中了前扩展点
-					if (temp.getText().equals("前扩展点"))
-					{
+					if (temp.getText().equals("前扩展点")) {
 						// 清空table
 						table.removeAll();
 						// 显示当前扩展点类型的扩展点信息
 						for (int curr : tfmExtendsMap.keySet())
 							// 前扩展点编号小于100，过滤编号大于100的
 							if (Integer.parseInt(tfmExtendsMap.get(curr)
-									.getSeqNo()) < 100)
-							{
+									.getSeqNo()) < 100) {
 								TableItem tabItem = new TableItem(table,
 										SWT.NONE);
 								tabItem.setText(new String[] {
@@ -355,13 +341,11 @@ public class TfmCongigureDialog extends Dialog
 							}
 					}
 					// 选择了后扩展点
-					else
-					{
+					else {
 						table.removeAll();
 						for (int curr : tfmExtendsMap.keySet())
 							if (Integer.parseInt(tfmExtendsMap.get(curr)
-									.getSeqNo()) >= 100)
-							{
+									.getSeqNo()) >= 100) {
 								TableItem tabItem = new TableItem(table,
 										SWT.NONE);
 								tabItem.setText(new String[] {
@@ -375,8 +359,7 @@ public class TfmCongigureDialog extends Dialog
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 
@@ -386,12 +369,10 @@ public class TfmCongigureDialog extends Dialog
 		// 为后扩展点按钮增加选择监听器
 		endextend.addSelectionListener(extentsSelectLististner);
 		// 扩展节点的dllid监听器 同节点的dllidModifyListener
-		extenddllid.addModifyListener(new ModifyListener()
-		{
+		extenddllid.addModifyListener(new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e)
-			{
+			public void modifyText(ModifyEvent e) {
 				if (extenddllid.getText().isEmpty())
 					return;
 				extendfuncname.removeAll();
@@ -400,54 +381,45 @@ public class TfmCongigureDialog extends Dialog
 				String sql = "select aopname from aop where upaopdll= "
 						+ extenddllid.getText();
 				ResultSet rs;
-				try
-				{
+				try {
 					dbConnectImpl.openConn(CommonUtil
 							.initPs(contentsModel.projectId));
 					rs = dbConnectImpl.retrive(sql);
 					while (rs.next())
 						extendfuncname.add(rs.getString(1));
 					dbConnectImpl.closeConn();
-				} catch (SQLException e1)
-				{
+				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
 
-		exbt.addSelectionListener(new SelectionListener()
-		{
+		exbt.addSelectionListener(new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				DllIdConfigureDialog dialog = new DllIdConfigureDialog(
 						getShell(), contentsModel);
-				if (Window.OK == dialog.open())
-				{
+				if (Window.OK == dialog.open()) {
 					extenddllid.setText(dialog.getText());
 				}
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
 		// 扩展点的ModifyListener监听器，当所有配置信息都配置后，激活保存按钮
-		listenerSaveActive = new ModifyListener()
-		{
+		listenerSaveActive = new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e)
-			{
+			public void modifyText(ModifyEvent e) {
 
 				if (extenddllid.getText().length() != 0
 						&& extendfuncname.getText().length() != 0
 						&& extendname.getText().length() != 0
-						&& extendseqno.getText().length() != 0)
-				{
+						&& extendseqno.getText().length() != 0) {
 					save.setEnabled(true);
 				} else
 					save.setEnabled(false);
@@ -459,17 +431,14 @@ public class TfmCongigureDialog extends Dialog
 		extendseqno.addModifyListener(listenerSaveActive);
 
 		// 上移，下移，删除，保存按钮的选择监听器
-		listener = new SelectionAdapter()
-		{
+		listener = new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
 				Button b = (Button) e.widget;
 				// 点击上移
-				if (b.getText().equals("上移"))
-				{
+				if (b.getText().equals("上移")) {
 					// table中的已选行的索引
 					int index = table.getSelectionIndex();
 					int no = Integer.parseInt(table.getItem(index).getText(0));
@@ -499,8 +468,7 @@ public class TfmCongigureDialog extends Dialog
 					tfmExtendsMap.put(no - 1, _down);
 					tfmExtendsMap.put(no, _up);
 					// 点击下移，所做的操作类似上移，请参考上移操作，其实此处可以写个函数来操作移动，上移和下移时传递不同的参数即可
-				} else if (b.getText().equals("下移"))
-				{
+				} else if (b.getText().equals("下移")) {
 					int index = table.getSelectionIndex();
 					int no = Integer.parseInt(table.getItem(index).getText(0));
 					if (index == table.getItemCount() - 1)
@@ -523,21 +491,18 @@ public class TfmCongigureDialog extends Dialog
 					tfmExtendsMap.put(no, _down);
 					tfmExtendsMap.put(no + 1, _up);
 					// 点击删除
-				} else if (b.getText().equals("删除"))
-				{
+				} else if (b.getText().equals("删除")) {
 					int index = table.getSelectionIndex();
 					if (index < 0)
 						return;
-					else
-					{
+					else {
 						// 先删除TfmExtendsMap里面的节点
 						tfmExtendsMap.remove(Integer.parseInt(table.getItem(
 								index).getText(0)));
 						// 删除table中的选中的行
 						table.remove(index);
 						// 修改被删除行后面的各行的序列
-						for (int i = index; i <= table.getItemCount() - 1; i++)
-						{
+						for (int i = index; i <= table.getItemCount() - 1; i++) {
 							int no = Integer.parseInt(table.getItem(i).getText(
 									0));
 							TfmExtendAop temp = tfmExtendsMap.remove(no);
@@ -548,8 +513,7 @@ public class TfmCongigureDialog extends Dialog
 						}
 					}
 					// 点击新建
-				} else if (b.getText().equals("新建"))
-				{
+				} else if (b.getText().equals("新建")) {
 					// 如果前扩展点，序列号从1开始
 					if (firstextend.getSelection())
 						extendseqno
@@ -567,14 +531,12 @@ public class TfmCongigureDialog extends Dialog
 
 				}
 				// 点击保存
-				else if (b.getText().equals("保存"))
-				{
+				else if (b.getText().equals("保存")) {
 					// 判断是新增加扩展点
 					if (Integer.parseInt(extendseqno.getText()) == table
 							.getItemCount() + 1
 							|| Integer.parseInt(extendseqno.getText()) == table
-									.getItemCount() + 101)
-					{
+									.getItemCount() + 101) {
 						TfmExtendAop newExtend = new TfmExtendAop();
 						newExtend.setDesc(extenddesc.getText());
 						newExtend.setDllId(extenddllid.getText());
@@ -595,8 +557,7 @@ public class TfmCongigureDialog extends Dialog
 								tfmExtendsMap.get(NO).getFuncname() });
 					}
 					// 判断是对已存在信息的修改
-					else
-					{
+					else {
 						int index = table.getSelectionIndex();
 						// 修改table中的行
 						table.getItem(index).setText(
@@ -618,28 +579,23 @@ public class TfmCongigureDialog extends Dialog
 					save.setEnabled(false);
 					Button btn = getButton(iAPPLICATION_ID);
 					Button btnOK = getButton(IDialogConstants.OK_ID);
-					if ((btn != null) && (btnOK != null))
-					{
+					if ((btn != null) && (btnOK != null)) {
 						getButton(iAPPLICATION_ID).setEnabled(true);
 						getButton(IDialogConstants.OK_ID).setEnabled(true);
 					}
 				}
 				up.setEnabled(true);
 				down.setEnabled(true);
-				if (table.getSelectionIndex() == 0 && table.getItemCount() == 1)
-				{
+				if (table.getSelectionIndex() == 0 && table.getItemCount() == 1) {
 					up.setEnabled(false);
 					down.setEnabled(false);
 				} else if (table.getSelectionIndex() == table.getItemCount() - 1
-						&& table.getItemCount() > 1)
-				{
+						&& table.getItemCount() > 1) {
 					down.setEnabled(false);
 				} else if (table.getSelectionIndex() == 0
-						&& table.getItemCount() > 1)
-				{
+						&& table.getItemCount() > 1) {
 					up.setEnabled(false);
-				} else
-				{
+				} else {
 					up.setEnabled(true);
 					down.setEnabled(true);
 				}
@@ -647,34 +603,27 @@ public class TfmCongigureDialog extends Dialog
 			}
 		};
 		// table的选择监听器
-		table.addSelectionListener(new SelectionListener()
-		{
+		table.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				int index = table.getSelectionIndex();
-				if (index > 0 && index < table.getItemCount() - 1)
-				{
+				if (index > 0 && index < table.getItemCount() - 1) {
 					up.setEnabled(true);
 					down.setEnabled(true);
-				} else if (index == table.getItemCount() - 1 && index == 0)
-				{
+				} else if (index == table.getItemCount() - 1 && index == 0) {
 					up.setEnabled(false);
 					down.setEnabled(false);
-				} else if (index == 0)
-				{
+				} else if (index == 0) {
 					up.setEnabled(false);
 					down.setEnabled(true);
-				} else if (index == table.getItemCount() - 1)
-				{
+				} else if (index == table.getItemCount() - 1) {
 					up.setEnabled(true);
 					down.setEnabled(false);
 				}
 				// 显示选中项对应的各项信息
-				if (index >= 0)
-				{
+				if (index >= 0) {
 					TfmExtendAop temp = tfmExtendsMap.get(Integer
 							.parseInt(table.getItem(index).getText(0)));
 					extenddesc.setText(temp.getDesc());
@@ -682,42 +631,35 @@ public class TfmCongigureDialog extends Dialog
 					extendfuncname.setText(temp.getFuncname());
 					extendname.setText(temp.getName());
 					extendseqno.setText(temp.getSeqNo());
-					if (Integer.parseInt(temp.getSeqNo()) < 100)
-					{
+					if (Integer.parseInt(temp.getSeqNo()) < 100) {
 						firstextend.setSelection(true);
 						endextend.setSelection(false);
-					} else
-					{
+					} else {
 						endextend.setSelection(true);
 						firstextend.setSelection(false);
 					}
 					del.setEnabled(true);
-				} else
-				{
+				} else {
 					del.setEnabled(false);
 				}
 				save.setEnabled(false);
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
-		table.addFocusListener(new FocusListener()
-		{
+		table.addFocusListener(new FocusListener() {
 
 			@Override
-			public void focusLost(FocusEvent e)
-			{
+			public void focusLost(FocusEvent e) {
 
 				// del.setEnabled(false);
 			}
 
 			@Override
-			public void focusGained(FocusEvent e)
-			{
+			public void focusGained(FocusEvent e) {
 
 				save.setEnabled(false);
 			}
@@ -727,20 +669,16 @@ public class TfmCongigureDialog extends Dialog
 		up.addSelectionListener(listener);
 		newb.addSelectionListener(listener);
 		save.addSelectionListener(listener);
-		if (block.getDesc().isEmpty())
-		{
+		if (block.getDesc().isEmpty()) {
 			desc.setText("描述信息...");
-		} else
-		{
+		} else {
 			desc.setText(block.getDesc());
 		}
 		// 初始化扩展点信息
-		for (TfmExtendAop curr : block.getTfmExtendAopsList())
-		{
+		for (TfmExtendAop curr : block.getTfmExtendAopsList()) {
 			tfmExtendsMap.put(Integer.parseInt(curr.getSeqNo()), curr);
 			// 显示前扩展点
-			if (Integer.parseInt(curr.getSeqNo()) < 100)
-			{
+			if (Integer.parseInt(curr.getSeqNo()) < 100) {
 
 				TableItem currItem = new TableItem(table, SWT.NONE);
 				int NO = Integer.parseInt(curr.getSeqNo());
@@ -751,19 +689,15 @@ public class TfmCongigureDialog extends Dialog
 						tfmExtendsMap.get(NO).getFuncname() });
 			}
 		}
-		ModifyListener confirm = new ModifyListener()
-		{
+		ModifyListener confirm = new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e)
-			{
+			public void modifyText(ModifyEvent e) {
 
-				if (nested.getText().length() != 0)
-				{
+				if (nested.getText().length() != 0) {
 					getButton(IDialogConstants.OK_ID).setEnabled(true);
 					getButton(iAPPLICATION_ID).setEnabled(true);
-				} else
-				{
+				} else {
 					getButton(IDialogConstants.OK_ID).setEnabled(false);
 					getButton(iAPPLICATION_ID).setEnabled(false);
 				}
@@ -774,11 +708,9 @@ public class TfmCongigureDialog extends Dialog
 		return area;
 	}
 
-	protected boolean check()
-	{
+	protected boolean check() {
 
-		for (TfmExtendAop curr : tfmExtendsMap.values())
-		{
+		for (TfmExtendAop curr : tfmExtendsMap.values()) {
 			if (curr.getDllId().equals(extenddllid.getText()))
 				if (curr.getFuncname().equals(extendfuncname.getText()))
 					return false;
@@ -787,19 +719,15 @@ public class TfmCongigureDialog extends Dialog
 	}
 
 	@Override
-	protected void buttonPressed(int buttonId)
-	{
+	protected void buttonPressed(int buttonId) {
 
-		if (IDialogConstants.OK_ID == buttonId)
-		{
+		if (IDialogConstants.OK_ID == buttonId) {
 			store();
 			setReturnCode(IDialogConstants.OK_ID);
 			close();
-		} else if (iAPPLICATION_ID == buttonId)
-		{
+		} else if (iAPPLICATION_ID == buttonId) {
 			store();
-		} else if (IDialogConstants.CANCEL_ID == buttonId)
-		{
+		} else if (IDialogConstants.CANCEL_ID == buttonId) {
 			setReturnCode(IDialogConstants.CANCEL_ID);
 			close();
 
@@ -809,8 +737,7 @@ public class TfmCongigureDialog extends Dialog
 	/**
 	 * 将当前配置的节点信息写入块中
 	 */
-	protected void store()
-	{
+	protected void store() {
 		block.setNestedtfm(nested.getText());
 		block.setTfmId(tfmid.getText());
 		block.setDesc(desc.getText());

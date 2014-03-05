@@ -9,9 +9,9 @@
 
 package dev.generate.entryFunction;
 
-import dev.util.DebugOut;
+import dev.util.DevLogger;
 
-public class Req{
+public class Req {
 	public String getReqID() {
 		return reqID;
 	}
@@ -30,11 +30,11 @@ public class Req{
 
 	public String reqID;
 	public String isNeed;
-	
-	Req(String reqDate){
-		DebugOut.println(reqDate);
-		String[] tem=reqDate.split("@");
-		reqID=tem[0];
-		isNeed=tem[1];
+
+	Req(String reqDate) {
+		DevLogger.printDebugMsg(reqDate);
+		String[] tem = reqDate.split("@");
+		reqID = tem[0];
+		isNeed = tem[1];
 	}
 }

@@ -7,21 +7,17 @@ import org.eclipse.ui.internal.presentations.util.StandardViewSystemMenu;
 import org.eclipse.ui.presentations.IPresentablePart;
 import org.eclipse.ui.presentations.IStackPresentationSite;
 
-public class GolpStandardEditorSystemMenu extends StandardViewSystemMenu
-{
-	public GolpStandardEditorSystemMenu(IStackPresentationSite site)
-	{
+public class GolpStandardEditorSystemMenu extends StandardViewSystemMenu {
+	public GolpStandardEditorSystemMenu(IStackPresentationSite site) {
 		super(site);
 	}
 
-	String getMoveMenuText()
-	{
+	String getMoveMenuText() {
 		return WorkbenchMessages.EditorPane_moveEditor;
 	}
 
 	public void show(Control parent, Point displayCoordinates,
-			IPresentablePart currentSelection)
-	{
+			IPresentablePart currentSelection) {
 		super.show(parent, displayCoordinates, currentSelection);
 	}
 }

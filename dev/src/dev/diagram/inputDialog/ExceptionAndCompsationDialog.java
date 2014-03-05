@@ -49,11 +49,9 @@ import dev.util.CommonUtil;
  * @author 木木
  * 
  */
-public class ExceptionAndCompsationDialog extends Dialog
-{
+public class ExceptionAndCompsationDialog extends Dialog {
 	public ExceptionAndCompsationDialog(Shell parentShell,
-			ContentsModel contentsModel)
-	{
+			ContentsModel contentsModel) {
 		super(parentShell);
 		setShellStyle(SWT.DIALOG_TRIM);
 		this.shell = parentShell;
@@ -77,43 +75,37 @@ public class ExceptionAndCompsationDialog extends Dialog
 	private static final int APPLICATION_ID = 10000;
 
 	@Override
-	protected void createButtonsForButtonBar(Composite parent)
-	{
+	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, "确定", false);
 		createButton(parent, APPLICATION_ID, "保存", false);
 		createButton(parent, IDialogConstants.CANCEL_ID, "取消", false);
 		getButton(IDialogConstants.CANCEL_ID).setEnabled(false);
 		getButton(APPLICATION_ID).setEnabled(false);
 		getButton(IDialogConstants.CANCEL_ID).setEnabled(true);
-		getButton(APPLICATION_ID).addSelectionListener(new SelectionListener()
-		{
+		getButton(APPLICATION_ID).addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				// getButton(IOK_ID).setEnabled(false);
 				getButton(APPLICATION_ID).setEnabled(false);
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
 	}
 
 	@Override
-	protected void configureShell(Shell newShell)
-	{
+	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("异常和补偿");
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent)
-	{
+	protected Control createDialogArea(Composite parent) {
 
 		Composite area = (Composite) super.createDialogArea(parent);
 		area.setLayout(new GridLayout(1, false));
@@ -234,12 +226,10 @@ public class ExceptionAndCompsationDialog extends Dialog
 
 		tfmid = new Text(composite_1, SWT.BORDER | SWT.READ_ONLY);
 		tfmid.setBounds(112, 4, 100, 23);
-		listenerSelect = new SelectionListener()
-		{
+		listenerSelect = new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				name.setText("");
 				desc.setText("");
@@ -247,11 +237,9 @@ public class ExceptionAndCompsationDialog extends Dialog
 				table.removeAll();
 				Button temp = (Button) e.widget;
 				if (temp.getSelection())
-					if (temp.getText().equals("异常"))
-					{
+					if (temp.getText().equals("异常")) {
 
-						for (int curr : tfmExceptionMap.keySet())
-						{
+						for (int curr : tfmExceptionMap.keySet()) {
 							TableItem tabItem = new TableItem(table, SWT.NONE);
 							tabItem.setText(new String[] {
 									tfmExceptionMap.get(curr).getSeqNo(),
@@ -259,10 +247,8 @@ public class ExceptionAndCompsationDialog extends Dialog
 									tfmExceptionMap.get(curr).getDllId(),
 									tfmExceptionMap.get(curr).getFuncname() });
 						}
-					} else
-					{
-						for (int curr : tfmComprasationMap.keySet())
-						{
+					} else {
+						for (int curr : tfmComprasationMap.keySet()) {
 							TableItem tabItem = new TableItem(table, SWT.NONE);
 							tabItem.setText(new String[] {
 									tfmComprasationMap.get(curr).getSeqNo(),
@@ -275,38 +261,32 @@ public class ExceptionAndCompsationDialog extends Dialog
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 
 		};
 		exception.addSelectionListener(listenerSelect);
 		comprasation.addSelectionListener(listenerSelect);
-		dllid.addModifyListener(new ModifyListener()
-		{
+		dllid.addModifyListener(new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e)
-			{
-				if (dllid.getText().length() != 0)
-				{
+			public void modifyText(ModifyEvent e) {
+				if (dllid.getText().length() != 0) {
 					funcname.removeAll();
 					DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
 
 					String sql = "select aopname from aop where upaopdll= "
 							+ dllid.getText();
 					ResultSet rs;
-					try
-					{
+					try {
 						dbConnectImpl.openConn(CommonUtil
 								.initPs(contentsModel.projectId));
 						rs = dbConnectImpl.retrive(sql);
 						while (rs.next())
 							funcname.add(rs.getString(1));
 						dbConnectImpl.closeConn();
-					} catch (SQLException e1)
-					{
+					} catch (SQLException e1) {
 
 						e1.printStackTrace();
 					}
@@ -314,36 +294,29 @@ public class ExceptionAndCompsationDialog extends Dialog
 			}
 		});
 
-		exbt.addSelectionListener(new SelectionListener()
-		{
+		exbt.addSelectionListener(new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				DllIdConfigureDialog dialog = new DllIdConfigureDialog(
 						getShell(), contentsModel);
-				if (Window.OK == dialog.open())
-				{
+				if (Window.OK == dialog.open()) {
 					dllid.setText(dialog.getText());
 				}
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
-		listenerSaveActive = new ModifyListener()
-		{
+		listenerSaveActive = new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e)
-			{
+			public void modifyText(ModifyEvent e) {
 
 				if (dllid.getText() != "" && funcname.getText() != ""
-						&& name.getText() != "" && seqno.getText() != "")
-				{
+						&& name.getText() != "" && seqno.getText() != "") {
 					save.setEnabled(true);
 				} else
 					save.setEnabled(false);
@@ -354,16 +327,13 @@ public class ExceptionAndCompsationDialog extends Dialog
 		name.addModifyListener(listenerSaveActive);
 		seqno.addModifyListener(listenerSaveActive);
 
-		listener = new SelectionAdapter()
-		{
+		listener = new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
 				Button b = (Button) e.widget;
-				if (b.getText().equals("上移"))
-				{
+				if (b.getText().equals("上移")) {
 					int index = table.getSelectionIndex();
 					int no = Integer.parseInt(table.getItem(index).getText(0));
 					if (index <= 0)
@@ -380,16 +350,14 @@ public class ExceptionAndCompsationDialog extends Dialog
 							table.getItem(index - 1).getText(3) };
 					table.getItem(index - 1).setText(down);
 					table.getItem(index).setText(up);
-					if (exception.getSelection())
-					{
+					if (exception.getSelection()) {
 						TfmException _up = tfmExceptionMap.remove(no - 1);
 						TfmException _down = tfmExceptionMap.remove(no);
 						_up.setSeqNo(no + "");
 						_down.setSeqNo(no - 1 + "");
 						tfmExceptionMap.put(no, _up);
 						tfmExceptionMap.put(no - 1, _down);
-					} else
-					{
+					} else {
 						TfmCompersation _up = tfmComprasationMap.remove(no - 1);
 						TfmCompersation _down = tfmComprasationMap.remove(no);
 						_up.setSeqNo(no + "");
@@ -398,8 +366,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 						tfmComprasationMap.put(no - 1, _down);
 					}
 					table.setSelection(index - 1);
-				} else if (b.getText().equals("下移"))
-				{
+				} else if (b.getText().equals("下移")) {
 					int index = table.getSelectionIndex();
 					int no = Integer.parseInt(table.getItem(index).getText(0));
 					if (index == table.getItemCount() - 1)
@@ -414,16 +381,14 @@ public class ExceptionAndCompsationDialog extends Dialog
 							table.getItem(index + 1).getText(3) };
 					table.getItem(index).setText(down);
 					table.getItem(index + 1).setText(up);
-					if (exception.getSelection())
-					{
+					if (exception.getSelection()) {
 						TfmException _up = tfmExceptionMap.remove(no);
 						TfmException _down = tfmExceptionMap.remove(no + 1);
 						_up.setSeqNo(no + 1 + "");
 						_down.setSeqNo(no + "");
 						tfmExceptionMap.put(no + 1, _up);
 						tfmExceptionMap.put(no, _down);
-					} else
-					{
+					} else {
 						TfmCompersation _up = tfmComprasationMap.remove(no);
 						TfmCompersation _down = tfmComprasationMap
 								.remove(no + 1);
@@ -434,22 +399,18 @@ public class ExceptionAndCompsationDialog extends Dialog
 					}
 					table.setSelection(index + 1);
 
-				} else if (b.getText().equals("删除"))
-				{
+				} else if (b.getText().equals("删除")) {
 					int index = table.getSelectionIndex();
 
 					if (index < 0)
 						return;
-					else
-					{
+					else {
 
-						if (exception.getSelection())
-						{
+						if (exception.getSelection()) {
 							tfmExceptionMap.remove(Integer.parseInt(table
 									.getItem(index).getText(0)));
 							table.remove(index);
-							for (int i = index; i <= table.getItemCount() - 1; i++)
-							{
+							for (int i = index; i <= table.getItemCount() - 1; i++) {
 								int no = Integer.parseInt(table.getItem(i)
 										.getText(0));
 								TfmException temp = tfmExceptionMap.remove(no);
@@ -457,13 +418,11 @@ public class ExceptionAndCompsationDialog extends Dialog
 								tfmExceptionMap.put(no - 1, temp);
 								table.getItem(i).setText(0, no - 1 + "");
 							}
-						} else
-						{
+						} else {
 							tfmComprasationMap.remove(Integer.parseInt(table
 									.getItem(index).getText(0)));
 							table.remove(index);
-							for (int i = index; i <= table.getItemCount() - 1; i++)
-							{
+							for (int i = index; i <= table.getItemCount() - 1; i++) {
 								int no = Integer.parseInt(table.getItem(i)
 										.getText(0));
 								TfmCompersation temp = tfmComprasationMap
@@ -475,8 +434,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 						}
 
 					}
-				} else if (b.getText().equals("新建"))
-				{
+				} else if (b.getText().equals("新建")) {
 					seqno.setText(Integer.toString(table.getItemCount() + 1));
 					name.setText("");
 					desc.setText("");
@@ -484,11 +442,9 @@ public class ExceptionAndCompsationDialog extends Dialog
 					funcname.removeAll();
 					name.setFocus();
 					return;
-				} else if (b.getText().equals("保存"))
-				{
+				} else if (b.getText().equals("保存")) {
 					int no = Integer.parseInt(seqno.getText());
-					if (exception.getSelection())
-					{
+					if (exception.getSelection()) {
 						TfmException newExtend = new TfmException();
 						newExtend.setDesc(desc.getText());
 						newExtend.setDllId(dllid.getText());
@@ -507,8 +463,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 								tfmExceptionMap.get(no).getName(),
 								tfmExceptionMap.get(no).getDllId(),
 								tfmExceptionMap.get(no).getFuncname() });
-					} else
-					{
+					} else {
 						TfmCompersation newExtend = new TfmCompersation();
 						newExtend.setDesc(desc.getText());
 						newExtend.setDllId(dllid.getText());
@@ -516,8 +471,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 						newExtend.setSeqNo(seqno.getText());
 						newExtend.setName(name.getText());
 						newExtend.setTfmId(tfmid.getText());
-						if (tfmComprasationMap.containsKey(no))
-						{
+						if (tfmComprasationMap.containsKey(no)) {
 							tfmComprasationMap.remove(no);
 						}
 						tfmComprasationMap.put(no, (TfmCompersation) newExtend);
@@ -536,64 +490,52 @@ public class ExceptionAndCompsationDialog extends Dialog
 					save.setEnabled(false);
 					Button btn = getButton(APPLICATION_ID);
 					Button btnOK = getButton(IDialogConstants.OK_ID);
-					if ((btn != null) && (btnOK != null))
-					{
+					if ((btn != null) && (btnOK != null)) {
 						getButton(APPLICATION_ID).setEnabled(true);
 						getButton(IDialogConstants.OK_ID).setEnabled(true);
 					}
 				}
 				up.setEnabled(true);
 				down.setEnabled(true);
-				if (table.getSelectionIndex() == 0 && table.getItemCount() == 1)
-				{
+				if (table.getSelectionIndex() == 0 && table.getItemCount() == 1) {
 					up.setEnabled(false);
 					down.setEnabled(false);
 				} else if (table.getSelectionIndex() == table.getItemCount() - 1
-						&& table.getItemCount() > 1)
-				{
+						&& table.getItemCount() > 1) {
 					down.setEnabled(false);
 				} else if (table.getSelectionIndex() == 0
-						&& table.getItemCount() > 1)
-				{
+						&& table.getItemCount() > 1) {
 					up.setEnabled(false);
-				} else
-				{
+				} else {
 					up.setEnabled(true);
 					down.setEnabled(true);
 				}
 
 			}
 		};
-		table.addSelectionListener(new SelectionListener()
-		{
+		table.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				int index = table.getSelectionIndex();
-				if (index == 0 && table.getItemCount() > 1)
-				{
+				if (index == 0 && table.getItemCount() > 1) {
 					up.setEnabled(false);
 					down.setEnabled(true);
 
-				} else if (index == table.getItemCount() - 1 && index != 0)
-				{
+				} else if (index == table.getItemCount() - 1 && index != 0) {
 					up.setEnabled(true);
 					down.setEnabled(false);
 
-				} else if (index > 0 && index < table.getItemCount() - 1)
-				{
+				} else if (index > 0 && index < table.getItemCount() - 1) {
 					up.setEnabled(true);
 					down.setEnabled(true);
 
-				} else
-				{
+				} else {
 					up.setEnabled(false);
 					down.setEnabled(false);
 				}
-				if (index >= 0)
-				{
+				if (index >= 0) {
 					TfmCommDeal temp;
 					int no = Integer.parseInt(table.getItem(index).getText(0));
 					if (exception.getSelection())
@@ -612,17 +554,14 @@ public class ExceptionAndCompsationDialog extends Dialog
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
-		table.addFocusListener(new FocusListener()
-		{
+		table.addFocusListener(new FocusListener() {
 
 			@Override
-			public void focusLost(FocusEvent e)
-			{
+			public void focusLost(FocusEvent e) {
 
 				// del.setEnabled(false);
 				// up.setEnabled(false);
@@ -630,8 +569,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 			}
 
 			@Override
-			public void focusGained(FocusEvent e)
-			{
+			public void focusGained(FocusEvent e) {
 
 				save.setEnabled(false);
 			}
@@ -647,8 +585,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 		lblNewLabel_1.setBounds(10, 108, 61, 17);
 		lblNewLabel_1.setText("\u63CF\u8FF0\uFF1A");
 		for (TfmException curr : contentsModel.getTfmBean()
-				.getTfmExceptionList())
-		{
+				.getTfmExceptionList()) {
 			int no = Integer.parseInt(curr.getSeqNo());
 			tfmExceptionMap.put(no, curr);
 			TableItem currItem = new TableItem(table, SWT.NONE);
@@ -659,8 +596,7 @@ public class ExceptionAndCompsationDialog extends Dialog
 			// currItem.setBackground(ColorConstants.gray);
 		}
 		for (TfmCompersation curr : contentsModel.getTfmBean()
-				.getTfmCompersationList())
-		{
+				.getTfmCompersationList()) {
 			int no = Integer.parseInt(curr.getSeqNo());
 			tfmComprasationMap.put(no, curr);
 			// TableItem currItem = new TableItem(table, SWT.NONE);
@@ -674,20 +610,15 @@ public class ExceptionAndCompsationDialog extends Dialog
 		return area;
 	}
 
-	protected boolean check()
-	{
-		if (exception.getSelection())
-		{
-			for (TfmException curr : tfmExceptionMap.values())
-			{
+	protected boolean check() {
+		if (exception.getSelection()) {
+			for (TfmException curr : tfmExceptionMap.values()) {
 				if (curr.getDllId().equals(dllid.getText()))
 					if (curr.getFuncname().equals(funcname.getText()))
 						return false;
 			}
-		} else if (comprasation.getSelection())
-		{
-			for (TfmCompersation curr : tfmComprasationMap.values())
-			{
+		} else if (comprasation.getSelection()) {
+			for (TfmCompersation curr : tfmComprasationMap.values()) {
 				if (curr.getDllId().equals(dllid.getText()))
 					if (curr.getFuncname().equals(funcname.getText()))
 						return false;
@@ -698,23 +629,19 @@ public class ExceptionAndCompsationDialog extends Dialog
 	}
 
 	@Override
-	protected void buttonPressed(int buttonId)
-	{
-		if (IDialogConstants.OK_ID == buttonId)
-		{
+	protected void buttonPressed(int buttonId) {
+		if (IDialogConstants.OK_ID == buttonId) {
 			store();
 			setReturnCode(IDialogConstants.OK_ID);
 			close();
-		} else if (IDialogConstants.CANCEL_ID == buttonId)
-		{
+		} else if (IDialogConstants.CANCEL_ID == buttonId) {
 			setReturnCode(IDialogConstants.CANCEL_ID);
 			close();
 		} else if (APPLICATION_ID == buttonId)
 			store();
 	}
 
-	protected void store()
-	{
+	protected void store() {
 
 		contentsModel.getTfmBean().getTfmExceptionList().clear();
 		contentsModel.getTfmBean().getTfmCompersationList().clear();

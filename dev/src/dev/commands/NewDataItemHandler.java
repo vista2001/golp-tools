@@ -12,23 +12,21 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import dev.wizards.newDataItem.NewDataItemWizard;
 
-public class NewDataItemHandler extends AbstractHandler
-{
+public class NewDataItemHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException
-	{
-		
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+
 		IWorkbenchWindow window = HandlerUtil
 				.getActiveWorkbenchWindowChecked(event);
-		
-		ISelection selection=HandlerUtil.getCurrentSelection(event);
+
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		{
 			NewDataItemWizard wizard = new NewDataItemWizard();
 			wizard.init(
 					window.getWorkbench(),
-					selection instanceof IStructuredSelection ? 
-							(IStructuredSelection) selection: StructuredSelection.EMPTY);
+					selection instanceof IStructuredSelection ? (IStructuredSelection) selection
+							: StructuredSelection.EMPTY);
 			WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 			dialog.open();
 		}

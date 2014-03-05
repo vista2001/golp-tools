@@ -3,56 +3,48 @@ package dev.diagram.commands;
 import org.eclipse.gef.commands.Command;
 
 import dev.diagram.model.AbstractConnectionModel;
-import dev.diagram.model.CommonModel;
 import dev.diagram.model.ElementModel;
 import dev.diagram.model.EndModel;
 import dev.diagram.model.ExAndComModel;
 import dev.diagram.model.StartModel;
 
-public class ReconnectConnectionCommand extends Command
-{
+public class ReconnectConnectionCommand extends Command {
 	private AbstractConnectionModel connectionModel;
 	private ElementModel newTargetModel;
 	private ElementModel newSourceModel;
 	private ElementModel oldSourceModel;
 	private ElementModel oldTargetModel;
 
-	public AbstractConnectionModel getConnectionModel()
-	{
+	public AbstractConnectionModel getConnectionModel() {
 		return connectionModel;
 	}
 
-	public void setConnectionModel(Object connectionModel)
-	{
+	public void setConnectionModel(Object connectionModel) {
 		this.connectionModel = (AbstractConnectionModel) connectionModel;
 	}
 
-	public ElementModel getNewTargetModel()
-	{
+	public ElementModel getNewTargetModel() {
 		return newTargetModel;
 	}
 
-	public void setNewTargetModel(Object newTargetModel)
-	{
+	public void setNewTargetModel(Object newTargetModel) {
 		this.newTargetModel = (ElementModel) newTargetModel;
-		oldTargetModel=connectionModel.getTarget();
+		oldTargetModel = connectionModel.getTarget();
 	}
 
-	public ElementModel getNewSourceModel()
-	{
+	public ElementModel getNewSourceModel() {
 		return newSourceModel;
 	}
 
-	public void setNewSourceModel(Object newSourceModel)
-	{
+	public void setNewSourceModel(Object newSourceModel) {
 		this.newSourceModel = (ElementModel) newSourceModel;
-		oldSourceModel=connectionModel.getSource();
+		oldSourceModel = connectionModel.getSource();
 	}
 
 	@Override
-	public boolean canExecute()
-	{
-		if (newTargetModel instanceof StartModel || newTargetModel instanceof ExAndComModel
+	public boolean canExecute() {
+		if (newTargetModel instanceof StartModel
+				|| newTargetModel instanceof ExAndComModel
 				|| newSourceModel instanceof EndModel
 				|| newSourceModel instanceof ExAndComModel)
 			return false;
@@ -61,15 +53,12 @@ public class ReconnectConnectionCommand extends Command
 	}
 
 	@Override
-	public void execute()
-	{
-		if (newSourceModel != null)
-		{
+	public void execute() {
+		if (newSourceModel != null) {
 			connectionModel.detachSource();
 			connectionModel.setSource(newSourceModel);
 			connectionModel.attachSource();
-		} else
-		{
+		} else {
 			connectionModel.detachTarget();
 			connectionModel.setTarget(newTargetModel);
 			connectionModel.attachTarget();
@@ -77,21 +66,17 @@ public class ReconnectConnectionCommand extends Command
 	}
 
 	@Override
-	public void redo()
-	{
+	public void redo() {
 		execute();
 	}
 
 	@Override
-	public void undo()
-	{
-		if (oldSourceModel != null)
-		{
+	public void undo() {
+		if (oldSourceModel != null) {
 			connectionModel.detachSource();
 			connectionModel.setSource(oldSourceModel);
 			connectionModel.attachSource();
-		} else
-		{
+		} else {
 			connectionModel.detachTarget();
 			connectionModel.setTarget(oldTargetModel);
 			connectionModel.attachTarget();

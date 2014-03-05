@@ -27,7 +27,7 @@ public class MakefileDialog extends Dialog {
 
 	protected MakefileDialog(Shell parentShell) {
 		super(parentShell);
-		
+
 	}
 
 	protected void configureShell(Shell newShell) {
@@ -68,7 +68,8 @@ public class MakefileDialog extends Dialog {
 			}
 		});
 		new Label(comp, SWT.NONE);
-		server = new org.eclipse.swt.widgets.List(comp, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		server = new org.eclipse.swt.widgets.List(comp, SWT.BORDER
+				| SWT.V_SCROLL | SWT.MULTI);
 		server.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 6));
 		NavView view = (NavView) PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage()

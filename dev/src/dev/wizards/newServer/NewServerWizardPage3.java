@@ -26,8 +26,7 @@ import org.eclipse.swt.widgets.Text;
 
 import dev.remote.RemoteDialog;
 
-public class NewServerWizardPage3 extends WizardPage
-{
+public class NewServerWizardPage3 extends WizardPage {
 	private ISelection selection;
 	private Text serverSpecIncludePathText;
 	private List serverSpecIncludePathList;
@@ -35,18 +34,15 @@ public class NewServerWizardPage3 extends WizardPage
 	private Button upButton;
 	private Button downButton;
 
-	public ISelection getSelection()
-	{
+	public ISelection getSelection() {
 		return selection;
 	}
 
-	public List getServerSpecIncludePathList()
-	{
+	public List getServerSpecIncludePathList() {
 		return serverSpecIncludePathList;
 	}
 
-	public NewServerWizardPage3(ISelection selection)
-	{
+	public NewServerWizardPage3(ISelection selection) {
 		super("NewServerWizardPage3");
 		setTitle("新建服务程序向导");
 		setDescription("这个向导将指导你完成GOLP服务程序的创建");
@@ -54,8 +50,7 @@ public class NewServerWizardPage3 extends WizardPage
 	}
 
 	@Override
-	public void createControl(Composite parent)
-	{
+	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
 		setControl(container);
 		container.setLayout(new GridLayout(3, false));
@@ -64,21 +59,19 @@ public class NewServerWizardPage3 extends WizardPage
 		serverSpecIncludePathLabel.setText("服务程序个性依赖头文件路径：");
 
 		serverSpecIncludePathText = new Text(container, SWT.BORDER);
-		serverSpecIncludePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
-		serverSpecIncludePathText.addKeyListener(new KeyAdapter()
-        {
-            @Override
-            public void keyPressed(KeyEvent e)
-            {
-                if((serverSpecIncludePathText.getText().trim().isEmpty() == false)
-                    && (e.keyCode == SWT.CR))
-                {
-                    serverSpecIncludePathList.add(serverSpecIncludePathText.getText());
-                    serverSpecIncludePathText.setText("");
-                }
-            }
-        });
+		serverSpecIncludePathText.setLayoutData(new GridData(SWT.FILL,
+				SWT.CENTER, true, false, 1, 1));
+		serverSpecIncludePathText.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if ((serverSpecIncludePathText.getText().trim().isEmpty() == false)
+						&& (e.keyCode == SWT.CR)) {
+					serverSpecIncludePathList.add(serverSpecIncludePathText
+							.getText());
+					serverSpecIncludePathText.setText("");
+				}
+			}
+		});
 
 		Button addButton = new Button(container, SWT.NONE);
 		GridData gd_addButton = new GridData(SWT.LEFT, SWT.CENTER, false,
@@ -86,50 +79,41 @@ public class NewServerWizardPage3 extends WizardPage
 		gd_addButton.widthHint = 60;
 		addButton.setLayoutData(gd_addButton);
 		addButton.setText("添加");
-		addButton.addSelectionListener(new SelectionAdapter()
-		{
+		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-//				if (!serverSpecIncludePathText.getText().isEmpty())
-//				{
-//					serverSpecIncludePathList.add(serverSpecIncludePathText.getText());
-//					serverSpecIncludePathText.setText("");
-//				}
-			    String upProject = ((NewServerWizardPage0) getWizard().getPage(
-                        "NewServerWizardPage0")).getUpProjectCombo().getText();
-                ArrayList<String> paths = new ArrayList<String>();
-                RemoteDialog remoteDialog = new RemoteDialog(getShell(),
-                        upProject, null, RemoteDialog.REMOTEDIALOG_DIRECTORY,
-                        RemoteDialog.REMOTEDIALOG_MULTI, paths);
-                remoteDialog.open();
-                for (String str : paths)
-                {
-                    serverSpecIncludePathList.add(str);
-                }
+			public void widgetSelected(SelectionEvent e) {
+				// if (!serverSpecIncludePathText.getText().isEmpty())
+				// {
+				// serverSpecIncludePathList.add(serverSpecIncludePathText.getText());
+				// serverSpecIncludePathText.setText("");
+				// }
+				String upProject = ((NewServerWizardPage0) getWizard().getPage(
+						"NewServerWizardPage0")).getUpProjectCombo().getText();
+				ArrayList<String> paths = new ArrayList<String>();
+				RemoteDialog remoteDialog = new RemoteDialog(getShell(),
+						upProject, null, RemoteDialog.REMOTEDIALOG_DIRECTORY,
+						RemoteDialog.REMOTEDIALOG_MULTI, paths);
+				remoteDialog.open();
+				for (String str : paths) {
+					serverSpecIncludePathList.add(str);
+				}
 			}
 		});
 		new Label(container, SWT.NONE);
 
-		serverSpecIncludePathList = new List(container, SWT.BORDER | SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.MULTI);
-		serverSpecIncludePathList.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-				true, true, 1, 3));
-		serverSpecIncludePathList.addSelectionListener(new SelectionAdapter()
-		{
+		serverSpecIncludePathList = new List(container, SWT.BORDER
+				| SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI);
+		serverSpecIncludePathList.setLayoutData(new GridData(SWT.FILL,
+				SWT.FILL, true, true, 1, 3));
+		serverSpecIncludePathList.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				if (serverSpecIncludePathList.getSelectionIndices().length > 0)
-				{
+			public void widgetSelected(SelectionEvent e) {
+				if (serverSpecIncludePathList.getSelectionIndices().length > 0) {
 					delButton.setEnabled(true);
-					if (serverSpecIncludePathList.getSelectionIndices().length == 1)
-					{
+					if (serverSpecIncludePathList.getSelectionIndices().length == 1) {
 						upButton.setEnabled(true);
 						downButton.setEnabled(true);
-					}
-					else
-					{
+					} else {
 						upButton.setEnabled(false);
 						downButton.setEnabled(false);
 					}
@@ -146,11 +130,9 @@ public class NewServerWizardPage3 extends WizardPage
 		delButton.setText("移除");
 		new Label(container, SWT.NONE);
 
-		delButton.addSelectionListener(new SelectionAdapter()
-		{
+		delButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int[] indices = serverSpecIncludePathList.getSelectionIndices();
 				serverSpecIncludePathList.remove(indices);
 				delButton.setEnabled(false);
@@ -167,18 +149,16 @@ public class NewServerWizardPage3 extends WizardPage
 		upButton.setLayoutData(gd_upButton);
 		upButton.setText("上移");
 		new Label(container, SWT.NONE);
-		upButton.addSelectionListener(new SelectionAdapter()
-		{
+		upButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int index = serverSpecIncludePathList.getSelectionIndex();
-				if(index > 0)
-				{
+				if (index > 0) {
 					String tmp = serverSpecIncludePathList.getItem(index);
-					serverSpecIncludePathList.setItem(index, serverSpecIncludePathList.getItem(index-1));
-					serverSpecIncludePathList.setItem(index-1, tmp);
-					serverSpecIncludePathList.setSelection(index-1);
+					serverSpecIncludePathList.setItem(index,
+							serverSpecIncludePathList.getItem(index - 1));
+					serverSpecIncludePathList.setItem(index - 1, tmp);
+					serverSpecIncludePathList.setSelection(index - 1);
 				}
 			}
 		});
@@ -190,18 +170,16 @@ public class NewServerWizardPage3 extends WizardPage
 		gd_downButton.widthHint = 60;
 		downButton.setLayoutData(gd_downButton);
 		downButton.setText("下移");
-		downButton.addSelectionListener(new SelectionAdapter()
-		{
+		downButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int index = serverSpecIncludePathList.getSelectionIndex();
-				if(index < serverSpecIncludePathList.getItemCount()-1)
-				{
+				if (index < serverSpecIncludePathList.getItemCount() - 1) {
 					String tmp = serverSpecIncludePathList.getItem(index);
-					serverSpecIncludePathList.setItem(index, serverSpecIncludePathList.getItem(index+1));
-					serverSpecIncludePathList.setItem(index+1, tmp);
-					serverSpecIncludePathList.setSelection(index+1);
+					serverSpecIncludePathList.setItem(index,
+							serverSpecIncludePathList.getItem(index + 1));
+					serverSpecIncludePathList.setItem(index + 1, tmp);
+					serverSpecIncludePathList.setSelection(index + 1);
 				}
 			}
 		});
@@ -211,8 +189,7 @@ public class NewServerWizardPage3 extends WizardPage
 	// 此处虽设置为true，但还是会调用下边的canFlipToNextPage()方法
 
 	@Override
-	public boolean canFlipToNextPage()
-	{
+	public boolean canFlipToNextPage() {
 
 		// DebugOut.println(getServerSpeclibText().getText().length());
 
@@ -221,4 +198,3 @@ public class NewServerWizardPage3 extends WizardPage
 	}
 
 }
-

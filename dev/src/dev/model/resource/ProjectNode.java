@@ -105,16 +105,18 @@ public class ProjectNode extends ResourceNode {
 						@Override
 						public IPropertyDescriptor[] getPropertyDescriptors() {
 
-							/*return new IPropertyDescriptor[] {
-									new TextPropertyDescriptor("prjId", "ID"),
-									new TextPropertyDescriptor("dbAddress", "数据库地址"),
-									new TextPropertyDescriptor("dbInstance", "数据库实例"),
-									new TextPropertyDescriptor("dbUser", "数据库用户"),
-									new TextPropertyDescriptor("dbPwd", "数据库口令"),
-									new TextPropertyDescriptor("dbPort", "数据库端口")
-
-							};*/
-							return new IPropertyDescriptor[]{};
+							/*
+							 * return new IPropertyDescriptor[] { new
+							 * TextPropertyDescriptor("prjId", "ID"), new
+							 * TextPropertyDescriptor("dbAddress", "数据库地址"), new
+							 * TextPropertyDescriptor("dbInstance", "数据库实例"),
+							 * new TextPropertyDescriptor("dbUser", "数据库用户"),
+							 * new TextPropertyDescriptor("dbPwd", "数据库口令"), new
+							 * TextPropertyDescriptor("dbPort", "数据库端口")
+							 * 
+							 * };
+							 */
+							return new IPropertyDescriptor[] {};
 						}
 
 						@Override

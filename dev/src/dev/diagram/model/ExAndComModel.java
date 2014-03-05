@@ -6,38 +6,32 @@ package dev.diagram.model;
  * @author Ä¾Ä¾
  * 
  */
-public class ExAndComModel extends ElementModel
-{
+public class ExAndComModel extends ElementModel {
 	private String name = "Òì³£ºÍ²¹³¥";
 
-	public ExAndComModel()
-	{
+	public ExAndComModel() {
 		super();
 	}
 
 	@Override
-	public void setText(String text)
-	{
+	public void setText(String text) {
 
 	}
 
 	@Override
-	public String getDesc()
-	{
+	public String getDesc() {
 
 		return null;
 	}
 
 	@Override
-	public String getText()
-	{
+	public String getText() {
 
 		return name;
 	}
 
 	@Override
-	public String getTypeName()
-	{
+	public String getTypeName() {
 		return new String("");
 	}
 

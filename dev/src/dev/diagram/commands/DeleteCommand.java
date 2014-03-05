@@ -17,21 +17,18 @@ import dev.diagram.model.ExAndComModel;
  * @author 木木
  * 
  */
-public class DeleteCommand extends Command
-{
+public class DeleteCommand extends Command {
 	private ContentsModel parentModel;
 	private ElementModel elementModel;
 	private List<AbstractConnectionModel> sourceConnections = new ArrayList<AbstractConnectionModel>();
 	private List<AbstractConnectionModel> targetConnections = new ArrayList<AbstractConnectionModel>();
 
-	public void execute()
-	{
+	public void execute() {
 		// 在删除一个模型对象前，这个模型对象连接的source和target被记录
 		sourceConnections.addAll(elementModel.getModelSourceConnections());
 		targetConnections.addAll(elementModel.getModelTargetConnections());
 		// 删除该模型对象对应的source
-		for (int i = 0; i < sourceConnections.size(); i++)
-		{
+		for (int i = 0; i < sourceConnections.size(); i++) {
 			AbstractConnectionModel model = (AbstractConnectionModel) sourceConnections
 					.get(i);
 			model.detachSource();
@@ -39,8 +36,7 @@ public class DeleteCommand extends Command
 		}
 
 		// 删除该模型对象对应的target
-		for (int i = 0; i < targetConnections.size(); i++)
-		{
+		for (int i = 0; i < targetConnections.size(); i++) {
 			AbstractConnectionModel model = (AbstractConnectionModel) targetConnections
 					.get(i);
 			model.detachSource();
@@ -51,34 +47,29 @@ public class DeleteCommand extends Command
 		parentModel.removeChild(elementModel);
 	}
 
-	public void setContentsModel(Object model)
-	{
+	public void setContentsModel(Object model) {
 		parentModel = (ContentsModel) model;
 	}
 
-	public void setModel(Object model)
-	{
+	public void setModel(Object model) {
 		if (CommonModel.class.isInstance(model))
 			elementModel = (CommonModel) model;
 		elementModel = (ElementModel) model;
 	}
 
 	// Override
-	public void undo()
-	{
+	public void undo() {
 		// undo
 		parentModel.addChild(elementModel);
 
 		// --------- undo the connection -------------
-		for (int i = 0; i < sourceConnections.size(); i++)
-		{
+		for (int i = 0; i < sourceConnections.size(); i++) {
 			AbstractConnectionModel model = (AbstractConnectionModel) sourceConnections
 					.get(i);
 			model.attachSource();
 			model.attachTarget();
 		}
-		for (int i = 0; i < targetConnections.size(); i++)
-		{
+		for (int i = 0; i < targetConnections.size(); i++) {
 			AbstractConnectionModel model = (AbstractConnectionModel) targetConnections
 					.get(i);
 			model.attachSource();
@@ -91,8 +82,7 @@ public class DeleteCommand extends Command
 	}
 
 	@Override
-	public boolean canExecute()
-	{
+	public boolean canExecute() {
 
 		if (elementModel instanceof ExAndComModel)
 			return false;

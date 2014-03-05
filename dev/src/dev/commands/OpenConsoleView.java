@@ -17,7 +17,7 @@ public class OpenConsoleView extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+
 		IWorkbenchWindow window = HandlerUtil
 				.getActiveWorkbenchWindowChecked(event);
 		if (window == null)
@@ -31,16 +31,17 @@ public class OpenConsoleView extends AbstractHandler {
 
 		// Open and activate the Favorites view
 
-//		try {
-//			//page.showView("");
-//			ConsoleFactory cf = new ConsoleFactory();
-//			  cf.openConsole();
-//			  DebugOut.println("hello");
-//			  page.showView("org.eclipse.ui.console.ConsoleView");
-//		} catch (PartInitException e) {
-//			//FavoritesLog.logError("Failed to open the Favorites view", e);
-//			e.printStackTrace();
-//		}
+		// try {
+		// //page.showView("");
+		// ConsoleFactory cf = new ConsoleFactory();
+		// cf.openConsole();
+		// DebugOut.println("hello");
+		// page.showView("org.eclipse.ui.console.ConsoleView");
+		// } catch (PartInitException e) {
+		// //FavoritesLog.logError("Failed to open the Favorites view", e);
+		//
+		// e.printStackTrace();DevLogger.printError(e);
+		// }
 		return null;
 	}
 

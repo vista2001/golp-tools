@@ -27,9 +27,18 @@ public class BasicPreferencePage extends FieldEditorPreferencePage implements
 	protected void createFieldEditors() {
 		{
 			// Create the field editors
-			StringFieldEditor workSpacePath = new StringFieldEditor(PreferenceConstants.WORKSPACE_PATH, "工作区路径", 50, StringFieldEditor.VALIDATE_ON_KEY_STROKE, getFieldEditorParent());
-			StringFieldEditor codeModelPath = new StringFieldEditor(PreferenceConstants.CODEMODEL_PATH, "代码模板路径", 50, StringFieldEditor.VALIDATE_ON_KEY_STROKE, getFieldEditorParent());
-			StringFieldEditor makeFileModelPath = new StringFieldEditor(PreferenceConstants.MAKEFILEMODEL_PATH, "MakeFile模板路径", 50, StringFieldEditor.VALIDATE_ON_KEY_STROKE, getFieldEditorParent());
+			StringFieldEditor workSpacePath = new StringFieldEditor(
+					PreferenceConstants.WORKSPACE_PATH, "工作区路径", 50,
+					StringFieldEditor.VALIDATE_ON_KEY_STROKE,
+					getFieldEditorParent());
+			StringFieldEditor codeModelPath = new StringFieldEditor(
+					PreferenceConstants.CODEMODEL_PATH, "代码模板路径", 50,
+					StringFieldEditor.VALIDATE_ON_KEY_STROKE,
+					getFieldEditorParent());
+			StringFieldEditor makeFileModelPath = new StringFieldEditor(
+					PreferenceConstants.MAKEFILEMODEL_PATH, "MakeFile模板路径", 50,
+					StringFieldEditor.VALIDATE_ON_KEY_STROKE,
+					getFieldEditorParent());
 			addField(workSpacePath);
 			addField(codeModelPath);
 			addField(makeFileModelPath);

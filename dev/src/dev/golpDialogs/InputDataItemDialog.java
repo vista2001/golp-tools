@@ -37,6 +37,7 @@ import dev.db.pojo.TDataItem;
 import dev.db.service.CommonDialogServiceImpl;
 import dev.golpEvent.InformDialogEvent;
 import dev.golpEvent.InformDialogListener;
+import dev.util.DevLogger;
 
 /**
  * InputDataItemDialoge类，该类实现了在新建交易向导中，让用户选择输入数据项的功能。
@@ -303,9 +304,11 @@ public class InputDataItemDialog extends TitleAreaDialog {
 				 * 当用户点击了第一条，则由于为inputDataItemList添加过监听器，该监听器会将needCombo设为“1-是”，
 				 * 此时就触发了needCombo的Modify事件（needCombo原本是空），然后本注释下边的代码块就会被执行，
 				 * 此段代码块会取出1000
+				 * 
 				 * @1中的1000，然后拼接上“@”，再将拼接上needCombo中当前选择项（“1-是”）的索引“1”，
 				 * 最后形成了字符串“1000@1”，然后用此字符串来设置inputDataItemList当前选中项的内容，虽然是多此一举，
 				 * 但此时inputDataItemList选中项的内容依然是1000
+				 * 
 				 * @1，至少显示结果还是正确的。然后用户再点击inputDataItemList中的第二项，
 				 * 即1001，此时inputDataItemList的监听器会将needCombo置空
 				 * ，此举又触发了needCombo的Modify事件，
@@ -391,6 +394,7 @@ public class InputDataItemDialog extends TitleAreaDialog {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 
 	}

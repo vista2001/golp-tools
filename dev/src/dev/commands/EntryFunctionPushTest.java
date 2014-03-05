@@ -32,8 +32,7 @@ public class EntryFunctionPushTest extends PropertyTester {
 					if (!node.parent.name.equals("½»Ò×")) {
 						return false;
 					}
-				}
-				else
+				} else
 					return false;
 			}
 			return true;

@@ -16,15 +16,13 @@ import dev.diagram.model.CommonModel;
  * @author 木木
  * 
  */
-public class CustomGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy
-{
+public class CustomGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy {
 	/**
 	 * 实现边与终点的连接
 	 */
 	@Override
 	protected Command getConnectionCompleteCommand(
-			CreateConnectionRequest request)
-	{
+			CreateConnectionRequest request) {
 		// 从栈中得到连接命令
 		CreateConnectionCommand command = (CreateConnectionCommand) request
 				.getStartCommand();
@@ -37,8 +35,7 @@ public class CustomGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy
 	 * 实现边和起点的连接
 	 */
 	@Override
-	protected Command getConnectionCreateCommand(CreateConnectionRequest request)
-	{
+	protected Command getConnectionCreateCommand(CreateConnectionRequest request) {
 		// 创建新的连接命令
 		CreateConnectionCommand command = new CreateConnectionCommand();
 		// 设置连接的边
@@ -51,8 +48,7 @@ public class CustomGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy
 	}
 
 	@Override
-	protected Command getReconnectTargetCommand(ReconnectRequest request)
-	{
+	protected Command getReconnectTargetCommand(ReconnectRequest request) {
 		ReconnectConnectionCommand command = new ReconnectConnectionCommand();
 		command.setConnectionModel((AbstractConnectionModel) request
 				.getConnectionEditPart().getModel());
@@ -61,11 +57,9 @@ public class CustomGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy
 	}
 
 	@Override
-	protected Command getReconnectSourceCommand(ReconnectRequest request)
-	{
+	protected Command getReconnectSourceCommand(ReconnectRequest request) {
 		ReconnectConnectionCommand command = new ReconnectConnectionCommand();
-		command.setConnectionModel(request
-				.getConnectionEditPart().getModel());
+		command.setConnectionModel(request.getConnectionEditPart().getModel());
 		command.setNewSourceModel(getHost().getModel());
 		return command;
 	}

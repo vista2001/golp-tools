@@ -10,15 +10,14 @@ import dev.Application;
 import dev.diagram.model.ContentsModel;
 import dev.diagram.ui.DiagramEditor;
 
-public class SaveAction extends Action
-{
+public class SaveAction extends Action {
 	public static final String ID = "SAVE_ACTION";
 	private ContentsModel contentsModel;
 	private DiagramEditor editor;
-	public SaveAction(ContentsModel model,DiagramEditor editor)
-	{
+
+	public SaveAction(ContentsModel model, DiagramEditor editor) {
 		contentsModel = model;
-		this.editor=editor;
+		this.editor = editor;
 		setId(ID);
 		ImageDescriptor descriptor = AbstractUIPlugin
 				.imageDescriptorFromPlugin(Application.PLUGIN_ID,
@@ -27,17 +26,15 @@ public class SaveAction extends Action
 	}
 
 	@Override
-	public void run()
-	{
-		if(WriteToXML.writeToXML(contentsModel))
-			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "提示信息", "已保存" +
-					"");
+	public void run() {
+		if (WriteToXML.writeToXML(contentsModel))
+			MessageDialog.openInformation(PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow().getShell(), "提示信息", "已保存" + "");
 		editor.setIsDirty(false);
 	}
 
 	@Override
-	public void setId(String id)
-	{
+	public void setId(String id) {
 		super.setId(id);
 	}
 

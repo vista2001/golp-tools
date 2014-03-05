@@ -15,20 +15,21 @@ import dev.model.resource.TFMNodes;
 import dev.model.resource.TradeNodes;
 
 public class ResourcesNodeType {
-	public  ResourceNode[] type;
-	
+	public ResourceNode[] type;
+
 	public ResourcesNodeType(TreeNode parent) {
-		ResourceNode[] tmp = { new DllNodes("动态库", "DLL", parent),
+		ResourceNode[] tmp = {
+				new DllNodes("动态库", "DLL", parent),
 				new DataItemNodes("数据项", "DATAITEM", parent),
 				new RetCodeNodes("响应码", "RETCODE", parent),
-//				new MessageNodes("交易报文", "MESSAGE", parent),
+				// new MessageNodes("交易报文", "MESSAGE", parent),
 				new ServerNodes("服务程序", "SERVER", parent),
 				new TradeNodes("交易", "TRADE", parent),
 				new AopNodes("原子交易", "AOP", parent),
 				new TFMNodes("流程图", "TFM", parent) };
 		this.setType(tmp);
 	}
-	
+
 	private void setType(ResourceNode[] type) {
 		this.type = type;
 	}

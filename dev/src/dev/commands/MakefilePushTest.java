@@ -23,10 +23,11 @@ import dev.views.NavView;
  */
 public class MakefilePushTest extends PropertyTester {
 	// 必须存在的空的公共构造函数
-	
+
 	public static IStructuredSelection s;
+
 	public MakefilePushTest() {
-		
+
 	}
 
 	/**
@@ -46,13 +47,13 @@ public class MakefilePushTest extends PropertyTester {
 	@Override
 	public boolean test(Object receiver, String property, Object[] args,
 			Object expectedValue) {
-		
+
 		IStructuredSelection temselection;
 		ISelection selection;
 		// 获得导航视图中选中的控件
-		Object obj= PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+		Object obj = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().findView(NavView.ID);
-		selection=((NavView)obj).getTreeViewer().getSelection();
+		selection = ((NavView) obj).getTreeViewer().getSelection();
 		if (selection instanceof IStructuredSelection) {
 			temselection = (IStructuredSelection) selection;
 			// 选中的是不是叶子节点
@@ -63,8 +64,7 @@ public class MakefilePushTest extends PropertyTester {
 					if (!node.parent.name.equals("服务程序")) {
 						return false;
 					}
-				}
-				else
+				} else
 					return false;
 			}
 			return true;

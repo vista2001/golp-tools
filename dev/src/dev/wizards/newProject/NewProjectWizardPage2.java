@@ -27,7 +27,7 @@ public class NewProjectWizardPage2 extends WizardPage {
 	private Text remoteUserText;
 	private Text remotePwdText;
 	private Text remoteAddressText;
-	
+
 	private List<Text> list = new ArrayList<Text>();
 
 	public ISelection getSelection() {
@@ -59,48 +59,47 @@ public class NewProjectWizardPage2 extends WizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 		setControl(container);
 		container.setLayout(new GridLayout(2, false));
-		
+
 		Label remoteAddressLabel = new Label(container, SWT.NONE);
 		remoteAddressLabel.setText("*服务器地址：");
-				
+
 		remoteAddressText = new Text(container, SWT.BORDER);
-		remoteAddressText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		remoteAddressText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
 
 		Label remoteUserLabel = new Label(container, SWT.NONE);
 		remoteUserLabel.setText("*服务器用户：");
-				
+
 		remoteUserText = new Text(container, SWT.BORDER);
-		remoteUserText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+		remoteUserText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+
 		Label remotePwdLabel = new Label(container, SWT.NONE);
 		remotePwdLabel.setText("*服务器口令：");
-		
+
 		remotePwdText = new Text(container, SWT.BORDER | SWT.PASSWORD);
-		remotePwdText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		remotePwdText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
 
 		list.add(remoteUserText);
 		list.add(remotePwdText);
 		list.add(remoteAddressText);
-		
+
 		addModifyListener();
 	}
-	
+
 	/**
-     * 为成员变量list中的所有元素，添加ModifyListener。
-     */
-	private void addModifyListener()
-    {
-        for(Text text : list)
-        {
-            text.addModifyListener(new ModifyListener()
-            {
-                public void modifyText(ModifyEvent e)
-                {
-                    dialogChanged();
-                }
-            });
-        }
-    }
+	 * 为成员变量list中的所有元素，添加ModifyListener。
+	 */
+	private void addModifyListener() {
+		for (Text text : list) {
+			text.addModifyListener(new ModifyListener() {
+				public void modifyText(ModifyEvent e) {
+					dialogChanged();
+				}
+			});
+		}
+	}
 
 	// 判断是否可以进入下一页
 	@Override
@@ -130,16 +129,19 @@ public class NewProjectWizardPage2 extends WizardPage {
 		}
 		return true;
 	}
-	
+
 	private void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
 	}
+
 	private void dialogChanged() {
-		/*if (getPrjDescText().getText().isEmpty()||getPrjIdText().getText().isEmpty()||getPrjNameText().getText().isEmpty()) {
-			updateStatus("File container must be specified");
-			return;
-		}*/
+		/*
+		 * if
+		 * (getPrjDescText().getText().isEmpty()||getPrjIdText().getText().isEmpty
+		 * ()||getPrjNameText().getText().isEmpty()) {
+		 * updateStatus("File container must be specified"); return; }
+		 */
 		updateStatus(null);
 	}
 }

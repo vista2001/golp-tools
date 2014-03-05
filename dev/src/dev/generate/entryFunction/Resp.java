@@ -5,12 +5,14 @@
  */
 
 package dev.generate.entryFunction;
+
 /**
  * 生成交易入口函数的替换子数据类
+ * 
  * @author zxh
- *
+ * 
  */
-public class Resp{
+public class Resp {
 
 	public String getRespID() {
 		return respID;
@@ -39,13 +41,14 @@ public class Resp{
 	public String respID;
 	public String isNeed;
 	public String comes;
-	//根据传入的数据转换成替换的数据
+
+	// 根据传入的数据转换成替换的数据
 	public Resp(String respDate) {
-		
-		String[] tem=respDate.split("@");
-		respID=tem[0];
-		isNeed=tem[1];
-		comes=tem[2];
+
+		String[] tem = respDate.split("@");
+		respID = tem[0];
+		isNeed = tem[1];
+		comes = tem[2];
 
 	}
 }

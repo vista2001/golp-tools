@@ -27,7 +27,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IViewPart;
@@ -47,7 +46,7 @@ import dev.model.resource.RetCodeNodes;
 import dev.model.resource.ServerNodes;
 import dev.model.resource.TFMNodes;
 import dev.model.resource.TradeNodes;
-import dev.util.DebugOut;
+import dev.util.DevLogger;
 import dev.views.NavView;
 
 public class DeleteHandler extends AbstractHandler {
@@ -70,17 +69,20 @@ public class DeleteHandler extends AbstractHandler {
 				.getId());
 		String dbfiles = project.getLocationURI().toString().substring(6) + '/'
 				+ nodes.get(0).getRootProject().getId() + ".properties";
-		DebugOut.println("dbfiles===" + dbfiles);
+		DevLogger.printDebugMsg("dbfiles===" + dbfiles);
 		ps = new PreferenceStore(dbfiles);
 		try {
 			ps.load();
 		} catch (IOException e) {
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		dbConnectImpl = DbConnFactory.dbConnCreator();
 		try {
 			dbConnectImpl.openConn(ps);
 		} catch (SQLException e1) {
+			DevLogger.printError(e1);
 			e1.printStackTrace();
 		}
 
@@ -100,7 +102,9 @@ public class DeleteHandler extends AbstractHandler {
 				for (int i = 0; i < nodes.size(); i++)
 					deleteServer(nodes.get(i));
 			} catch (SQLException e) {
+
 				e.printStackTrace();
+				DevLogger.printError(e);
 			}
 			tv.refresh();
 		} else if (nodes.get(0).parent instanceof TradeNodes) {
@@ -108,7 +112,9 @@ public class DeleteHandler extends AbstractHandler {
 				for (int i = 0; i < nodes.size(); i++)
 					deleteTrade(nodes.get(i));
 			} catch (SQLException e) {
+
 				e.printStackTrace();
+				DevLogger.printError(e);
 			}
 			tv.refresh();
 		} else if (nodes.get(0).parent instanceof RetCodeNodes) {
@@ -120,7 +126,9 @@ public class DeleteHandler extends AbstractHandler {
 				for (int i = 0; i < nodes.size(); i++)
 					deleteDateitem(nodes.get(i));
 			} catch (SQLException e) {
+
 				e.printStackTrace();
+				DevLogger.printError(e);
 			}
 			tv.refresh();
 
@@ -129,20 +137,13 @@ public class DeleteHandler extends AbstractHandler {
 				for (int i = 0; i < nodes.size(); i++)
 					deleteTFM(nodes.get(i));
 			} catch (SQLException e) {
+
 				e.printStackTrace();
+				DevLogger.printError(e);
 			}
 			tv.refresh();
 		}
 		return null;
-	}
-
-	public int showMessage(int style, String title, String message) {
-		MessageBox box = new MessageBox(PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getShell(), style);
-		box.setMessage(message);
-		box.setText(title);
-		
-		return box.open();
 	}
 
 	public void deleteAop(ResourceLeafNode aop) {
@@ -152,7 +153,9 @@ public class DeleteHandler extends AbstractHandler {
 			tv.remove(aop);
 			dbConnectImpl.retrive(sql);
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 
 		}
 		closeEditor(aop);
@@ -165,7 +168,9 @@ public class DeleteHandler extends AbstractHandler {
 		try {
 			dbConnectImpl.retrive(sql);
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		closeEditor(retcode);
 	}
@@ -179,7 +184,7 @@ public class DeleteHandler extends AbstractHandler {
 				do {
 					aops += "          " + rs.getString(1) + "\n";
 				} while (rs.next());
-				showMessage(SWT.ICON_INFORMATION | SWT.YES, "删除", "此动态库"
+				DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.YES, "删除", "此动态库"
 						+ aopDll.id + "包含下列原子交易:\n" + aops
 						+ "删除动态库之前请先修改上述原子交易所属动态库");
 				return;
@@ -197,12 +202,16 @@ public class DeleteHandler extends AbstractHandler {
 			try {
 				dbConnectImpl.retrive(sql);
 			} catch (SQLException e) {
+
 				e.printStackTrace();
+				DevLogger.printError(e);
 			}
 			removeChild(aopDll);
 			tv.remove(aopDll);
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		closeEditor(aopDll);
 	}
@@ -225,7 +234,7 @@ public class DeleteHandler extends AbstractHandler {
 			String[] tems = dataitems.get(i).split("\\|");
 			for (String tem : tems) {
 				if (tem.split("@")[0].equals(dataitem.id)) {
-					showMessage(SWT.ICON_INFORMATION | SWT.YES, "删除", "数据项"
+					DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.YES, "删除", "数据项"
 							+ dataitem.id + "正在被使用，无法删除");
 					return;
 				}
@@ -238,7 +247,9 @@ public class DeleteHandler extends AbstractHandler {
 		try {
 			dbConnectImpl.retrive(sql);
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		closeEditor(dataitem);
 	}
@@ -248,17 +259,18 @@ public class DeleteHandler extends AbstractHandler {
 				+ "'";
 		ResultSet rs = dbConnectImpl.retrive(sql);
 		if (rs.next() && rs.getString(1).equals("0")) {
-			int result = showMessage(SWT.ICON_INFORMATION | SWT.YES | SWT.NO,
+			int result = DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.YES | SWT.NO,
 					"删除", "交易" + trade.id + "由流程图驱动，删除此交易将连同绑定的流程图一起删除");
 			if (result == SWT.NO)
 				return;
-			else if(result==SWT.YES){
+			else if (result == SWT.YES) {
 				sql = "select tfmid from t_tfm where tradeid='" + trade.id
 						+ "'";
 				rs = dbConnectImpl.retrive(sql);
-				if (!(rs.next() && rs.getString(1)!=null))
+				if (!(rs.next() && rs.getString(1) != null))
 					return;
-				List<TreeNode> nodes = trade.getParent().getParent().getChildren();
+				List<TreeNode> nodes = trade.getParent().getParent()
+						.getChildren();
 				List<TreeNode> tfmNodes = null;
 				for (int i = 0; i < nodes.size(); i++) {
 					if (nodes.get(i).name.equals("流程图")) {
@@ -291,7 +303,7 @@ public class DeleteHandler extends AbstractHandler {
 			trades += rs.getString(1) + "\n";
 		}
 		if (trades.length() != 0) {
-			showMessage(SWT.ICON_INFORMATION | SWT.YES, "删除", "服务程序"
+			DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.YES, "删除", "服务程序"
 					+ server.id + "已经部署了以下交易:\n" + trades
 					+ "删除服务之前请先修改上述交易的所属服务程序");
 			return;
@@ -342,7 +354,9 @@ public class DeleteHandler extends AbstractHandler {
 				if (editor.getEditorInput().getName().equals(node.id))
 					return editor.getEditor(false);
 			} catch (PartInitException e) {
+
 				e.printStackTrace();
+				DevLogger.printError(e);
 			}
 		return null;
 	}

@@ -13,6 +13,7 @@ import dev.db.DbConnectImpl;
 import dev.diagram.model.ContentsModel;
 import dev.diagram.ui.GenerateXml;
 import dev.util.CommonUtil;
+import dev.util.DevLogger;
 
 /**
  * 流程图配置的信息写入xml
@@ -20,16 +21,13 @@ import dev.util.CommonUtil;
  * @author 木木
  * 
  */
-public class WriteToXML
-{
-	public static Boolean writeToXML(ContentsModel contentsModel)
-	{
+public class WriteToXML {
+	public static Boolean writeToXML(ContentsModel contentsModel) {
 		// xml文件的名称，其中包括路径信息，打开编辑器的时候生成
 		String fileName = contentsModel.fileName;
 		DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
 		// writeTfmXml将流程图模型信息写入fileName中
-		try
-		{
+		try {
 			GenerateXml.writeTfmXml(fileName, contentsModel.getTfmBean());
 			// 打开数据库的连接，xml插入数据库表T_tfm中的tfmxml字段
 			dbConnectImpl.openConn(CommonUtil.initPs(contentsModel.projectId));
@@ -40,8 +38,7 @@ public class WriteToXML
 					.retrive("select tfmxml from t_tfm where tfmid = "
 							+ contentsModel.diagramId + " for update");
 			fileName = contentsModel.fileName;
-			if (rs.next())
-			{
+			if (rs.next()) {
 				// 得到数据库表中的存储xml的二进制字段
 				BLOB blob = (BLOB) rs.getBlob(1);
 				// 打开外存xml文件
@@ -66,9 +63,9 @@ public class WriteToXML
 				dbConnectImpl.commit();
 			}
 
-		} catch (IOException|SQLException e)
-		{
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		return true;
 	}

@@ -6,13 +6,11 @@ package dev.diagram.model;
  * @author Ä¾Ä¾
  * 
  */
-public class StartModel extends CommonModel
-{
+public class StartModel extends CommonModel {
 	private final static String name = "¿ªÊ¼";
 	private final static int typeId = 4;
 
-	public StartModel()
-	{
+	public StartModel() {
 		super(typeId, name);
 	}
 

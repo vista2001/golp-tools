@@ -32,7 +32,7 @@ import dev.db.DbConnFactory;
 import dev.db.DbConnectImpl;
 import dev.generate.fml.FmlId;
 import dev.model.base.ResourceLeafNode;
-import dev.util.DebugOut;
+import dev.util.DevLogger;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -78,7 +78,7 @@ public class TpsMaker {
 		IProject project = prjRoot.getProject(server.getRootProject().getId());
 		String dbfiles = project.getLocationURI().toString().substring(6) + '/'
 				+ server.getRootProject().getId() + ".properties";
-		DebugOut.println("dbfiles===" + dbfiles);
+		DevLogger.printDebugMsg("dbfiles===" + dbfiles);
 		PreferenceStore ps = new PreferenceStore(dbfiles);
 		try {
 			ps.load();
@@ -125,7 +125,7 @@ public class TpsMaker {
 		sql = "select tradesrcpath from trade where upserverid='" + server.id
 				+ "'" + "and trademode='1'";
 		rs = dbConnectImpl.retrive(sql);
-		while(rs.next() && rs.getString(1) != null) {
+		while (rs.next() && rs.getString(1) != null) {
 			String[] tradeObj = rs.getString(1).split("\\|");
 			for (String str : tradeObj) {
 				tradeObjs.add(getName(str));
@@ -171,7 +171,7 @@ public class TpsMaker {
 		rs = dbConnectImpl.retrive(sql);
 		if (rs.next() && rs.getString(1) != null) {
 			String[] lib = rs.getString(1).split("\\]\\[");
-			DebugOut.println(lib[0]);
+			DevLogger.printDebugMsg(lib[0]);
 			String[] spath = lib[0].substring(1).split("\\|");
 			for (String str : spath) {
 				spathes.add(str);
@@ -193,7 +193,7 @@ public class TpsMaker {
 		removeDuplicate(spathes);
 		removeDuplicate(names);
 		removeDuplicate(trades);
-		System.out.println(VPATH);
+		DevLogger.printDebugMsg(VPATH);
 		root.put("SAMP", server.name);
 		root.put("OBJS", objs);
 		root.put("tradeObjs", tradeObjs);

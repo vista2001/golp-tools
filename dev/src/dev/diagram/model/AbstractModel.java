@@ -12,63 +12,53 @@ import org.eclipse.ui.views.properties.IPropertySource;
  * @author ľľ
  * 
  */
-public abstract class AbstractModel implements IPropertySource
-{
+public abstract class AbstractModel implements IPropertySource {
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 
-	public void addPropertyChangeListener(PropertyChangeListener l)
-	{
+	public void addPropertyChangeListener(PropertyChangeListener l) {
 		listeners.addPropertyChangeListener(l);
 	}
 
 	public void firePropertyChange(String propName, Object oldValue,
-			Object newValue)
-	{
+			Object newValue) {
 		listeners.firePropertyChange(propName, oldValue, newValue);
 	}
 
-	public void removePropertyChangeListener(PropertyChangeListener listener)
-	{
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		listeners.removePropertyChangeListener(listener);
 	}
 
 	@Override
-	public Object getEditableValue()
-	{
+	public Object getEditableValue() {
 
 		return null;
 	}
 
 	@Override
-	public IPropertyDescriptor[] getPropertyDescriptors()
-	{
+	public IPropertyDescriptor[] getPropertyDescriptors() {
 
 		return null;
 	}
 
 	@Override
-	public Object getPropertyValue(Object id)
-	{
+	public Object getPropertyValue(Object id) {
 
 		return null;
 	}
 
 	@Override
-	public boolean isPropertySet(Object id)
-	{
+	public boolean isPropertySet(Object id) {
 
 		return false;
 	}
 
 	@Override
-	public void resetPropertyValue(Object id)
-	{
+	public void resetPropertyValue(Object id) {
 
 	}
 
 	@Override
-	public void setPropertyValue(Object id, Object value)
-	{
+	public void setPropertyValue(Object id, Object value) {
 
 	}
 

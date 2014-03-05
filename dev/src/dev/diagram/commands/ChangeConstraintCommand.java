@@ -12,8 +12,7 @@ import dev.diagram.model.ExAndComModel;
  * @author 木木
  * 
  */
-public class ChangeConstraintCommand extends Command
-{
+public class ChangeConstraintCommand extends Command {
 	// 发生改变的模型
 	private ElementModel cModel;
 	// 改变后的位置和大小
@@ -25,8 +24,7 @@ public class ChangeConstraintCommand extends Command
 	 * 对模型执行改变
 	 */
 	@Override
-	public void execute()
-	{
+	public void execute() {
 		cModel.setConstraint(constraint);
 
 	}
@@ -36,8 +34,7 @@ public class ChangeConstraintCommand extends Command
 	 * 
 	 * @param rect
 	 */
-	public void setConstraint(Rectangle rect)
-	{
+	public void setConstraint(Rectangle rect) {
 		constraint = rect;
 		if (cModel instanceof ExAndComModel)
 			constraint = new Rectangle(rect.x, rect.y, oldConstraint.width,
@@ -49,8 +46,7 @@ public class ChangeConstraintCommand extends Command
 	 * 
 	 * @param model
 	 */
-	public void setModel(Object model)
-	{
+	public void setModel(Object model) {
 		cModel = (ElementModel) model;
 		// 保存原来的位置和大小，用于撤销
 		oldConstraint = cModel.getConstraint();
@@ -59,8 +55,7 @@ public class ChangeConstraintCommand extends Command
 	/**
 	 * 撤销
 	 */
-	public void undo()
-	{
+	public void undo() {
 		cModel.setConstraint(oldConstraint);
 
 	}

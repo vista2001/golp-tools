@@ -14,60 +14,51 @@ import dev.views.NavView;
  * @author 木木
  * 
  */
-public class DiagramEditorInput implements IEditorInput
-{
-	//流程图编号（Id）
+public class DiagramEditorInput implements IEditorInput {
+	// 流程图编号（Id）
 	private String diagramId;
-	//工程名称
+	// 工程名称
 	private String projectName;
-	//工程编号（Id）
+	// 工程编号（Id）
 	private String projectId;
 
 	// 从node节点中获得工程名称，工程编号（Id），流程图编号（Id）
-	public DiagramEditorInput(ResourceLeafNode node)
-	{
+	public DiagramEditorInput(ResourceLeafNode node) {
 		projectName = node.getRootProject().getName();
 		projectId = node.getRootProject().getId();
 		diagramId = node.getId();
 	}
 
-	public String getDiagramId()
-	{
+	public String getDiagramId() {
 		return diagramId;
 	}
 
-	public String getProjectName()
-	{
+	public String getProjectName() {
 		return projectName;
 	}
 
-	public String getProjectId()
-	{
+	public String getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(String projectId)
-	{
+	public void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
 
 	@Override
-	public boolean exists()
-	{
+	public boolean exists() {
 
 		return false;
 	}
 
 	@Override
-	public ImageDescriptor getImageDescriptor()
-	{
+	public ImageDescriptor getImageDescriptor() {
 
 		return null;
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 
 		NavView view = (NavView) PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage()
@@ -77,22 +68,19 @@ public class DiagramEditorInput implements IEditorInput
 	}
 
 	@Override
-	public IPersistableElement getPersistable()
-	{
+	public IPersistableElement getPersistable() {
 
 		return null;
 	}
 
 	@Override
-	public String getToolTipText()
-	{
+	public String getToolTipText() {
 
 		return diagramId + "";
 	}
 
 	@Override
-	public Object getAdapter(Class adapter)
-	{
+	public Object getAdapter(Class adapter) {
 
 		return null;
 	}

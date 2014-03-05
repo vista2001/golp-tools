@@ -20,16 +20,16 @@ import dev.diagram.model.LineConnectionModel;
 import dev.diagram.model.ReturnModel;
 import dev.diagram.model.StartModel;
 import dev.diagram.model.TfmModel;
+
 /**
  * 创建调色板
+ * 
  * @author 木木
- *
+ * 
  */
-public class Palette
-{
-	public static PaletteRoot getPaletteRoot()
-	{
-		
+public class Palette {
+	public static PaletteRoot getPaletteRoot() {
+
 		PaletteRoot root = new PaletteRoot();
 		PaletteGroup toolGroup = new PaletteGroup("工具");
 		ToolEntry tool = new SelectionToolEntry();

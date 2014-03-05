@@ -10,12 +10,10 @@ import org.eclipse.jface.dialogs.IInputValidator;
  * @author ľľ
  * 
  */
-public class InputValidator implements IInputValidator
-{
+public class InputValidator implements IInputValidator {
 
 	@Override
-	public String isValid(String newText)
-	{
+	public String isValid(String newText) {
 
 		if (Pattern.matches("0|[1-9][0-9]*", newText))
 			return null;

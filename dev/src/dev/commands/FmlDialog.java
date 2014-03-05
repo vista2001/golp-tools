@@ -24,6 +24,7 @@ public class FmlDialog extends Dialog {
 	public FmlDialog(Shell parentShell) {
 		super(parentShell);
 	}
+
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("选择工程");
@@ -37,10 +38,11 @@ public class FmlDialog extends Dialog {
 		gl_comp.horizontalSpacing = -1;
 		gl_comp.verticalSpacing = -1;
 		comp.setLayout(gl_comp);
-		
-		list = new org.eclipse.swt.widgets.List(comp, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+
+		list = new org.eclipse.swt.widgets.List(comp, SWT.BORDER | SWT.V_SCROLL
+				| SWT.MULTI);
 		list.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 9));
-		
+
 		NavView view = (NavView) PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage()
 				.findView(NavView.ID);
@@ -55,7 +57,7 @@ public class FmlDialog extends Dialog {
 			boolean defaultButton) {
 		return null;
 	}
-	
+
 	protected void initializeBounds() {
 		// 我们可以利用原有的ID创建按钮,也可以用自定义的ID创建按钮
 		// 但是调用的都是父类的createButton方法.
@@ -77,17 +79,15 @@ public class FmlDialog extends Dialog {
 			close();
 		}
 	}
-	
 
 	protected Point getInitialSize() {
 		return new Point(300, 300);
 	}
 
-
 	public List<String> getSelected() {
 		return selected;
 	}
-	
+
 	private List<TreeNode> projects;
 	private List<String> selected = new ArrayList<String>();
 	private org.eclipse.swt.widgets.List list;

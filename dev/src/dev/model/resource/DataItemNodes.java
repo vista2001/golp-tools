@@ -7,10 +7,8 @@ import dev.model.base.ResourceLeafNode;
 import dev.model.base.ResourceNode;
 import dev.model.base.TreeNode;
 
+public class DataItemNodes extends ResourceNode {
 
-public class DataItemNodes extends ResourceNode{
-
-	
 	public DataItemNodes(String name, String id, TreeNode parent) {
 		super(name, id, parent);
 		this.children = new ArrayList<TreeNode>();
@@ -43,20 +41,19 @@ public class DataItemNodes extends ResourceNode{
 
 	@Override
 	public Object getAdapter(Class adapter) {
-		
+
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren() {
-		if(this.children==null||this.children.isEmpty()){
+		if (this.children == null || this.children.isEmpty()) {
 			return false;
 		}
 		return !this.children.isEmpty();
 	}
-	
-	public void add(ResourceLeafNode rln)
-	{
+
+	public void add(ResourceLeafNode rln) {
 		this.children.add(rln);
 	}
 }

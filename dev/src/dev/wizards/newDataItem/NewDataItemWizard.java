@@ -27,38 +27,37 @@ import dev.model.base.RootNode;
 import dev.model.base.TreeNode;
 import dev.model.resource.DataItemNodes;
 import dev.model.resource.ProjectNode;
+import dev.util.DevLogger;
 import dev.views.NavView;
+
 /**
  * 该类定义了新建数据项向导所需要的 Wizard类
  */
-public class NewDataItemWizard extends Wizard implements INewWizard
-{
+public class NewDataItemWizard extends Wizard implements INewWizard {
 	private ISelection selection;
 	private IWorkbench workbench;
 
 	private NewDataItemWizardPage0 page0;
 	private NewDataItemWizardPage1 page1;
 
-//	private int dataItemId;
-//	private String dataItemName = "";
-//	private String dataItemDesc = "";
-//	private String dataItemLvL = "";
-//	private String dataItemType = "";
-//	private int dataItemlen;
-//	private String dataItemAOP = "";
+	// private int dataItemId;
+	// private String dataItemName = "";
+	// private String dataItemDesc = "";
+	// private String dataItemLvL = "";
+	// private String dataItemType = "";
+	// private int dataItemlen;
+	// private String dataItemAOP = "";
 	private String dataItemUpProject;
 	private TDataItem dataItem;
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection)
-	{
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
 		this.workbench = workbench;
 		this.dataItem = new TDataItem();
 	}
 
-	public void addPages()
-	{
+	public void addPages() {
 		page0 = new NewDataItemWizardPage0(selection);
 		page1 = new NewDataItemWizardPage1(selection);
 
@@ -67,24 +66,20 @@ public class NewDataItemWizard extends Wizard implements INewWizard
 	}
 
 	@Override
-	public boolean performFinish()
-	{
+	public boolean performFinish() {
 		getData();
-		try
-        {
-            doFinish(dataItem, dataItemUpProject);
-            updateNavView();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+		try {
+			doFinish(dataItem, dataItemUpProject);
+			updateNavView();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			DevLogger.printError(e);
+		}
 		return true;
 	}
 
-	//获取该新建向导中所设置的数据
-	private void getData()
-	{
+	// 获取该新建向导中所设置的数据
+	private void getData() {
 		dataItemUpProject = page0.getDataItemUpProjectCombo().getText();
 		String dataItemLvL = page0.getDataItemLvLCombo().getText();
 		dataItem.setDataLvL2(dataItemLvL);
@@ -96,70 +91,65 @@ public class NewDataItemWizard extends Wizard implements INewWizard
 		dataItem.setDataDesc(dataItemDesc);
 		String dataItemType = page1.getDataItemTypeCombo().getText();
 		dataItem.setDataType2(dataItemType);
-		int dataItemlen = Integer.parseInt(page1.getDataItemlenText().getText());
+		int dataItemlen = Integer
+				.parseInt(page1.getDataItemlenText().getText());
 		dataItem.setDataLen(dataItemlen);
 		String dataItemAOP = page1.getDataItemAOPText().getText();
 		dataItem.setDataAop(dataItemAOP);
 		dataItemType = dataItemType.substring(2);
 		dataItem.setIsPublished("0");
-		try
-        {
-            long fmlId = FmlId.getFmlId(dataItemName, dataItemId, dataItemType);
-            dataItem.setFmlId(fmlId);
-        }
-        catch (IOException | InterruptedException e)
-        {
-            e.printStackTrace();
-            dataItem.setFmlId(-1);
-        }
+		try {
+			long fmlId = FmlId.getFmlId(dataItemName, dataItemId, dataItemType);
+			dataItem.setFmlId(fmlId);
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			DevLogger.printError(e);
+			dataItem.setFmlId(-1);
+		}
 	}
 
 	// 将从新建向导中得到的数据写入数据库
-	private void doFinish(TDataItem dataItem, String prjId) throws SQLException
-	{
-	    EditorDataitemServiceImpl editorDataitemServiceImpl = new EditorDataitemServiceImpl();
-	    editorDataitemServiceImpl.insertDataItem(dataItem, prjId);
+	private void doFinish(TDataItem dataItem, String prjId) throws SQLException {
+		EditorDataitemServiceImpl editorDataitemServiceImpl = new EditorDataitemServiceImpl();
+		editorDataitemServiceImpl.insertDataItem(dataItem, prjId);
 	}
-	
-	//更新左侧导航视图
-	private void updateNavView()
-	{
+
+	// 更新左侧导航视图
+	private void updateNavView() {
 		IViewPart view = this.workbench.getActiveWorkbenchWindow()
 				.getActivePage().findView(NavView.ID);
-		if (view != null)
-		{
+		if (view != null) {
 			NavView v = (NavView) view;
 			TreeViewer tv = v.getTreeViewer();
 			RootNode root = (RootNode) tv.getInput();
 
 			int index;
-			for (index = 0; index < root.getChildren().size(); index++)
-			{
-				if (root.getChildren().get(index).getName().equals(dataItemUpProject))
+			for (index = 0; index < root.getChildren().size(); index++) {
+				if (root.getChildren().get(index).getName()
+						.equals(dataItemUpProject))
 					break;
 			}
 			ProjectNode projectNode = (ProjectNode) root.getChildren().get(
 					index);
-			//DebugOut.println(projectNode.getName());
+			// DebugOut.println(projectNode.getName());
 
 			List<TreeNode> list = projectNode.getChildren();
 			int i;
-			for (i = 0; i < list.size(); i++)
-			{
+			for (i = 0; i < list.size(); i++) {
 				if (list.get(i).getName().equals("数据项"))
 					break;
 			}
-			//DebugOut.println(list.get(i).getName());
-			ResourceLeafNode resourceLeafNode = new ResourceLeafNode(dataItem.getDataName(),
-					dataItem.getDataItemId()+"", list.get(i));
+			// DebugOut.println(list.get(i).getName());
+			ResourceLeafNode resourceLeafNode = new ResourceLeafNode(
+					dataItem.getDataName(), dataItem.getDataItemId() + "",
+					list.get(i));
 			((DataItemNodes) list.get(i)).add(resourceLeafNode);
 			tv.refresh();
 		}
 	}
-	
+
 	@Override
-	public boolean canFinish()
-	{
+	public boolean canFinish() {
 		return page0.canFlipToNextPage() && page1.validInput();
 
 	}

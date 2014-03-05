@@ -8,21 +8,17 @@ import dev.diagram.model.CommonModel;
 import dev.diagram.model.ElementModel;
 import dev.diagram.policies.CustomComponentEditPolicy;
 
-public class CommonTreeViewerPart extends CustomTreeEditPart
-{
+public class CommonTreeViewerPart extends CustomTreeEditPart {
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt)
-	{
-
+	public void propertyChange(PropertyChangeEvent evt) {
 
 		refreshVisuals();
 
 	}
 
 	@Override
-	protected void refreshVisuals()
-	{
+	protected void refreshVisuals() {
 
 		ElementModel elementModel = (ElementModel) getModel();
 		if (elementModel instanceof CommonModel)
@@ -35,8 +31,7 @@ public class CommonTreeViewerPart extends CustomTreeEditPart
 	}
 
 	@Override
-	protected void createEditPolicies()
-	{
+	protected void createEditPolicies() {
 
 		installEditPolicy(EditPolicy.COMPONENT_ROLE,
 				new CustomComponentEditPolicy());

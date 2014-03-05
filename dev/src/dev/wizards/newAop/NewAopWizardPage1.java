@@ -31,278 +31,244 @@ import dev.golpDialogs.InputDataItemDialog;
 import dev.golpDialogs.OutputDataItemDialog;
 import dev.golpEvent.InformDialogEvent;
 import dev.golpEvent.InformDialogListener;
+import dev.util.DevLogger;
 
-public class NewAopWizardPage1 extends WizardPage
-{
+public class NewAopWizardPage1 extends WizardPage {
 
-    private ISelection selection;
+	private ISelection selection;
 
-    private Text inputData;
-    private Text outPutData;
-    private Text aopPreConditionText;
-    private Text aopPostConditionText;
-    private Combo aopErrRecoverCombo;
-    private Combo upDllCombo;
-    private Text aopRetValText;
-    
-    public Text getAopRetValText()
-    {
-        return aopRetValText;
-    }
+	private Text inputData;
+	private Text outPutData;
+	private Text aopPreConditionText;
+	private Text aopPostConditionText;
+	private Combo aopErrRecoverCombo;
+	private Combo upDllCombo;
+	private Text aopRetValText;
 
-    public ISelection getSelection()
-    {
-        return selection;
-    }
+	public Text getAopRetValText() {
+		return aopRetValText;
+	}
 
-    public Text getInputData()
-    {
-        return inputData;
-    }
+	public ISelection getSelection() {
+		return selection;
+	}
 
-    public Text getOutPutData()
-    {
-        return outPutData;
-    }
+	public Text getInputData() {
+		return inputData;
+	}
 
-    public Text getAopPreConditionText()
-    {
-        return aopPreConditionText;
-    }
+	public Text getOutPutData() {
+		return outPutData;
+	}
 
-    public Text getAopPostConditionText()
-    {
-        return aopPostConditionText;
-    }
+	public Text getAopPreConditionText() {
+		return aopPreConditionText;
+	}
 
-    public Combo getAopErrRecoverCombo()
-    {
-        return aopErrRecoverCombo;
-    }
+	public Text getAopPostConditionText() {
+		return aopPostConditionText;
+	}
 
-    public Combo getUpDllCombo()
-    {
-        return upDllCombo;
-    }
+	public Combo getAopErrRecoverCombo() {
+		return aopErrRecoverCombo;
+	}
 
-    public NewAopWizardPage1(ISelection selection)
-    {
-        super("NewAopWizardPage1");
-        setTitle("新建原子交易向导");
-        setDescription("这个向导将指导你完成GOLP原子交易的创建");
-        this.selection = selection;
-    }
+	public Combo getUpDllCombo() {
+		return upDllCombo;
+	}
 
-    @Override
-    public void createControl(Composite parent)
-    {
-        Composite container = new Composite(parent, SWT.NULL);
-        setControl(container);
-        container.setLayout(new GridLayout(3, false));
+	public NewAopWizardPage1(ISelection selection) {
+		super("NewAopWizardPage1");
+		setTitle("新建原子交易向导");
+		setDescription("这个向导将指导你完成GOLP原子交易的创建");
+		this.selection = selection;
+	}
 
-        Label upDllComboLabel = new Label(container, SWT.NONE);
-        upDllComboLabel.setText("*所属动态库：");
-        upDllCombo = new Combo(container, SWT.READ_ONLY);
-        upDllCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-                false, 1, 1));
-        upDllCombo.addModifyListener(new ModifyListener()
-        {
-            public void modifyText(ModifyEvent e)
-            {
-                dialogChanged();
-            }
-        });
-        new Label(container, SWT.NONE);
+	@Override
+	public void createControl(Composite parent) {
+		Composite container = new Composite(parent, SWT.NULL);
+		setControl(container);
+		container.setLayout(new GridLayout(3, false));
 
-        Label aopErrRecoverLabel = new Label(container, SWT.NONE);
-        aopErrRecoverLabel.setText("*AOP恢复机制：");
-        aopErrRecoverCombo = new Combo(container, SWT.READ_ONLY);
-        aopErrRecoverCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-                true, false, 1, 1));
-        aopErrRecoverCombo.addModifyListener(new ModifyListener()
-        {
-            public void modifyText(ModifyEvent e)
-            {
-                dialogChanged();
-            }
-        });
-        aopErrRecoverCombo.setItems(new String[] { "0-第一种", "1-第二种" });
+		Label upDllComboLabel = new Label(container, SWT.NONE);
+		upDllComboLabel.setText("*所属动态库：");
+		upDllCombo = new Combo(container, SWT.READ_ONLY);
+		upDllCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+		upDllCombo.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChanged();
+			}
+		});
+		new Label(container, SWT.NONE);
 
-        new Label(container, SWT.NONE);
+		Label aopErrRecoverLabel = new Label(container, SWT.NONE);
+		aopErrRecoverLabel.setText("*AOP恢复机制：");
+		aopErrRecoverCombo = new Combo(container, SWT.READ_ONLY);
+		aopErrRecoverCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
+		aopErrRecoverCombo.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChanged();
+			}
+		});
+		aopErrRecoverCombo.setItems(new String[] { "0-第一种", "1-第二种" });
 
-        Label inputDataLabel = new Label(container, SWT.NONE);
-        inputDataLabel.setText("*输入数据项：");
-        inputData = new Text(container, SWT.BORDER | SWT.READ_ONLY);
-        inputData.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-                1, 1));
-        inputData.addModifyListener(new ModifyListener()
-        {
-            public void modifyText(ModifyEvent e)
-            {
-                dialogChanged();
-            }
-        });
-        Button inputDataBtn = new Button(container, SWT.NONE);
-        inputDataBtn.setText("...");
-        inputDataBtn.addSelectionListener(new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected(SelectionEvent e)
-            {
-                String upProjectId = ((NewAopWizardPage0)getWizard().getPage("NewAopWizardPage0")).getUpProjectCombo().getText();
-                InputDataItemDialog inputDataItemDialog = new InputDataItemDialog(
-                        e.display.getActiveShell(), e.getSource(),
-                        inputData.getText(), upProjectId);
-                inputDataItemDialog
-                        .addInformDialogListener(new InformDialogListener()
-                        {
+		new Label(container, SWT.NONE);
 
-                            @Override
-                            public void handleEvent(InformDialogEvent dm)
-                            {
-                                java.util.List<String> l = ((InputDataItemDialog) dm
-                                        .getdm()).getListForReturn();
-                                String s = "";
-                                for (String string : l)
-                                {
-                                    if (s.equals(""))
-                                    {
-                                        s += string;
-                                    } else
-                                    {
-                                        s += "|" + string;
-                                    }
-                                }
-                                inputData.setText(s);
-                            }
-                        });
-                inputDataItemDialog.open();
-            }
-        });
+		Label inputDataLabel = new Label(container, SWT.NONE);
+		inputDataLabel.setText("*输入数据项：");
+		inputData = new Text(container, SWT.BORDER | SWT.READ_ONLY);
+		inputData.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
+				1, 1));
+		inputData.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChanged();
+			}
+		});
+		Button inputDataBtn = new Button(container, SWT.NONE);
+		inputDataBtn.setText("...");
+		inputDataBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String upProjectId = ((NewAopWizardPage0) getWizard().getPage(
+						"NewAopWizardPage0")).getUpProjectCombo().getText();
+				InputDataItemDialog inputDataItemDialog = new InputDataItemDialog(
+						e.display.getActiveShell(), e.getSource(), inputData
+								.getText(), upProjectId);
+				inputDataItemDialog
+						.addInformDialogListener(new InformDialogListener() {
 
-        Label outputDataLabel = new Label(container, SWT.NONE);
-        outputDataLabel.setText("*输出数据项：");
-        outPutData = new Text(container, SWT.BORDER | SWT.READ_ONLY);
-        outPutData.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-                false, 1, 1));
-        outPutData.addModifyListener(new ModifyListener()
-        {
-            public void modifyText(ModifyEvent e)
-            {
-                dialogChanged();
-            }
-        });
-        Button outputDataBtn = new Button(container, SWT.NONE);
-        outputDataBtn.addSelectionListener(new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected(SelectionEvent e)
-            {
-                String upProjectId = ((NewAopWizardPage0)getWizard().getPage("NewAopWizardPage0")).getUpProjectCombo().getText();
-                OutputDataItemDialog outputDataItemDialog = new OutputDataItemDialog(
-                        e.display.getActiveShell(), e.getSource(), outPutData.getText(), upProjectId, inputData.getText());
-                outputDataItemDialog.addInformDialogListener(new InformDialogListener()
-                {
+							@Override
+							public void handleEvent(InformDialogEvent dm) {
+								java.util.List<String> l = ((InputDataItemDialog) dm
+										.getdm()).getListForReturn();
+								String s = "";
+								for (String string : l) {
+									if (s.equals("")) {
+										s += string;
+									} else {
+										s += "|" + string;
+									}
+								}
+								inputData.setText(s);
+							}
+						});
+				inputDataItemDialog.open();
+			}
+		});
 
-                    @Override
-                    public void handleEvent(InformDialogEvent dm)
-                    {
-                        java.util.List<String> l = ((OutputDataItemDialog) dm
-                                .getdm()).getListForReturn();
-                        String s = "";
-                        for (String string : l)
-                        {
-                            if (s.equals(""))
-                            {
-                                s += string;
-                            } else
-                            {
-                                s += "|" + string;
-                            }
-                        }
-                        outPutData.setText(s);
-                    }
-                });
-                outputDataItemDialog.open();
-            }
-        });
-        outputDataBtn.setText("...");
+		Label outputDataLabel = new Label(container, SWT.NONE);
+		outputDataLabel.setText("*输出数据项：");
+		outPutData = new Text(container, SWT.BORDER | SWT.READ_ONLY);
+		outPutData.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+		outPutData.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChanged();
+			}
+		});
+		Button outputDataBtn = new Button(container, SWT.NONE);
+		outputDataBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String upProjectId = ((NewAopWizardPage0) getWizard().getPage(
+						"NewAopWizardPage0")).getUpProjectCombo().getText();
+				OutputDataItemDialog outputDataItemDialog = new OutputDataItemDialog(
+						e.display.getActiveShell(), e.getSource(), outPutData
+								.getText(), upProjectId, inputData.getText());
+				outputDataItemDialog
+						.addInformDialogListener(new InformDialogListener() {
 
-        Label aopRetValLabel = new Label(container, SWT.NONE);
-        aopRetValLabel.setText("*原子交易返回值：");
-        aopRetValLabel.setToolTipText("返回值必须是整数，值之间用竖线分隔，默认值放在第一个");
+							@Override
+							public void handleEvent(InformDialogEvent dm) {
+								java.util.List<String> l = ((OutputDataItemDialog) dm
+										.getdm()).getListForReturn();
+								String s = "";
+								for (String string : l) {
+									if (s.equals("")) {
+										s += string;
+									} else {
+										s += "|" + string;
+									}
+								}
+								outPutData.setText(s);
+							}
+						});
+				outputDataItemDialog.open();
+			}
+		});
+		outputDataBtn.setText("...");
 
-        aopRetValText = new Text(container, SWT.BORDER);
-        aopRetValText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-                false, 1, 1));
-        new Label(container, SWT.NONE);
-        aopRetValText.addModifyListener(new ModifyListener()
-        {
-            public void modifyText(ModifyEvent e)
-            {
-                dialogChanged();
-            }
-        });
+		Label aopRetValLabel = new Label(container, SWT.NONE);
+		aopRetValLabel.setText("*原子交易返回值：");
+		aopRetValLabel.setToolTipText("返回值必须是整数，值之间用竖线分隔，默认值放在第一个");
 
-        Label aopPreConditionLabel = new Label(container, SWT.NONE);
-        aopPreConditionLabel.setText("前置条件：");
-        aopPreConditionText = new Text(container, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
-        GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-        gd_text.heightHint = 58;
-        aopPreConditionText.setLayoutData(gd_text);
-        new Label(container, SWT.NONE);
+		aopRetValText = new Text(container, SWT.BORDER);
+		aopRetValText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+		new Label(container, SWT.NONE);
+		aopRetValText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChanged();
+			}
+		});
 
-        Label aopPostConditionLabel = new Label(container, SWT.NONE);
-        aopPostConditionLabel.setText("后置条件：");
-        aopPostConditionText = new Text(container, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
-        GridData gd_aopPostConditionText = new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
-                1);
-        gd_aopPostConditionText.heightHint = 68;
-        aopPostConditionText.setLayoutData(gd_aopPostConditionText);
-        new Label(container, SWT.NONE);
+		Label aopPreConditionLabel = new Label(container, SWT.NONE);
+		aopPreConditionLabel.setText("前置条件：");
+		aopPreConditionText = new Text(container, SWT.BORDER | SWT.WRAP
+				| SWT.V_SCROLL | SWT.MULTI);
+		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_text.heightHint = 58;
+		aopPreConditionText.setLayoutData(gd_text);
+		new Label(container, SWT.NONE);
 
-        // 控件创建后初始化数据
-//        initData();
-    }
+		Label aopPostConditionLabel = new Label(container, SWT.NONE);
+		aopPostConditionLabel.setText("后置条件：");
+		aopPostConditionText = new Text(container, SWT.BORDER | SWT.WRAP
+				| SWT.V_SCROLL | SWT.MULTI);
+		GridData gd_aopPostConditionText = new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1);
+		gd_aopPostConditionText.heightHint = 68;
+		aopPostConditionText.setLayoutData(gd_aopPostConditionText);
+		new Label(container, SWT.NONE);
 
-    public boolean validInput()
-    {
-        if (getAopErrRecoverCombo().getText().length() == 0
-                || getInputData().getText().length() == 0
-                || getOutPutData().getText().length() == 0
-                || getUpDllCombo().getText().length() == 0
-                || aopRetValText.getText().length() == 0)
-            return false;
-        return true;
-    }
+		// 控件创建后初始化数据
+		// initData();
+	}
 
-    /*
-     * @Override public boolean canFlipToNextPage() { //return validInput();
-     * return false; }
-     */
+	public boolean validInput() {
+		if (getAopErrRecoverCombo().getText().length() == 0
+				|| getInputData().getText().length() == 0
+				|| getOutPutData().getText().length() == 0
+				|| getUpDllCombo().getText().length() == 0
+				|| aopRetValText.getText().length() == 0)
+			return false;
+		return true;
+	}
 
-    // 此处虽设置为true，但还是会调用下边的canFlipToNextPage()方法
-    private void dialogChanged()
-    {
-        setPageComplete(true);
-    }
+	/*
+	 * @Override public boolean canFlipToNextPage() { //return validInput();
+	 * return false; }
+	 */
 
-    protected void initData(String prjId)
-    {
-        upDllCombo.removeAll();
-        CommonDialogServiceImpl commonDialogServiceImpl = new CommonDialogServiceImpl();
-        try
-        {
-            List<TAopDll> aopDlls = commonDialogServiceImpl.aopDllQuery(prjId);
-            for(TAopDll aopDll : aopDlls)
-            {
-                upDllCombo.add(aopDll.getAopDllId() + "");
-            }
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+	// 此处虽设置为true，但还是会调用下边的canFlipToNextPage()方法
+	private void dialogChanged() {
+		setPageComplete(true);
+	}
 
-    }
+	protected void initData(String prjId) {
+		upDllCombo.removeAll();
+		CommonDialogServiceImpl commonDialogServiceImpl = new CommonDialogServiceImpl();
+		try {
+			List<TAopDll> aopDlls = commonDialogServiceImpl.aopDllQuery(prjId);
+			for (TAopDll aopDll : aopDlls) {
+				upDllCombo.add(aopDll.getAopDllId() + "");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			DevLogger.printError(e);
+		}
+
+	}
 }

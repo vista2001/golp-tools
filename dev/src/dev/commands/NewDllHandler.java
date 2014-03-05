@@ -18,23 +18,21 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import dev.wizards.newDll.NewDllWizard;
 
-public class NewDllHandler extends AbstractHandler
-{
+public class NewDllHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException
-	{
-		
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+
 		IWorkbenchWindow window = HandlerUtil
 				.getActiveWorkbenchWindowChecked(event);
-		
-		ISelection selection=HandlerUtil.getCurrentSelection(event);
+
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		{
 			NewDllWizard wizard = new NewDllWizard();
 			wizard.init(
 					window.getWorkbench(),
-					selection instanceof IStructuredSelection ? 
-							(IStructuredSelection) selection: StructuredSelection.EMPTY);
+					selection instanceof IStructuredSelection ? (IStructuredSelection) selection
+							: StructuredSelection.EMPTY);
 			WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 			dialog.open();
 		}

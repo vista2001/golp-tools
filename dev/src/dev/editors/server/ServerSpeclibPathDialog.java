@@ -32,8 +32,7 @@ import dev.golpEvent.InformDialogEvent;
 import dev.golpEvent.InformDialogListener;
 import dev.remote.RemoteDialog;
 
-public class ServerSpeclibPathDialog extends TitleAreaDialog
-{
+public class ServerSpeclibPathDialog extends TitleAreaDialog {
 	List serverSpeclibPathList;
 	java.util.List<String> listForReturn = null;
 	java.util.List<InformDialogListener> listeners = new ArrayList<InformDialogListener>();
@@ -53,11 +52,11 @@ public class ServerSpeclibPathDialog extends TitleAreaDialog
 	 * 
 	 * @param parentShell
 	 */
-	public ServerSpeclibPathDialog(Shell parentShell, Object obj, String string, String prjId) {
+	public ServerSpeclibPathDialog(Shell parentShell, Object obj,
+			String string, String prjId) {
 		super(parentShell);
 		String[] tmp = string.split("\\|");
-		for(String s : tmp)
-		{
+		for (String s : tmp) {
 			already.add(s);
 		}
 		this.prjId = prjId;
@@ -74,103 +73,95 @@ public class ServerSpeclibPathDialog extends TitleAreaDialog
 		new Label(area, SWT.NONE);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(2, false));
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
+				1));
 		this.setMessage("请选择服务程序个性依赖库路径");
-		
+
 		serverSpeclibPathText = new Text(container, SWT.BORDER);
-		serverSpeclibPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+		serverSpeclibPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
+
 		Button addButton = new Button(container, SWT.NONE);
-		GridData gd_addButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_addButton = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
 		gd_addButton.widthHint = 60;
 		addButton.setLayoutData(gd_addButton);
 		addButton.setText("添加");
-		serverSpeclibPathList = new List(container, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI);
-		serverSpeclibPathList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
-		for(String s : already)
-		{
-			if(s != "")
-			{
+		serverSpeclibPathList = new List(container, SWT.BORDER | SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.MULTI);
+		serverSpeclibPathList.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+				true, true, 1, 3));
+		for (String s : already) {
+			if (s != "") {
 				serverSpeclibPathList.add(s);
 			}
 		}
-		
+
 		delButton = new Button(container, SWT.NONE);
-		GridData gd_delButton = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
+		GridData gd_delButton = new GridData(SWT.LEFT, SWT.TOP, false, false,
+				1, 1);
 		gd_delButton.widthHint = 60;
 		delButton.setLayoutData(gd_delButton);
 		delButton.setText("移除");
-		
+
 		upButton = new Button(container, SWT.NONE);
-		GridData gd_upButton = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
+		GridData gd_upButton = new GridData(SWT.LEFT, SWT.TOP, false, false, 1,
+				1);
 		gd_upButton.widthHint = 60;
 		upButton.setLayoutData(gd_upButton);
 		upButton.setText("上移");
-		
+
 		downButton = new Button(container, SWT.NONE);
-		GridData gd_downButton = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
+		GridData gd_downButton = new GridData(SWT.LEFT, SWT.TOP, false, false,
+				1, 1);
 		gd_downButton.widthHint = 60;
 		downButton.setLayoutData(gd_downButton);
 		downButton.setText("下移");
 
-		serverSpeclibPathText.addKeyListener(new KeyAdapter()
-        {
-            @Override
-            public void keyPressed(KeyEvent e)
-            {
-                if((serverSpeclibPathText.getText().trim().isEmpty() == false)
-                    && (e.keyCode == SWT.CR))
-                {
-                    serverSpeclibPathList.add(serverSpeclibPathText.getText());
-                    serverSpeclibPathText.setText("");
-                }
-            }
-        });
-		
-		serverSpeclibPathList.addSelectionListener(new SelectionAdapter()
-		{
+		serverSpeclibPathText.addKeyListener(new KeyAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				if (serverSpeclibPathList.getSelectionIndices().length > 0)
-				{
+			public void keyPressed(KeyEvent e) {
+				if ((serverSpeclibPathText.getText().trim().isEmpty() == false)
+						&& (e.keyCode == SWT.CR)) {
+					serverSpeclibPathList.add(serverSpeclibPathText.getText());
+					serverSpeclibPathText.setText("");
+				}
+			}
+		});
+
+		serverSpeclibPathList.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (serverSpeclibPathList.getSelectionIndices().length > 0) {
 					delButton.setEnabled(true);
-					if (serverSpeclibPathList.getSelectionIndices().length == 1)
-					{
+					if (serverSpeclibPathList.getSelectionIndices().length == 1) {
 						upButton.setEnabled(true);
 						downButton.setEnabled(true);
-					}
-					else
-					{
+					} else {
 						upButton.setEnabled(false);
 						downButton.setEnabled(false);
 					}
 				}
 			}
 		});
-		
-		addButton.addSelectionListener(new SelectionAdapter()
-		{
+
+		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-                ArrayList<String> paths = new ArrayList<String>();
-                RemoteDialog remoteDialog = new RemoteDialog(getShell(),
-                        prjId, null, RemoteDialog.REMOTEDIALOG_DIRECTORY,
-                        RemoteDialog.REMOTEDIALOG_MULTI, paths);
-                remoteDialog.open();
-                for (String str : paths)
-                {
-                    serverSpeclibPathList.add(str);
-                }
+			public void widgetSelected(SelectionEvent e) {
+				ArrayList<String> paths = new ArrayList<String>();
+				RemoteDialog remoteDialog = new RemoteDialog(getShell(), prjId,
+						null, RemoteDialog.REMOTEDIALOG_DIRECTORY,
+						RemoteDialog.REMOTEDIALOG_MULTI, paths);
+				remoteDialog.open();
+				for (String str : paths) {
+					serverSpeclibPathList.add(str);
+				}
 			}
 		});
-		
-		delButton.addSelectionListener(new SelectionAdapter()
-		{
+
+		delButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int[] indices = serverSpeclibPathList.getSelectionIndices();
 				serverSpeclibPathList.remove(indices);
 				delButton.setEnabled(false);
@@ -178,35 +169,31 @@ public class ServerSpeclibPathDialog extends TitleAreaDialog
 				downButton.setEnabled(false);
 			}
 		});
-		
-		upButton.addSelectionListener(new SelectionAdapter()
-		{
+
+		upButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int index = serverSpeclibPathList.getSelectionIndex();
-				if(index > 0)
-				{
+				if (index > 0) {
 					String tmp = serverSpeclibPathList.getItem(index);
-					serverSpeclibPathList.setItem(index, serverSpeclibPathList.getItem(index-1));
-					serverSpeclibPathList.setItem(index-1, tmp);
-					serverSpeclibPathList.setSelection(index-1);
+					serverSpeclibPathList.setItem(index,
+							serverSpeclibPathList.getItem(index - 1));
+					serverSpeclibPathList.setItem(index - 1, tmp);
+					serverSpeclibPathList.setSelection(index - 1);
 				}
 			}
 		});
-		
-		downButton.addSelectionListener(new SelectionAdapter()
-		{
+
+		downButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int index = serverSpeclibPathList.getSelectionIndex();
-				if(index < serverSpeclibPathList.getItemCount()-1)
-				{
+				if (index < serverSpeclibPathList.getItemCount() - 1) {
 					String tmp = serverSpeclibPathList.getItem(index);
-					serverSpeclibPathList.setItem(index, serverSpeclibPathList.getItem(index+1));
-					serverSpeclibPathList.setItem(index+1, tmp);
-					serverSpeclibPathList.setSelection(index+1);
+					serverSpeclibPathList.setItem(index,
+							serverSpeclibPathList.getItem(index + 1));
+					serverSpeclibPathList.setItem(index + 1, tmp);
+					serverSpeclibPathList.setSelection(index + 1);
 				}
 			}
 		});
@@ -222,13 +209,15 @@ public class ServerSpeclibPathDialog extends TitleAreaDialog
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,false);
-		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				false);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
 	}
 
 	@Override
 	protected void okPressed() {
-		//DebugOut.println(listInDialog.isDisposed());
+		// DebugOut.println(listInDialog.isDisposed());
 		String[] serverSpeclibPaths = serverSpeclibPathList.getItems();
 		listForReturn = new ArrayList<String>();
 		for (int i = 0; i < serverSpeclibPaths.length; i++) {
@@ -245,7 +234,7 @@ public class ServerSpeclibPathDialog extends TitleAreaDialog
 	protected Point getInitialSize() {
 		return new Point(550, 400);
 	}
-	
+
 	public void addInformDialogListener(InformDialogListener dl) {
 		listeners.add(dl);
 	}

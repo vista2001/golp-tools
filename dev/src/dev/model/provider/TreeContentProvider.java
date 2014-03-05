@@ -1,6 +1,5 @@
 package dev.model.provider;
 
-
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -10,20 +9,18 @@ public class TreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
-		
-		
+
 	}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		
-		
+
 	}
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		
-		if(inputElement instanceof TreeNode){
+
+		if (inputElement instanceof TreeNode) {
 			return ((TreeNode) inputElement).getChildren().toArray();
 		}
 		return null;
@@ -31,8 +28,8 @@ public class TreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		
-		if(parentElement instanceof TreeNode){
+
+		if (parentElement instanceof TreeNode) {
 			return ((TreeNode) parentElement).getChildren().toArray();
 		}
 		return null;
@@ -40,8 +37,8 @@ public class TreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object getParent(Object element) {
-		
-		if(element instanceof TreeNode){
+
+		if (element instanceof TreeNode) {
 			return ((TreeNode) element).getParent();
 		}
 		return null;
@@ -49,10 +46,8 @@ public class TreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(Object element) {
-		
-		return ((TreeNode)element).hasChildren();
+
+		return ((TreeNode) element).hasChildren();
 	}
-
-
 
 }

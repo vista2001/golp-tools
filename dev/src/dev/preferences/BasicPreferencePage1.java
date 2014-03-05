@@ -7,7 +7,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import dev.Activator;
 
-
 public class BasicPreferencePage1 extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
 
@@ -21,13 +20,10 @@ public class BasicPreferencePage1 extends FieldEditorPreferencePage implements
 
 	public void createFieldEditors() {
 		/** 添加一个单选按钮组字段 */
-		addField(new RadioGroupFieldEditor(
-				PreferenceConstants.WORKSPACE_PATH, "默认的搜索类型", 2,
-				new String[][] { { "客户", "Customer" }, { "联系人", "Contact" } },
-				getFieldEditorParent(), true));
+		addField(new RadioGroupFieldEditor(PreferenceConstants.WORKSPACE_PATH,
+				"默认的搜索类型", 2, new String[][] { { "客户", "Customer" },
+						{ "联系人", "Contact" } }, getFieldEditorParent(), true));
 	}
-	
-
 
 	public void init(IWorkbench workbench) {
 	}

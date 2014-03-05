@@ -2,8 +2,7 @@ package dev.model.base;
 
 import java.util.List;
 
-
-public abstract class TreeNode implements ITreeNode{
+public abstract class TreeNode implements ITreeNode {
 	public String name;
 	public String id;
 	public TreeNode parent;
@@ -12,10 +11,10 @@ public abstract class TreeNode implements ITreeNode{
 	public TreeNode() {
 	}
 
-	public TreeNode(String name, String id,TreeNode parent) {
+	public TreeNode(String name, String id, TreeNode parent) {
 		this.name = name;
 		this.id = id;
-		this.parent=parent;
+		this.parent = parent;
 	}
 
 }

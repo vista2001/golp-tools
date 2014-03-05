@@ -60,20 +60,17 @@ import dev.diagram.policies.CustomGraphicalNodeEditPolicy;
  * 
  */
 public class ElementEditPart extends EditPartWithListener implements
-		NodeEditPart
-{
+		NodeEditPart {
 	/**
 	 * 根据不同的模型创建不同的图形
 	 */
 	@Override
-	protected IFigure createFigure()
-	{
+	protected IFigure createFigure() {
 		ElementModel model = (ElementModel) getModel();
 		IFigure figure = null;
 		// 异常与补偿模型
 		// 异常与补偿模型是个多层图形，父图像是个矩形，子图像是个button
-		if (model instanceof ExAndComModel)
-		{
+		if (model instanceof ExAndComModel) {
 			// 异常与补偿图像父图像
 			figure = new ColorRectangle();
 			// 父图像布局管理器
@@ -89,11 +86,9 @@ public class ElementEditPart extends EditPartWithListener implements
 			ButtonModel buttonModelEx = new ButtonModel();
 			exceptions.setModel(buttonModelEx);
 			// 为button添加监听
-			buttonModelEx.addActionListener(new ActionListener()
-			{
+			buttonModelEx.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent event)
-				{
+				public void actionPerformed(ActionEvent event) {
 					// 单击后打开一个异常与补偿对话框
 					ExceptionAndCompsationDialog dialog = new ExceptionAndCompsationDialog(
 							getViewer().getControl().getShell(),
@@ -133,8 +128,7 @@ public class ElementEditPart extends EditPartWithListener implements
 	 * 安装策略
 	 */
 	@Override
-	protected void createEditPolicies()
-	{
+	protected void createEditPolicies() {
 		// ComponentEditPolicy策略，用于模型的删除
 		installEditPolicy(EditPolicy.COMPONENT_ROLE,
 				new CustomComponentEditPolicy());
@@ -151,8 +145,7 @@ public class ElementEditPart extends EditPartWithListener implements
 	 * 刷新视图，显示模型对应的图像
 	 */
 	@Override
-	protected void refreshVisuals()
-	{
+	protected void refreshVisuals() {
 		Rectangle cts = ((ElementModel) getModel()).getConstraint();
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this,
 				getFigure(), cts);
@@ -162,29 +155,25 @@ public class ElementEditPart extends EditPartWithListener implements
 	 * 属性改变触发器激活后执行动作
 	 */
 	@Override
-	public void propertyChange(PropertyChangeEvent event)
-	{
+	public void propertyChange(PropertyChangeEvent event) {
 		// event是属性改变事件
 		// 位置和大小属性改变后刷新视图
 		if (event.getPropertyName().equals(ElementModel.CONSTRAINT))
 			refreshVisuals();
 		// 名称改变（直接编辑）后改变视图中的名称
-		else if (event.getPropertyName().equals(ElementModel.NAME))
-		{
+		else if (event.getPropertyName().equals(ElementModel.NAME)) {
 			MyFigure myFigure = (MyFigure) getFigure();
 			myFigure.setText((String) event.getNewValue());
 		}
 		// 模型中增加了边，此边以模型为起点，后刷新
 		else if (event.getPropertyName().equals(
-				ElementModel.P_SOURCE_CONNECTION))
-		{
+				ElementModel.P_SOURCE_CONNECTION)) {
 			// AbstractGraphicalEditPart类中的方法
 			refreshSourceConnections();
 		}
 		// 模型中增加了边，此边以模型为终点，后刷新
 		else if (event.getPropertyName().equals(
-				ElementModel.P_TARGET_CONNECTION))
-		{
+				ElementModel.P_TARGET_CONNECTION)) {
 			// AbstractGraphicalEditPart类中的方法
 			refreshTargetConnections();
 		}
@@ -198,8 +187,7 @@ public class ElementEditPart extends EditPartWithListener implements
 	 * 调用
 	 */
 	@Override
-	protected List<?> getModelSourceConnections()
-	{
+	protected List<?> getModelSourceConnections() {
 		return ((ElementModel) getModel()).getModelSourceConnections();
 	}
 
@@ -211,8 +199,7 @@ public class ElementEditPart extends EditPartWithListener implements
 	 * 调用
 	 */
 	@Override
-	public List<?> getModelTargetConnections()
-	{
+	public List<?> getModelTargetConnections() {
 		return ((ElementModel) getModel()).getModelTargetConnections();
 	}
 
@@ -222,40 +209,32 @@ public class ElementEditPart extends EditPartWithListener implements
 	 * 单击和双击请求处理
 	 */
 	@Override
-	public void performRequest(Request req)
-	{
+	public void performRequest(Request req) {
 		// 单击后执行直接编辑功能
-		if (req.getType().equals(RequestConstants.REQ_DIRECT_EDIT))
-		{
+		if (req.getType().equals(RequestConstants.REQ_DIRECT_EDIT)) {
 			// 直接编辑
 			performDirectEdit();
 			((CommonModel) getModel()).setText(((MyFigure) getFigure())
 					.getText());
 		}
 		// 双击后根据不同模型打开不同的模型属性配置对话框
-		else if (req.getType().equals(RequestConstants.REQ_OPEN))
-		{
+		else if (req.getType().equals(RequestConstants.REQ_OPEN)) {
 			Dialog dialog = null;
 			// 异常和补偿 实现的是打开与折叠
-			if (getModel() instanceof ExAndComModel)
-			{
+			if (getModel() instanceof ExAndComModel) {
 				Rectangle rec = getFigure().getBounds();
-				if (rec.height <= 25)
-				{
+				if (rec.height <= 25) {
 					((ElementModel) getModel()).setConstraint(new Rectangle(
 							rec.x, rec.y, rec.width, 80));
-				} else
-				{
+				} else {
 					((ElementModel) getModel()).setConstraint(new Rectangle(
 							rec.x, rec.y, rec.width, 25));
 				}
-			} else if (getModel() instanceof CommonModel)
-			{
+			} else if (getModel() instanceof CommonModel) {
 				ContentsModel contentsModel = ((CommonModel) getModel())
 						.getContentModel();
 				// 条件模型
-				if (((CommonModel) getModel()).getTypeId() == 0)
-				{
+				if (((CommonModel) getModel()).getTypeId() == 0) {
 					// 打开条件模型对话框
 					dialog = new ConditionBlockConfigurDialong(getViewer()
 							.getControl().getShell(), (CommonModel) getModel(),
@@ -263,34 +242,29 @@ public class ElementEditPart extends EditPartWithListener implements
 				}
 				// AOP，返回模型
 				else if (((CommonModel) getModel()).getTypeId() == 1
-						|| ((CommonModel) getModel()).getTypeId() == 2)
-				{
+						|| ((CommonModel) getModel()).getTypeId() == 2) {
 					// 打开模型属性对话框
 					dialog = new BlockConfigureDialog(getViewer().getControl()
 							.getShell(), (CommonModel) getModel(),
 							contentsModel);
 				}
 				// TFM
-				else if (((CommonModel) getModel()).getTypeId() == 3)
-				{
+				else if (((CommonModel) getModel()).getTypeId() == 3) {
 					// 打开开始或结束模型属性对话框
 					dialog = new TfmCongigureDialog(getViewer().getControl()
 							.getShell(), (CommonModel) getModel(),
 							contentsModel);
 				}
 				// 开始或结束模型
-				else
-				{
+				else {
 					// 打开开始或结束模型属性对话框
 					dialog = new StartAndEndDialog(getViewer().getControl()
 							.getShell(), (CommonModel) getModel(),
 							contentsModel);
 				}
-				if (dialog.open() == IDialogConstants.OK_ID)
-				{
+				if (dialog.open() == IDialogConstants.OK_ID) {
 					getViewer().getEditDomain().getCommandStack()
-							.execute(new Command()
-							{
+							.execute(new Command() {
 							});
 				}
 			}
@@ -300,11 +274,9 @@ public class ElementEditPart extends EditPartWithListener implements
 	/**
 	 * 直接编辑
 	 */
-	private void performDirectEdit()
-	{
+	private void performDirectEdit() {
 
-		if (directManager == null)
-		{
+		if (directManager == null) {
 			// 新建直接编辑管理器
 			directManager = new CustomDirectEditManager(this,
 					TextCellEditor.class,
@@ -319,8 +291,7 @@ public class ElementEditPart extends EditPartWithListener implements
 	 */
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(
-			ConnectionEditPart connection)
-	{
+			ConnectionEditPart connection) {
 
 		return new ChopboxAnchor(getFigure());
 	}
@@ -330,22 +301,19 @@ public class ElementEditPart extends EditPartWithListener implements
 	 */
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(
-			ConnectionEditPart connection)
-	{
+			ConnectionEditPart connection) {
 
 		return new ChopboxAnchor(getFigure());
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(Request request)
-	{
+	public ConnectionAnchor getSourceConnectionAnchor(Request request) {
 
 		return new ChopboxAnchor(getFigure());
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(Request request)
-	{
+	public ConnectionAnchor getTargetConnectionAnchor(Request request) {
 
 		return new ChopboxAnchor(getFigure());
 	}

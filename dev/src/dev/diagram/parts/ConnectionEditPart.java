@@ -12,11 +12,9 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PlatformUI;
 
-import dev.diagram.helper.InputValidator;
 import dev.diagram.inputDialog.EdgeListLimitDialog;
 import dev.diagram.model.AbstractConnectionModel;
 import dev.diagram.model.CommonModel;
@@ -30,28 +28,24 @@ import dev.diagram.policies.CustomConnectionEditPolicy;
  * 
  */
 public class ConnectionEditPart extends AbstractConnectionEditPart implements
-		PropertyChangeListener
-{
-	
+		PropertyChangeListener {
+
 	@Override
-	public void activate()
-	{
-		((AbstractConnectionModel)getModel()).addPropertyChangeListener(this);
+	public void activate() {
+		((AbstractConnectionModel) getModel()).addPropertyChangeListener(this);
 		super.activate();
 	}
 
 	@Override
-	public void deactivate()
-	{
+	public void deactivate() {
 		super.deactivate();
-		((AbstractConnectionModel)getModel()).addPropertyChangeListener(this);
+		((AbstractConnectionModel) getModel()).addPropertyChangeListener(this);
 	}
 
 	/**
 	 * 创建边图形
 	 */
-	protected IFigure createFigure()
-	{
+	protected IFigure createFigure() {
 		// 新建一条直线
 		PolylineConnection conn = new PolylineConnection();
 		// 为直线添加箭头装饰
@@ -69,8 +63,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements
 	/**
 	 * 安装策略
 	 */
-	protected void createEditPolicies()
-	{
+	protected void createEditPolicies() {
 		// 安装ConnectionEditPolicy策略，用于边的删除
 		installEditPolicy(EditPolicy.COMPONENT_ROLE,
 				new CustomConnectionEditPolicy());
@@ -83,19 +76,16 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements
 	 * 特殊命令请求
 	 */
 	@Override
-	public void performRequest(Request req)
-	{
+	public void performRequest(Request req) {
 		// 双击
-		if (req.getType().equals(REQ_OPEN))
-		{
+		if (req.getType().equals(REQ_OPEN)) {
 			// 打开权值配置对话框
 			CommonModel source = (CommonModel) ((AbstractConnectionModel) getModel())
 					.getSource();
 			EdgeListLimitDialog dialog = new EdgeListLimitDialog(PlatformUI
 					.getWorkbench().getActiveWorkbenchWindow().getShell(),
 					source);
-			if (dialog.open() == Window.OK)
-			{
+			if (dialog.open() == Window.OK) {
 				((LineConnectionModel) getModel()).setWeight(dialog.getText());
 				((Label) getFigure().getChildren().get(1)).setText(dialog
 						.getText());
@@ -105,8 +95,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt)
-	{
+	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(AbstractConnectionModel.EDGE))
 			((Label) getFigure().getChildren().get(1))
 					.setText(((LineConnectionModel) getModel()).getWeight()

@@ -1,6 +1,5 @@
 package dev.diagram.figures;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
@@ -11,8 +10,7 @@ import org.eclipse.swt.SWT;
  * @author Ä¾Ä¾
  * 
  */
-public class Circle_End extends Circle implements MyFigure
-{
+public class Circle_End extends Circle implements MyFigure {
 	// Í¼ÐÎÃû³Æ
 	private String text = "½áÊø";
 
@@ -20,8 +18,7 @@ public class Circle_End extends Circle implements MyFigure
 	 * Í¼ÐÎÌî³äÎªÁ©¸öÍ¬ÐÄÔ²
 	 */
 	@Override
-	protected void fillShape(Graphics graphics)
-	{
+	protected void fillShape(Graphics graphics) {
 
 		super.fillShape(graphics);
 		Rectangle rec = getBounds();
@@ -39,8 +36,7 @@ public class Circle_End extends Circle implements MyFigure
 	 * Í¼ÏñÂÖÀªÊÇÔ²
 	 */
 	@Override
-	protected void outlineShape(Graphics graphics)
-	{
+	protected void outlineShape(Graphics graphics) {
 
 		Rectangle rec = getBounds();
 		int r = (rec.width > rec.height) ? rec.height : rec.width;
@@ -56,8 +52,7 @@ public class Circle_End extends Circle implements MyFigure
 	}
 
 	@Override
-	public void setText(String text)
-	{
+	public void setText(String text) {
 
 		this.text = text;
 		repaint();

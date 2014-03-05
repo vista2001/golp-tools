@@ -13,15 +13,13 @@ import dev.diagram.model.ElementModel;
  * @author 木木
  * 
  */
-public class CustomDirectEditManager extends DirectEditManager
-{
+public class CustomDirectEditManager extends DirectEditManager {
 	// 直接编辑的对象模型，目的是得到当前文本
 	private ElementModel model;
 
 	// 初始化模型
 	public CustomDirectEditManager(GraphicalEditPart source,
-			Class<?> editorType, CellEditorLocator locator)
-	{
+			Class<?> editorType, CellEditorLocator locator) {
 		super(source, editorType, locator);
 		model = (ElementModel) source.getModel();
 	}
@@ -30,8 +28,7 @@ public class CustomDirectEditManager extends DirectEditManager
 	 * 初始化直接编辑的初始值
 	 */
 	@Override
-	protected void initCellEditor()
-	{
+	protected void initCellEditor() {
 
 		getCellEditor().setValue(model.getText());
 

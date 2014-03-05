@@ -11,8 +11,7 @@ import java.util.List;
 
 import dev.model.resource.ProjectNode;
 
-
-public class RootNode extends TreeNode{
+public class RootNode extends TreeNode {
 
 	public RootNode(String name, String id, TreeNode parent) {
 		super(name, id, parent);
@@ -40,7 +39,7 @@ public class RootNode extends TreeNode{
 
 	@Override
 	public List<TreeNode> getChildren() {
-		if(this.children==null){
+		if (this.children == null) {
 			return new ArrayList<TreeNode>();
 		}
 		return this.children;
@@ -50,25 +49,24 @@ public class RootNode extends TreeNode{
 	public Object getAdapter(Class adapter) {
 		return null;
 	}
-	
-	public void add(ProjectNode prj){
-		if(children==null){
-			children=new ArrayList<TreeNode>();
+
+	public void add(ProjectNode prj) {
+		if (children == null) {
+			children = new ArrayList<TreeNode>();
 			children.add(prj);
-		}else{
+		} else {
 			children.add(prj);
 		}
 	}
 
 	@Override
 	public boolean hasChildren() {
-		//DebugOut.println("root is empty="+this.children.isEmpty());
+		// DebugOut.println("root is empty="+this.children.isEmpty());
 		return !this.children.isEmpty();
 	}
 
 	@Override
 	public void removeAllChildren() {
-		
-		
+
 	}
 }

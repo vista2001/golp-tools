@@ -6,13 +6,11 @@ import java.util.List;
 import dev.model.base.ResourceNode;
 import dev.model.base.TreeNode;
 
+public class MessageNodes extends ResourceNode {
 
-public class MessageNodes extends ResourceNode{
-
-	
 	public MessageNodes(String name, String id, TreeNode parent) {
 		super(name, id, parent);
-		this.children=new ArrayList<TreeNode>();
+		this.children = new ArrayList<TreeNode>();
 	}
 
 	@Override
@@ -42,7 +40,7 @@ public class MessageNodes extends ResourceNode{
 
 	@Override
 	public Object getAdapter(Class adapter) {
-		if(adapter.isInstance(this)){
+		if (adapter.isInstance(this)) {
 			return this;
 		}
 		return null;
@@ -50,11 +48,10 @@ public class MessageNodes extends ResourceNode{
 
 	@Override
 	public boolean hasChildren() {
-		if (this.children == null || this.children.isEmpty())
-		{
+		if (this.children == null || this.children.isEmpty()) {
 			return false;
 		}
 		return !this.children.isEmpty();
 	}
-	
+
 }

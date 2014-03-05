@@ -16,31 +16,29 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import dev.util.DebugOut;
+import dev.util.DevLogger;
 import dev.wizards.newProject.NewProjectWizard;
 
-
-public class NewProjectHandler extends AbstractHandler{
-
+public class NewProjectHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-	    DebugOut.println("NewProjectHandler is called");
+		DevLogger.printDebugMsg("NewProjectHandler is called");
 		IWorkbenchWindow window = HandlerUtil
 				.getActiveWorkbenchWindowChecked(event);
-		//MessageDialog.openConfirm(window.getShell(), "Add", "The \"Add to Favorites\" handler was called");
-		ISelection selection=HandlerUtil.getCurrentSelection(event);
+		// MessageDialog.openConfirm(window.getShell(), "Add",
+		// "The \"Add to Favorites\" handler was called");
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		{
 			NewProjectWizard wizard = new NewProjectWizard();
 			wizard.init(
 					window.getWorkbench(),
-					selection instanceof IStructuredSelection ? 
-							(IStructuredSelection) selection: StructuredSelection.EMPTY);
+					selection instanceof IStructuredSelection ? (IStructuredSelection) selection
+							: StructuredSelection.EMPTY);
 			WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 			dialog.open();
 		}
 		return null;
 	}
-
 
 }

@@ -12,15 +12,15 @@ package dev.generate.entryFunction;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.util.DebugOut;
+import dev.util.DevLogger;
+
 /**
  * 生成交易入口函数的替换父数据类
+ * 
  * @author zxh
- *
+ * 
  */
 public class Trade {
-
-	
 
 	public String getTradeID() {
 		return tradeID;
@@ -67,24 +67,25 @@ public class Trade {
 	public String actionName;
 	public List<Req> req;
 	public List<Resp> resp;
-	//根据处理过的数据库数据初始化类
-	public Trade(String tradeID,String tradeType,String actionName,
-			String req,String resp) {
-		
-		this.tradeID=tradeID;
-		this.tradeType=tradeType;
-		this.actionName=actionName;
-		
-		String reqtem[]=req.split("\\|");
-		DebugOut.println(reqtem.length);
-		this.req=new ArrayList<Req>();
-		for(String tem:reqtem){
+
+	// 根据处理过的数据库数据初始化类
+	public Trade(String tradeID, String tradeType, String actionName,
+			String req, String resp) {
+
+		this.tradeID = tradeID;
+		this.tradeType = tradeType;
+		this.actionName = actionName;
+
+		String reqtem[] = req.split("\\|");
+		DevLogger.printDebugMsg(reqtem.length);
+		this.req = new ArrayList<Req>();
+		for (String tem : reqtem) {
 			this.req.add(new Req(tem));
 		}
-		
-		String[] resptem=resp.split("\\|");
-		this.resp=new ArrayList<Resp>();
-		for(int i=0;i<resptem.length;i++)
+
+		String[] resptem = resp.split("\\|");
+		this.resp = new ArrayList<Resp>();
+		for (int i = 0; i < resptem.length; i++)
 			this.resp.add(new Resp(resptem[i]));
 	}
 }

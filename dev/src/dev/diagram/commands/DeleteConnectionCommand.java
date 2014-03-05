@@ -10,27 +10,23 @@ import dev.diagram.model.AbstractConnectionModel;
  * @author 木木
  * 
  */
-public class DeleteConnectionCommand extends Command
-{
+public class DeleteConnectionCommand extends Command {
 
 	private AbstractConnectionModel conn;
 
-	public void setConnection(Object connx)
-	{
+	public void setConnection(Object connx) {
 		conn = (AbstractConnectionModel) connx;
 	}
 
 	/**
 	 * 边连接的俩个节点都删除此边
 	 */
-	public void execute()
-	{
+	public void execute() {
 		conn.detachSource();
 		conn.detachTarget();
 	}
 
-	public void undo()
-	{
+	public void undo() {
 		conn.attachSource();
 		conn.attachTarget();
 	}

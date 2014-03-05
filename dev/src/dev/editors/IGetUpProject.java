@@ -1,6 +1,5 @@
 package dev.editors;
 
-public interface IGetUpProject
-{
-    public String getUpProject();
+public interface IGetUpProject {
+	public String getUpProject();
 }

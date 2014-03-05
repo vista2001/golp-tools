@@ -24,15 +24,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.PreferenceStore;
 
 import dev.db.DbConnFactory;
 import dev.db.DbConnectImpl;
 import dev.generate.fml.FmlId;
 import dev.model.base.ResourceLeafNode;
-import dev.util.DebugOut;
-import dev.util.LogUtils;
+import dev.util.DevLogger;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -87,7 +85,7 @@ public class EntryFunction {
 		IProject project = prjRoot.getProject(server.getRootProject().getId());
 		String dbfiles = project.getLocationURI().toString().substring(6) + '/'
 				+ server.getRootProject().getId() + ".properties";
-		DebugOut.println("dbfiles===" + dbfiles);
+		DevLogger.printDebugMsg("dbfiles===" + dbfiles);
 		PreferenceStore ps = new PreferenceStore(dbfiles);
 		try {
 			ps.load();
@@ -135,21 +133,25 @@ public class EntryFunction {
 				root.put("trade", trade);
 				// 写出到文件
 				String path = FmlId.getPath();
-				File filePath = new File(path +"/"+server.getRootProject().getId()+ "/appHome/build/AGservices/");
-				File outFile = new File(path +"/"+server.getRootProject().getId()+ "/appHome/build/AGservices/TH"
-						+ trade.tradeID + ".cpp");
+				File filePath = new File(path + "/"
+						+ server.getRootProject().getId()
+						+ "/appHome/build/AGservices/");
+				File outFile = new File(path + "/"
+						+ server.getRootProject().getId()
+						+ "/appHome/build/AGservices/TH" + trade.tradeID
+						+ ".cpp");
 				filePath.mkdirs();
 				Writer out = null;
 				out = new BufferedWriter(new OutputStreamWriter(
 						new FileOutputStream(outFile), "UTF-8"));
-				if(root==null){
-					
+				if (root == null) {
+
 				}
-				System.out.println(testfile.toString());
-				System.out.println(root.toString());
-				System.out.println(out.toString());
-				System.out.println(out.toString());
-				
+				DevLogger.printDebugMsg(testfile.toString());
+				DevLogger.printDebugMsg(root.toString());
+				DevLogger.printDebugMsg(out.toString());
+				DevLogger.printDebugMsg(out.toString());
+
 				testfile.process(root, out);
 				out.flush();
 				out.close();
@@ -157,6 +159,7 @@ public class EntryFunction {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 	}
 

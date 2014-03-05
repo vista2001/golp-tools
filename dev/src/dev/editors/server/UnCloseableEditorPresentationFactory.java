@@ -16,15 +16,13 @@ import org.eclipse.ui.presentations.StackPresentation;
 import org.eclipse.ui.presentations.WorkbenchPresentationFactory;
 
 public class UnCloseableEditorPresentationFactory extends
-		WorkbenchPresentationFactory
-{
+		WorkbenchPresentationFactory {
 	private static int editorTabPosition = PlatformUI.getPreferenceStore()
 			.getInt(IWorkbenchPreferenceConstants.EDITOR_TAB_POSITION);
 
 	@Override
 	public StackPresentation createEditorPresentation(Composite parent,
-			IStackPresentationSite site)
-	{
+			IStackPresentationSite site) {
 		DefaultTabFolder folder = new DefaultTabFolder(parent,
 				editorTabPosition | SWT.BORDER,
 				site.supportsState(IStackPresentationSite.STATE_MINIMIZED),
@@ -39,12 +37,10 @@ public class UnCloseableEditorPresentationFactory extends
 		 */
 		final IPreferenceStore store = PlatformUI.getPreferenceStore();
 		if (store
-				.contains(IWorkbenchPreferenceConstants.EDITOR_MINIMUM_CHARACTERS))
-		{
+				.contains(IWorkbenchPreferenceConstants.EDITOR_MINIMUM_CHARACTERS)) {
 			final int minimumCharacters = store
 					.getInt(IWorkbenchPreferenceConstants.EDITOR_MINIMUM_CHARACTERS);
-			if (minimumCharacters >= 0)
-			{
+			if (minimumCharacters >= 0) {
 				folder.setMinimumCharacters(minimumCharacters);
 			}
 		}

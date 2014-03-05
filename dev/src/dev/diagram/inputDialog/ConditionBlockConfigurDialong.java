@@ -44,8 +44,7 @@ import dev.util.CommonUtil;
  * @author 木木
  * 
  */
-public class ConditionBlockConfigurDialong extends Dialog
-{
+public class ConditionBlockConfigurDialong extends Dialog {
 	private Text tfmid, nodetype, nodeid, desc;
 	private Text extenddllid, extendseqno, extendname, extenddesc;
 	private Button up, down, del, newb, save;
@@ -65,42 +64,36 @@ public class ConditionBlockConfigurDialong extends Dialog
 	private ContentsModel contentsModel;
 
 	@Override
-	protected void createButtonsForButtonBar(Composite parent)
-	{
+	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, "确定", false);
 		createButton(parent, APPLICATION_ID, "保存", false);
 		createButton(parent, IDialogConstants.CANCEL_ID, "取消", false);
 		getButton(IDialogConstants.OK_ID).setEnabled(false);
 		getButton(APPLICATION_ID).setEnabled(false);
-		getButton(APPLICATION_ID).addSelectionListener(new SelectionListener()
-		{
+		getButton(APPLICATION_ID).addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				// getButton(IOK_ID).setEnabled(false);
 				getButton(APPLICATION_ID).setEnabled(false);
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
 	}
 
 	@Override
-	protected void configureShell(Shell newShell)
-	{
+	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(block.getName());
 	}
 
 	public ConditionBlockConfigurDialong(Shell parentShell,
-			CommonModel commonModel, ContentsModel contentsModel)
-	{
+			CommonModel commonModel, ContentsModel contentsModel) {
 		super(parentShell);
 		this.commonModel = commonModel;
 		this.block = commonModel.getTfmBlock();
@@ -108,8 +101,7 @@ public class ConditionBlockConfigurDialong extends Dialog
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent)
-	{
+	protected Control createDialogArea(Composite parent) {
 
 		Composite area = (Composite) super.createDialogArea(parent);
 		area.setLayout(null);
@@ -273,16 +265,14 @@ public class ConditionBlockConfigurDialong extends Dialog
 		TableColumn t_func = new TableColumn(table, SWT.NONE);
 		t_func.setWidth(100);
 		t_func.setText("\u51FD\u6570\u540D\u79F0");
-		
+
 		Label lblNewLabel_3 = new Label(composite_1, SWT.NONE);
 		lblNewLabel_3.setBounds(10, 89, 61, 17);
 		lblNewLabel_3.setText("\u63CF\u8FF0\uFF1A");
-		extentsSelectLististner = new SelectionListener()
-		{
+		extentsSelectLististner = new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				extendname.setText("");
 				extenddesc.setText("");
@@ -291,13 +281,11 @@ public class ConditionBlockConfigurDialong extends Dialog
 				extendfuncname.setText("");
 				Button temp = (Button) e.widget;
 				if (temp.getSelection())
-					if (temp.getText().equals("前扩展点"))
-					{
+					if (temp.getText().equals("前扩展点")) {
 						table.removeAll();
 						for (int curr : tfmExtendsMap.keySet())
 							if (Integer.parseInt(tfmExtendsMap.get(curr)
-									.getSeqNo()) < 100)
-							{
+									.getSeqNo()) < 100) {
 								TableItem tabItem = new TableItem(table,
 										SWT.NONE);
 								tabItem.setText(new String[] {
@@ -306,13 +294,11 @@ public class ConditionBlockConfigurDialong extends Dialog
 										tfmExtendsMap.get(curr).getDllId(),
 										tfmExtendsMap.get(curr).getFuncname() });
 							}
-					} else
-					{
+					} else {
 						table.removeAll();
 						for (int curr : tfmExtendsMap.keySet())
 							if (Integer.parseInt(tfmExtendsMap.get(curr)
-									.getSeqNo()) >= 100)
-							{
+									.getSeqNo()) >= 100) {
 								TableItem tabItem = new TableItem(table,
 										SWT.NONE);
 								tabItem.setText(new String[] {
@@ -325,21 +311,18 @@ public class ConditionBlockConfigurDialong extends Dialog
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 
 		};
 		firstextend.addSelectionListener(extentsSelectLististner);
 		endextend.addSelectionListener(extentsSelectLististner);
-		extenddllid.addModifyListener(new ModifyListener()
-		{
+		extenddllid.addModifyListener(new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e)
-			{
-				if(extenddllid.getText().isEmpty())
+			public void modifyText(ModifyEvent e) {
+				if (extenddllid.getText().isEmpty())
 					return;
 				extendfuncname.removeAll();
 				DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
@@ -347,52 +330,43 @@ public class ConditionBlockConfigurDialong extends Dialog
 				String sql = "select aopname from aop where upaopdll= "
 						+ extenddllid.getText();
 				ResultSet rs;
-				try
-				{
+				try {
 					dbConnectImpl.openConn(CommonUtil
 							.initPs(contentsModel.projectId));
 					rs = dbConnectImpl.retrive(sql);
 					while (rs.next())
 						extendfuncname.add(rs.getString(1));
 					dbConnectImpl.closeConn();
-				} catch (SQLException e1)
-				{
+				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
 
-		exbt.addSelectionListener(new SelectionListener()
-		{
+		exbt.addSelectionListener(new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				DllIdConfigureDialog dialog = new DllIdConfigureDialog(
 						getShell(), contentsModel);
-				if (Window.OK == dialog.open())
-				{
+				if (Window.OK == dialog.open()) {
 					extenddllid.setText(dialog.getText());
 				}
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
-		listenerSaveActive = new ModifyListener()
-		{
+		listenerSaveActive = new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent e)
-			{
+			public void modifyText(ModifyEvent e) {
 
 				if (extenddllid.getText() != ""
 						&& extendfuncname.getText() != ""
 						&& extendname.getText() != ""
-						&& extendseqno.getText() != "")
-				{
+						&& extendseqno.getText() != "") {
 					save.setEnabled(true);
 
 				} else
@@ -403,16 +377,13 @@ public class ConditionBlockConfigurDialong extends Dialog
 		extendname.addModifyListener(listenerSaveActive);
 		extendseqno.addModifyListener(listenerSaveActive);
 		extenddesc.addModifyListener(listenerSaveActive);
-		listener = new SelectionAdapter()
-		{
+		listener = new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
 				Button b = (Button) e.widget;
-				if (b.getText().equals("上移"))
-				{
+				if (b.getText().equals("上移")) {
 					int index = table.getSelectionIndex();
 					int no = Integer.parseInt(table.getItem(index).getText(0));
 					if (index <= 0)
@@ -437,8 +408,7 @@ public class ConditionBlockConfigurDialong extends Dialog
 					tfmExtendsMap.put(no - 1, _down);
 					tfmExtendsMap.put(no, _up);
 
-				} else if (b.getText().equals("下移"))
-				{
+				} else if (b.getText().equals("下移")) {
 					int index = table.getSelectionIndex();
 					int no = Integer.parseInt(table.getItem(index).getText(0));
 					if (index == table.getItemCount() - 1)
@@ -461,18 +431,15 @@ public class ConditionBlockConfigurDialong extends Dialog
 					tfmExtendsMap.put(no, _down);
 					tfmExtendsMap.put(no + 1, _up);
 
-				} else if (b.getText().equals("删除"))
-				{
+				} else if (b.getText().equals("删除")) {
 					int index = table.getSelectionIndex();
 					if (index < 0)
 						return;
-					else
-					{
+					else {
 						tfmExtendsMap.remove(Integer.parseInt(table.getItem(
 								index).getText(0)));
 						table.remove(index);
-						for (int i = index; i <= table.getItemCount() - 1; i++)
-						{
+						for (int i = index; i <= table.getItemCount() - 1; i++) {
 							int no = Integer.parseInt(table.getItem(i).getText(
 									0));
 							TfmExtendAop temp = tfmExtendsMap.remove(no);
@@ -482,8 +449,7 @@ public class ConditionBlockConfigurDialong extends Dialog
 
 						}
 					}
-				} else if (b.getText().equals("新建"))
-				{
+				} else if (b.getText().equals("新建")) {
 					if (firstextend.getSelection())
 						extendseqno
 								.setText(String.valueOf(table.getItemCount() + 1));
@@ -496,14 +462,12 @@ public class ConditionBlockConfigurDialong extends Dialog
 					extendfuncname.removeAll();
 					extendname.setFocus();
 					return;
-				} else if (b.getText().equals("保存"))
-				{
+				} else if (b.getText().equals("保存")) {
 
 					if (Integer.parseInt(extendseqno.getText()) == table
 							.getItemCount() + 1
 							|| Integer.parseInt(extendseqno.getText()) == table
-									.getItemCount() + 101)
-					{
+									.getItemCount() + 101) {
 
 						TfmExtendAop newExtend = new TfmExtendAop();
 						newExtend.setDesc(extenddesc.getText());
@@ -520,8 +484,7 @@ public class ConditionBlockConfigurDialong extends Dialog
 								tfmExtendsMap.get(NO).getName(),
 								tfmExtendsMap.get(NO).getDllId(),
 								tfmExtendsMap.get(NO).getFuncname() });
-					} else
-					{
+					} else {
 						int index = table.getSelectionIndex();
 						table.getItem(index).setText(
 								new String[] { extendseqno.getText(),
@@ -543,60 +506,48 @@ public class ConditionBlockConfigurDialong extends Dialog
 				}
 				up.setEnabled(true);
 				down.setEnabled(true);
-				if (table.getSelectionIndex() == 0 && table.getItemCount() == 1)
-				{
+				if (table.getSelectionIndex() == 0 && table.getItemCount() == 1) {
 					up.setEnabled(false);
 					down.setEnabled(false);
 				} else if (table.getSelectionIndex() == table.getItemCount() - 1
-						&& table.getItemCount() > 1)
-				{
+						&& table.getItemCount() > 1) {
 					down.setEnabled(false);
 				} else if (table.getSelectionIndex() == 0
-						&& table.getItemCount() > 1)
-				{
+						&& table.getItemCount() > 1) {
 					up.setEnabled(false);
-				} else
-				{
+				} else {
 					up.setEnabled(true);
 					down.setEnabled(true);
 				}
 
 				Button btn = getButton(APPLICATION_ID);
 				Button btnOK = getButton(IDialogConstants.OK_ID);
-				if ((btn != null) && (btnOK != null))
-				{
+				if ((btn != null) && (btnOK != null)) {
 					getButton(APPLICATION_ID).setEnabled(true);
 					getButton(IDialogConstants.OK_ID).setEnabled(true);
 				}
 			}
 		};
-		table.addSelectionListener(new SelectionListener()
-		{
+		table.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 
 				int index = table.getSelectionIndex();
-				if (index > 0 && index < table.getItemCount() - 1)
-				{
+				if (index > 0 && index < table.getItemCount() - 1) {
 					up.setEnabled(true);
 					down.setEnabled(true);
-				} else if (index == table.getItemCount() - 1 && index == 0)
-				{
+				} else if (index == table.getItemCount() - 1 && index == 0) {
 					up.setEnabled(false);
 					down.setEnabled(false);
-				} else if (index == 0)
-				{
+				} else if (index == 0) {
 					up.setEnabled(false);
 					down.setEnabled(true);
-				} else if (index == table.getItemCount() - 1)
-				{
+				} else if (index == table.getItemCount() - 1) {
 					up.setEnabled(true);
 					down.setEnabled(false);
 				}
-				if (index >= 0)
-				{
+				if (index >= 0) {
 					TfmExtendAop temp = tfmExtendsMap.get(Integer
 							.parseInt(table.getItem(index).getText(0)));
 					extenddesc.setText(temp.getDesc());
@@ -604,42 +555,35 @@ public class ConditionBlockConfigurDialong extends Dialog
 					extendfuncname.setText(temp.getFuncname());
 					extendname.setText(temp.getName());
 					extendseqno.setText(temp.getSeqNo());
-					if (Integer.parseInt(temp.getSeqNo()) < 100)
-					{
+					if (Integer.parseInt(temp.getSeqNo()) < 100) {
 						firstextend.setSelection(true);
 						endextend.setSelection(false);
-					} else
-					{
+					} else {
 						endextend.setSelection(true);
 						firstextend.setSelection(false);
 					}
 					del.setEnabled(true);
-				} else
-				{
+				} else {
 					del.setEnabled(false);
 				}
 				save.setEnabled(false);
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
-		table.addFocusListener(new FocusListener()
-		{
+		table.addFocusListener(new FocusListener() {
 
 			@Override
-			public void focusLost(FocusEvent e)
-			{
+			public void focusLost(FocusEvent e) {
 
 				// del.setEnabled(false);
 			}
 
 			@Override
-			public void focusGained(FocusEvent e)
-			{
+			public void focusGained(FocusEvent e) {
 
 				save.setEnabled(false);
 			}
@@ -653,11 +597,9 @@ public class ConditionBlockConfigurDialong extends Dialog
 		Label lblNewLabel_11 = new Label(composite, SWT.NONE);
 		lblNewLabel_11.setBounds(10, 198, 61, 17);
 		lblNewLabel_11.setText("\u6761\u4EF6\uFF1A");
-		for (TfmExtendAop curr : block.getTfmExtendAopsList())
-		{
+		for (TfmExtendAop curr : block.getTfmExtendAopsList()) {
 			tfmExtendsMap.put(Integer.parseInt(curr.getSeqNo()), curr);
-			if (Integer.parseInt(curr.getSeqNo()) < 100)
-			{
+			if (Integer.parseInt(curr.getSeqNo()) < 100) {
 
 				TableItem currItem = new TableItem(table, SWT.NONE);
 				int NO = Integer.parseInt(curr.getSeqNo());
@@ -672,29 +614,23 @@ public class ConditionBlockConfigurDialong extends Dialog
 		nodetype.setText(commonModel.getTypeName());
 		condition.setText(block.getCondition());
 		tfmid.setText(block.getTfmId());
-		ModifyListener confirm = new ModifyListener()
-		{
+		ModifyListener confirm = new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e)
-			{
+			public void modifyText(ModifyEvent e) {
 
-				if (condition.getText().length() != 0)
-				{
+				if (condition.getText().length() != 0) {
 					Button btn = getButton(APPLICATION_ID);
 					Button btnOK = getButton(IDialogConstants.OK_ID);
-					if ((btn != null) && (btnOK != null))
-					{
+					if ((btn != null) && (btnOK != null)) {
 						getButton(APPLICATION_ID).setEnabled(true);
 						getButton(IDialogConstants.OK_ID).setEnabled(true);
 					}
 
-				} else
-				{
+				} else {
 					Button btn = getButton(APPLICATION_ID);
 					Button btnOK = getButton(IDialogConstants.OK_ID);
-					if ((btn != null) && (btnOK != null))
-					{
+					if ((btn != null) && (btnOK != null)) {
 						getButton(APPLICATION_ID).setEnabled(false);
 						getButton(IDialogConstants.OK_ID).setEnabled(false);
 					}
@@ -703,21 +639,17 @@ public class ConditionBlockConfigurDialong extends Dialog
 		};
 		desc.addModifyListener(confirm);
 		condition.addModifyListener(confirm);
-		if (block.getDesc().isEmpty())
-		{
+		if (block.getDesc().isEmpty()) {
 			desc.setText("描述信息...");
-		} else
-		{
+		} else {
 			desc.setText(block.getDesc());
 		}
 		return area;
 	}
 
-	protected boolean check()
-	{
+	protected boolean check() {
 
-		for (TfmExtendAop curr : tfmExtendsMap.values())
-		{
+		for (TfmExtendAop curr : tfmExtendsMap.values()) {
 			if (curr.getDllId().equals(extenddllid.getText()))
 				if (curr.getFuncname().equals(extendfuncname.getText()))
 					return false;
@@ -726,22 +658,18 @@ public class ConditionBlockConfigurDialong extends Dialog
 	}
 
 	@Override
-	protected void buttonPressed(int buttonId)
-	{
-		if (IDialogConstants.OK_ID == buttonId)
-		{
+	protected void buttonPressed(int buttonId) {
+		if (IDialogConstants.OK_ID == buttonId) {
 			store();
 			close();
-		} else if (IDialogConstants.CANCEL_ID == buttonId)
-		{
+		} else if (IDialogConstants.CANCEL_ID == buttonId) {
 			setReturnCode(buttonId);
 			close();
 		} else if (APPLICATION_ID == buttonId)
 			store();
 	}
 
-	protected void store()
-	{
+	protected void store() {
 		block.setTfmId(tfmid.getText());
 		block.setDesc(desc.getText());
 		block.setCondition(condition.getText());

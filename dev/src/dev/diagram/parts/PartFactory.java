@@ -13,13 +13,11 @@ import dev.diagram.model.ElementModel;
  * @author 木木
  * 
  */
-public class PartFactory implements EditPartFactory
-{
+public class PartFactory implements EditPartFactory {
 	/**
 	 * 模型与控制关联
 	 */
-	public EditPart createEditPart(EditPart context, Object model)
-	{
+	public EditPart createEditPart(EditPart context, Object model) {
 		// 得到控制器
 		EditPart part = getPartForElement(model);
 		// 关联模型与控制器
@@ -33,15 +31,14 @@ public class PartFactory implements EditPartFactory
 	 * @param modelElement
 	 * @return
 	 */
-	private EditPart getPartForElement(Object modelElement)
-	{
-		//基本模型控制器
+	private EditPart getPartForElement(Object modelElement) {
+		// 基本模型控制器
 		if (modelElement instanceof ElementModel)
 			return new ElementEditPart();
-		//内容控制器
+		// 内容控制器
 		else if (modelElement instanceof ContentsModel)
 			return new ContentsModelPart();
-		//边控制器
+		// 边控制器
 		else if (modelElement instanceof AbstractConnectionModel)
 			return new ConnectionEditPart();
 

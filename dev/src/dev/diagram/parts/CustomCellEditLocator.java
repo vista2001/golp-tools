@@ -12,13 +12,11 @@ import org.eclipse.swt.widgets.Text;
  * @author 木木
  * 
  */
-public class CustomCellEditLocator implements CellEditorLocator
-{
+public class CustomCellEditLocator implements CellEditorLocator {
 	// 直接编辑图形对象
 	private IFigure figure;
 
-	public CustomCellEditLocator(IFigure f)
-	{
+	public CustomCellEditLocator(IFigure f) {
 		figure = f;
 	}
 
@@ -26,8 +24,7 @@ public class CustomCellEditLocator implements CellEditorLocator
 	 * 直接编辑定位，包括位置和大小
 	 */
 	@Override
-	public void relocate(CellEditor celleditor)
-	{
+	public void relocate(CellEditor celleditor) {
 
 		Text text = (Text) celleditor.getControl();
 

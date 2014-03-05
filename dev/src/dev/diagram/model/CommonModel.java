@@ -15,16 +15,14 @@ import dev.diagram.beans.TfmBlock;
  * @author 木木
  * 
  */
-public abstract class CommonModel extends ElementModel
-{
+public abstract class CommonModel extends ElementModel {
 	// 流程图中节点的数据(块的信息)，最终会以此为基础写入XML
 	private TfmBlock tfmBlock = new TfmBlock();
 	// 节点的类型名称
 	private String typeName;
 	private ContentsModel contentModel;
 
-	public CommonModel(int typeId, String text)
-	{
+	public CommonModel(int typeId, String text) {
 		super();
 		typeName = text;
 		setText(text);
@@ -33,27 +31,23 @@ public abstract class CommonModel extends ElementModel
 	}
 
 	@Override
-	public void setText(String text)
-	{
+	public void setText(String text) {
 		tfmBlock.setName(text);
 		// 激活触发器，表示节点名称改变
 		firePropertyChange(ElementModel.NAME, null, text);
 	}
 
 	@Override
-	public String getDesc()
-	{
+	public String getDesc() {
 		return tfmBlock.getDesc();
 	}
 
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		return tfmBlock.getName();
 	}
 
-	public String getTypeName()
-	{
+	public String getTypeName() {
 		return typeName;
 	}
 
@@ -62,37 +56,32 @@ public abstract class CommonModel extends ElementModel
 	 * 
 	 * @return
 	 */
-	public boolean isConnected()
-	{
+	public boolean isConnected() {
 		if ((getSourceConnection().size() == 0 && getTypeId() != 5)
 				|| (getTargetConnection().size() == 0 && getTypeId() != 4))
 			return false;
 		return true;
 	}
 
-	public void setTfmBlock(TfmBlock tfmBlock)
-	{
+	public void setTfmBlock(TfmBlock tfmBlock) {
 		this.tfmBlock = tfmBlock;
 		int nodeId = Integer.parseInt(tfmBlock.getNodeId());
 		/*
 		 * 在读入的时候得到当前的所有节点中的最大编号，并保存在模型的maxNumber中，用于在给新节赋值时参考，否则编号的值将不断的变大
 		 */
-		if (getId() <= nodeId)
-		{
+		if (getId() <= nodeId) {
 			ElementModel.setNumber(nodeId);
 
 		}
 
 	}
 
-	public TfmBlock getTfmBlock()
-	{
+	public TfmBlock getTfmBlock() {
 		tfmBlock.setTfmId(contentModel.diagramId + "");
 		return tfmBlock;
 	}
 
-	public int getTypeId()
-	{
+	public int getTypeId() {
 		return Integer.parseInt(tfmBlock.getNodeType());
 	}
 
@@ -107,8 +96,7 @@ public abstract class CommonModel extends ElementModel
 	/**
 	 * 设置模型位置和大小，并通知触发器，同时写入tfmBlock中
 	 */
-	public void setConstraint(Rectangle rect)
-	{
+	public void setConstraint(Rectangle rect) {
 		super.setConstraint(rect);
 		tfmBlock.setLocationX(String.valueOf(rect.x));
 		tfmBlock.setLocationY(String.valueOf(rect.y));
@@ -119,8 +107,7 @@ public abstract class CommonModel extends ElementModel
 	}
 
 	@Override
-	public IPropertyDescriptor[] getPropertyDescriptors()
-	{
+	public IPropertyDescriptor[] getPropertyDescriptors() {
 
 		IPropertyDescriptor[] decriptors = new IPropertyDescriptor[] {
 				new TextPropertyDescriptor(CommonModel.TFMID, "ID"),
@@ -134,8 +121,7 @@ public abstract class CommonModel extends ElementModel
 	}
 
 	@Override
-	public Object getPropertyValue(Object id)
-	{
+	public Object getPropertyValue(Object id) {
 		if (CommonModel.TFMID.equals(id))
 			return tfmBlock.getTfmId();
 		if (CommonModel.NODEID.equals(id))
@@ -150,25 +136,22 @@ public abstract class CommonModel extends ElementModel
 	}
 
 	@Override
-	public boolean isPropertySet(Object id)
-	{
+	public boolean isPropertySet(Object id) {
 		return false;
 
 	}
 
 	@Override
-	public void setPropertyValue(Object id, Object value)
-	{
+	public void setPropertyValue(Object id, Object value) {
 	}
 
 	/**
 	 * 模型增加边，同时将边存入edgeList中，由于一条边连接俩个节点， 所以这里选择在目标节点添加边的时候，同时将边写入edgeList
 	 */
 	@Override
-	public void addTargetConnection(AbstractConnectionModel connx)
-	{
+	public void addTargetConnection(AbstractConnectionModel connx) {
 		// 边加入节点模型的边链表中
-//		edgeList.add(connx.getTfmEdge());
+		// edgeList.add(connx.getTfmEdge());
 		super.addTargetConnection(connx);
 
 	}
@@ -177,32 +160,27 @@ public abstract class CommonModel extends ElementModel
 	 * 连接的目标节点移除边，同时在edgeList中移除边
 	 */
 	@Override
-	public void removeTargetConnection(AbstractConnectionModel connx)
-	{
+	public void removeTargetConnection(AbstractConnectionModel connx) {
 		// 将边从模型的边链表中删除
-//		edgeList.remove(connx.getTfmEdge());
+		// edgeList.remove(connx.getTfmEdge());
 		super.removeTargetConnection(connx);
 	}
 
 	@Override
-	public void addSourceConnection(AbstractConnectionModel connx)
-	{
+	public void addSourceConnection(AbstractConnectionModel connx) {
 		super.addSourceConnection(connx);
 	}
 
 	@Override
-	public void removeSourceConnection(AbstractConnectionModel connx)
-	{
+	public void removeSourceConnection(AbstractConnectionModel connx) {
 		super.removeSourceConnection(connx);
 	}
 
-	public ContentsModel getContentModel()
-	{
+	public ContentsModel getContentModel() {
 		return contentModel;
 	}
 
-	public void setContentModel(ContentsModel contentModel)
-	{
+	public void setContentModel(ContentsModel contentModel) {
 		this.contentModel = contentModel;
 	}
 

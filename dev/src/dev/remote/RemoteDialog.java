@@ -21,11 +21,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import dev.util.CommonUtil;
+import dev.util.DevLogger;
 
 public class RemoteDialog extends Dialog {
 
@@ -103,14 +103,14 @@ public class RemoteDialog extends Dialog {
 			}
 		} else {
 			try {
-				lines = run.getRemoteDirs("cd "+path+"&&pwd");
+				lines = run.getRemoteDirs("cd " + path + "&&pwd");
 			} catch (IOException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
 		}
 		path = lines.get(0);
-		if(path.equals("/"))
+		if (path.equals("/"))
 			displayText.setText(path);
 		else
 			displayText.setText(path + "/");
@@ -134,7 +134,7 @@ public class RemoteDialog extends Dialog {
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-					System.out.println(result);
+					DevLogger.printDebugMsg(result);
 					if (result.get(result.size() - 1).equals("0")) {
 						list.removeAll();
 						list.add("路径错误");
@@ -261,6 +261,7 @@ public class RemoteDialog extends Dialog {
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+							DevLogger.printError(e);
 						}
 						list.removeAll();
 						createList(lines);
@@ -274,7 +275,7 @@ public class RemoteDialog extends Dialog {
 				} else {
 					boolean isAllDirectory = true;
 					for (String line : list.getSelection()) {
-						if (!(line.endsWith("/")||line.equals(".."))) {
+						if (!(line.endsWith("/") || line.equals(".."))) {
 							isAllDirectory = false;
 							break;
 						}
@@ -287,6 +288,7 @@ public class RemoteDialog extends Dialog {
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+							DevLogger.printError(e);
 						}
 						list.removeAll();
 						createList(lines);
@@ -297,7 +299,8 @@ public class RemoteDialog extends Dialog {
 						getAbsolutePath(tem);
 
 						for (int i = 0; i < tem.size(); i++) {
-							if (tem.get(i).endsWith("/")||tem.get(i).endsWith("..")) {
+							if (tem.get(i).endsWith("/")
+									|| tem.get(i).endsWith("..")) {
 								tem.remove(i);
 								i--;
 							}
@@ -374,8 +377,8 @@ public class RemoteDialog extends Dialog {
 			return;
 		}
 		for (String name : list.getSelection()) {
-			if(name.endsWith("*")){	
-				name=name.substring(0, name.length()-2);
+			if (name.endsWith("*")) {
+				name = name.substring(0, name.length() - 2);
 			}
 			if (name.contains("->")) {
 				String fake = name.substring(name.indexOf("->") + 2,
@@ -396,10 +399,11 @@ public class RemoteDialog extends Dialog {
 	}
 
 	private void openMessagebox() {
-		MessageBox box = new MessageBox(getShell(), SWT.OK);
+		/*MessageBox box = new MessageBox(getShell(), SWT.OK);
 		box.setText("失败");
 		box.setMessage("没有权限打开此目录!");
-		box.open();
+		box.open();*/
+		DevLogger.showMessage(SWT.OK, "失败", "没有权限打开此目录!");
 	}
 
 	public String turnToRelative(String absolute) {

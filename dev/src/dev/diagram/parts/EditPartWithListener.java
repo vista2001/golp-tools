@@ -20,21 +20,19 @@ import dev.diagram.model.AbstractModel;
  * 
  */
 abstract public class EditPartWithListener extends AbstractGraphicalEditPart
-		implements PropertyChangeListener
-{
+		implements PropertyChangeListener {
 	@Override
-	public void activate()
-	{
+	public void activate() {
 		super.activate();
-		//给模型添加监听器
+		// 给模型添加监听器
 		((AbstractModel) getModel()).addPropertyChangeListener(this);
 
 	}
+
 	@Override
-	public void deactivate()
-	{
+	public void deactivate() {
 		super.deactivate();
-		//给模型添加监听器
+		// 给模型添加监听器
 		((AbstractModel) getModel()).removePropertyChangeListener(this);
 	}
 

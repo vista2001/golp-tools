@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Text;
 
 import dev.util.RegExpCheck;
 
-public class NewTradeWizardPage0 extends WizardPage{
+public class NewTradeWizardPage0 extends WizardPage {
 	private Combo tradeUpProjectCombo;
 	private Combo TradeLvlCombo;
 	private Text tradeIdText;
@@ -49,14 +49,12 @@ public class NewTradeWizardPage0 extends WizardPage{
 	}
 
 	public Text getTradeIdText() {
-	return tradeIdText;
+		return tradeIdText;
 	}
-
 
 	public Text getTradeNameText() {
 		return tradeNameText;
 	}
-
 
 	public Text getTradeDescText() {
 		return tradeDescText;
@@ -68,74 +66,78 @@ public class NewTradeWizardPage0 extends WizardPage{
 		Composite container = new Composite(parent, SWT.NULL);
 		setControl(container);
 		container.setLayout(new GridLayout(2, false));
-		
+
 		Label tradeUpProjectLabel = new Label(container, SWT.NONE);
 		tradeUpProjectLabel.setText("*所属工程：");
-        tradeUpProjectCombo = new Combo(container, SWT.READ_ONLY);
-        tradeUpProjectCombo.addModifyListener(new ModifyListener()
-        {
-            public void modifyText(ModifyEvent e)
-            {
-                dialogChanged();
-                if (!tradeUpProjectCombo.getText().isEmpty())
-                {
-                    ((NewTradeWizardPage1)getWizard().getPage("NewTradeWizardPage1")).getTradeUpServerText().setText("");
-                    ((NewTradeWizardPage1)getWizard().getPage("NewTradeWizardPage1")).getInputDataText().setText("");
-                    ((NewTradeWizardPage1)getWizard().getPage("NewTradeWizardPage1")).getOutputDataText().setText("");
-                }
-            }
-        });
-        tradeUpProjectCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+		tradeUpProjectCombo = new Combo(container, SWT.READ_ONLY);
+		tradeUpProjectCombo.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChanged();
+				if (!tradeUpProjectCombo.getText().isEmpty()) {
+					((NewTradeWizardPage1) getWizard().getPage(
+							"NewTradeWizardPage1")).getTradeUpServerText()
+							.setText("");
+					((NewTradeWizardPage1) getWizard().getPage(
+							"NewTradeWizardPage1")).getInputDataText().setText(
+							"");
+					((NewTradeWizardPage1) getWizard().getPage(
+							"NewTradeWizardPage1")).getOutputDataText()
+							.setText("");
+				}
+			}
+		});
+		tradeUpProjectCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
+
 		Label aopLvlLabel = new Label(container, SWT.NONE);
 		aopLvlLabel.setText("*交易级别：");
 		TradeLvlCombo = new Combo(container, SWT.READ_ONLY);
-		TradeLvlCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		TradeLvlCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
 		TradeLvlCombo.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				dialogChanged();
 			}
 		});
-		TradeLvlCombo.setItems(new String[]{"0-APP"});
-		
+		TradeLvlCombo.setItems(new String[] { "0-APP" });
+
 		Label prjIdLabel = new Label(container, SWT.NONE);
 		prjIdLabel.setText("*交易标识符：");
-		
+
 		tradeIdText = new Text(container, SWT.BORDER);
-		tradeIdText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-        tradeIdText.addModifyListener(new ModifyListener()
-        {
-            public void modifyText(ModifyEvent e)
-            {
-                if(RegExpCheck.isTradeId(tradeIdText.getText()))
-                {
-                    setErrorMessage(null);
-                }
-                else
-                {
-                    setErrorMessage("交易标识符只能为数字");
-                }
-                dialogChanged();
-            }
-        });
-		
+		tradeIdText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+
+		tradeIdText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				if (RegExpCheck.isTradeId(tradeIdText.getText())) {
+					setErrorMessage(null);
+				} else {
+					setErrorMessage("交易标识符只能为数字");
+				}
+				dialogChanged();
+			}
+		});
+
 		Label prjNameLabel = new Label(container, SWT.NONE);
 		prjNameLabel.setText("*交易名称：");
-		
+
 		tradeNameText = new Text(container, SWT.BORDER);
-		tradeNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		tradeNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
 		tradeNameText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				dialogChanged();
 			}
 		});
-		
+
 		Label prjDescLabel = new Label(container, SWT.NONE);
 		prjDescLabel.setText("*描述：");
-		
-		tradeDescText = new Text(container, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
-		tradeDescText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		tradeDescText = new Text(container, SWT.BORDER | SWT.WRAP
+				| SWT.V_SCROLL | SWT.MULTI);
+		tradeDescText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+				true, 1, 1));
 		tradeDescText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				dialogChanged();
@@ -146,29 +148,30 @@ public class NewTradeWizardPage0 extends WizardPage{
 
 	// 输入项校验
 	private void dialogChanged() {
-		/*if (getPrjDescText().getText().isEmpty()||getPrjIdText().getText().isEmpty()||getPrjNameText().getText().isEmpty()) {
-			updateStatus("File container must be specified");
-			return;
-		}*/
-//		updateStatus(null);
-	    setPageComplete(true);
+		/*
+		 * if
+		 * (getPrjDescText().getText().isEmpty()||getPrjIdText().getText().isEmpty
+		 * ()||getPrjNameText().getText().isEmpty()) {
+		 * updateStatus("File container must be specified"); return; }
+		 */
+		// updateStatus(null);
+		setPageComplete(true);
 	}
 
 	// 更新状态
-//	private void updateStatus(String message) {
-//		setErrorMessage(message);
-//		setPageComplete(message == null);
-//	}
+	// private void updateStatus(String message) {
+	// setErrorMessage(message);
+	// setPageComplete(message == null);
+	// }
 
 	@Override
 	public boolean canFlipToNextPage() {
-		if(  tradeUpProjectCombo.getText().isEmpty()
-		  || TradeLvlCombo.getText().isEmpty()
-		  || tradeDescText.getText().isEmpty()
-		  || RegExpCheck.isTradeId(tradeIdText.getText()) == false
-		  || tradeNameText.getText().isEmpty())
-		{
-		    return false; 
+		if (tradeUpProjectCombo.getText().isEmpty()
+				|| TradeLvlCombo.getText().isEmpty()
+				|| tradeDescText.getText().isEmpty()
+				|| RegExpCheck.isTradeId(tradeIdText.getText()) == false
+				|| tradeNameText.getText().isEmpty()) {
+			return false;
 		}
 		return true;
 	}

@@ -30,43 +30,42 @@ import dev.model.base.RootNode;
 import dev.model.base.TreeNode;
 import dev.model.resource.AopNodes;
 import dev.model.resource.ProjectNode;
+import dev.util.DevLogger;
 import dev.views.NavView;
 
-public class NewAopWizard extends Wizard implements INewWizard
-{
+public class NewAopWizard extends Wizard implements INewWizard {
 	private ISelection selection;
 	private IWorkbench workbench;
 
 	private NewAopWizardPage0 page0;
 	private NewAopWizardPage1 page1;
 
-//	private String aopId = "";
-//	private String aopName = "";
-//	private String aopDesc = "";
-//	private String aopInputData ="";
-//	private String aopOutputData="";
-//	private String aopPrecondition="";
-//	private String aopPostcondition="";
-//	private String aopErrRecover="";
-//	private String aopLvL = "";
-//	private String aopUpDll = "";
+	// private String aopId = "";
+	// private String aopName = "";
+	// private String aopDesc = "";
+	// private String aopInputData ="";
+	// private String aopOutputData="";
+	// private String aopPrecondition="";
+	// private String aopPostcondition="";
+	// private String aopErrRecover="";
+	// private String aopLvL = "";
+	// private String aopUpDll = "";
 	private String aopUpProject;
 	private TAop aop;
-//	private String aopRetVal = "";
-	
+
+	// private String aopRetVal = "";
+
 	// 用于加载存储有工程信息的本地文件的PreferenceStore对象
-//    private PreferenceStore ps;
+	// private PreferenceStore ps;
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection)
-	{
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
 		this.workbench = workbench;
 		aop = new TAop();
 	}
 
-	public void addPages()
-	{
+	public void addPages() {
 		page0 = new NewAopWizardPage0(selection);
 		page1 = new NewAopWizardPage1(selection);
 
@@ -75,26 +74,22 @@ public class NewAopWizard extends Wizard implements INewWizard
 	}
 
 	@Override
-	public boolean performFinish()
-	{
+	public boolean performFinish() {
 		getData();
-		try
-        {
-            doFinish(aop,aopUpProject);
-            updateNavView();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+		try {
+			doFinish(aop, aopUpProject);
+			updateNavView();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			DevLogger.printError(e);
+		}
 		return true;
 	}
 
 	// //获取该新建向导中所设置的数据
-	private void getData()
-	{
-	    aopUpProject = page0.getUpProjectCombo().getText();
-	    String aopId = page0.getAopIdText().getText();
+	private void getData() {
+		aopUpProject = page0.getUpProjectCombo().getText();
+		String aopId = page0.getAopIdText().getText();
 		aop.setAopId(aopId);
 		String aopName = page0.getAopNameText().getText();
 		aop.setAopName(aopName);
@@ -110,38 +105,38 @@ public class NewAopWizard extends Wizard implements INewWizard
 		aop.setPreCondition(aopPrecondition);
 		String aopPostcondition = page1.getAopPostConditionText().getText();
 		aop.setPostCondition(aopPostcondition);
-		String aopErrRecover = page1.getAopErrRecoverCombo().getText().substring(0, 1);
+		String aopErrRecover = page1.getAopErrRecoverCombo().getText()
+				.substring(0, 1);
 		aop.setAopErrRecover(aopErrRecover);
-		String aopUpDll=page1.getUpDllCombo().getText();
+		String aopUpDll = page1.getUpDllCombo().getText();
 		aop.setUpAopDll(Integer.parseInt(aopUpDll));
 		String aopLvL = page0.getAopLvlCombo().getText().substring(0, 1);
 		aop.setAopLevel(aopLvL);
 	}
 
 	// 将从新建向导中得到的数据写入数据库
-	private void doFinish(TAop aop, String prjId) throws SQLException
-	{
-	    EditorAopServiceImpl editorAopServiceImpl = new EditorAopServiceImpl();
-	    editorAopServiceImpl.insertAop(aop, prjId);
+	private void doFinish(TAop aop, String prjId) throws SQLException {
+		EditorAopServiceImpl editorAopServiceImpl = new EditorAopServiceImpl();
+		editorAopServiceImpl.insertAop(aop, prjId);
 	}
-	
-	private void updateNavView()
-	{
+
+	private void updateNavView() {
 		IViewPart view = this.workbench.getActiveWorkbenchWindow()
 				.getActivePage().findView(NavView.ID);
-		if (view != null)
-		{
+		if (view != null) {
 			NavView v = (NavView) view;
 			TreeViewer tv = v.getTreeViewer();
 			RootNode root = (RootNode) tv.getInput();
 
 			int index;
-			for (index = 0; index < root.getChildren().size(); index++){
-				if (root.getChildren().get(index).getName().equals(aopUpProject)){
+			for (index = 0; index < root.getChildren().size(); index++) {
+				if (root.getChildren().get(index).getName()
+						.equals(aopUpProject)) {
 					break;
 				}
 			}
-			ProjectNode projectNode = (ProjectNode) root.getChildren().get(index);
+			ProjectNode projectNode = (ProjectNode) root.getChildren().get(
+					index);
 
 			List<TreeNode> list = projectNode.getChildren();
 			int i;
@@ -149,18 +144,18 @@ public class NewAopWizard extends Wizard implements INewWizard
 				if (list.get(i).getName().equals("原子交易"))
 					break;
 			}
-			ResourceLeafNode resourceLeafNode = new ResourceLeafNode(aop.getAopName(), aop.getAopId(), list.get(i));
+			ResourceLeafNode resourceLeafNode = new ResourceLeafNode(
+					aop.getAopName(), aop.getAopId(), list.get(i));
 			((AopNodes) list.get(i)).add(resourceLeafNode);
 			tv.refresh();
 		}
-		
+
 	}
-	
+
 	@Override
-	public boolean canFinish()
-	{
-		return page0.canFlipToNextPage() && page1.validInput() ;
-		//return page0.canFlipToNextPage() && page1.validInput();
+	public boolean canFinish() {
+		return page0.canFlipToNextPage() && page1.validInput();
+		// return page0.canFlipToNextPage() && page1.validInput();
 	}
-	
+
 }

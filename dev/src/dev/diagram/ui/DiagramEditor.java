@@ -66,6 +66,7 @@ import dev.diagram.model.ContentsModel;
 import dev.diagram.outline.TreeEditPartFactory;
 import dev.diagram.parts.PartFactory;
 import dev.util.CommonUtil;
+import dev.util.DevLogger;
 
 /**
  * 视图编辑器
@@ -73,8 +74,8 @@ import dev.util.CommonUtil;
  * @author 木木
  * 
  */
-public class DiagramEditor extends GraphicalEditorWithFlyoutPalette 
-//implements		ISaveablePart2
+public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
+// implements ISaveablePart2
 {
 	// 编辑器ID
 	public static final String ID = "dev.diagram.ui.DiagramEditor";
@@ -88,18 +89,23 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 	private String fileName;
 	// 声明视图
 	GraphicalViewer viewer;
-	public DiagramEditor()
-	{
+
+	public DiagramEditor() {
 		// 设置编辑域
 		setEditDomain(new DefaultEditDomain(this));
 
 	}
 
+	@Override
+	protected void setPartName(String partName) {
+		//setPartName("AAA");
+		//super.setPartName(partName);
+	}
+
 	/**
 	 * 配置视图
 	 */
-	protected void configureGraphicalViewer()
-	{
+	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
 		// ScalableRootEditPart可以伸缩，有滚动条工作区
 		ScalableRootEditPart rootEditPart = new ScalableRootEditPart();
@@ -128,7 +134,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 		// 注册缩小IAction
 		action = new ZoomOutAction(manager);
 		getActionRegistry().registerAction(action);
-		
+
 		getGraphicalViewer().setKeyHandler(
 				new GraphicalViewerKeyHandler(getGraphicalViewer())
 						.setParent(getCommonKeyHandler()));
@@ -137,8 +143,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 	/**
 	 * 初始化视图编辑器
 	 */
-	protected void initializeGraphicalViewer()
-	{
+	protected void initializeGraphicalViewer() {
 		// 初始化模型
 		// initModel();
 		// 设置ContentsModel模型是视图的显示内容
@@ -147,18 +152,15 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 		viewer.setContents(model);
 	}
 
-	public void doSave(IProgressMonitor monitor)
-	{
+	public void doSave(IProgressMonitor monitor) {
 		WriteToXML.writeToXML(model);
 	}
 
-	public void doSaveAs()
-	{
+	public void doSaveAs() {
 
 	}
 
-	public boolean isSaveAsAllowed()
-	{
+	public boolean isSaveAsAllowed() {
 
 		return false;
 	}
@@ -170,12 +172,10 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 	 * 
 	 */
 	class MyContentOutlinePage extends
-			org.eclipse.gef.ui.parts.ContentOutlinePage
-	{
+			org.eclipse.gef.ui.parts.ContentOutlinePage {
 		private SashForm sash;
 
-		public MyContentOutlinePage()
-		{
+		public MyContentOutlinePage() {
 			super(new TreeViewer());
 		}
 
@@ -183,8 +183,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 		ScrollableThumbnail thumbnail;
 
 		@Override
-		public void createControl(Composite parent)
-		{
+		public void createControl(Composite parent) {
 
 			sash = new SashForm(parent, SWT.VERTICAL);
 			getViewer().createControl(sash);
@@ -202,15 +201,12 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 					.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
 
-			disposeListerner = new DisposeListener()
-			{
+			disposeListerner = new DisposeListener() {
 
 				@Override
-				public void widgetDisposed(DisposeEvent e)
-				{
+				public void widgetDisposed(DisposeEvent e) {
 
-					if (thumbnail != null)
-					{
+					if (thumbnail != null) {
 						thumbnail.deactivate();
 						thumbnail = null;
 
@@ -222,22 +218,19 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 		}
 
 		@Override
-		public Control getControl()
-		{
+		public Control getControl() {
 
 			return sash;
 		}
 
 		@Override
-		protected EditPartViewer getViewer()
-		{
+		protected EditPartViewer getViewer() {
 
 			return super.getViewer();
 		}
 
 		@Override
-		public void dispose()
-		{
+		public void dispose() {
 
 			getSelectionSynchronizer().removeViewer(getViewer());
 			if (getGraphicalViewer().getControl() != null
@@ -248,8 +241,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 		}
 
 		@Override
-		public void init(IPageSite pageSite)
-		{
+		public void init(IPageSite pageSite) {
 
 			super.init(pageSite);
 			ActionRegistry registry = getActionRegistry();
@@ -263,14 +255,12 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 	}
 
 	@Override
-	protected PaletteRoot getPaletteRoot()
-	{
+	protected PaletteRoot getPaletteRoot() {
 
 		return Palette.getPaletteRoot();
 	}
 
-	public void selectionChanged(IWorkbenchPart part, ISelection selection)
-	{
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// It ignores, when getActivePage() is null
 		if (part.getSite().getWorkbenchWindow().getActivePage() == null)
 			return;
@@ -278,10 +268,8 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 	}
 
 	@Override
-	public Object getAdapter(Class type)
-	{
-		if (type == ZoomManager.class)
-		{
+	public Object getAdapter(Class type) {
+		if (type == ZoomManager.class) {
 			return ((ScalableRootEditPart) getGraphicalViewer()
 					.getRootEditPart()).getZoomManager();
 
@@ -295,8 +283,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 	 * 创建IAction
 	 */
 	@Override
-	protected void createActions()
-	{
+	protected void createActions() {
 		super.createActions();
 		ActionRegistry registry = getActionRegistry();
 		IAction action;
@@ -310,8 +297,8 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 		// 注册写入数据库action
 		action = new GenerateCodeAction(model);
 		registry.registerAction(action);
-		//注册SaveAction
-		action = new SaveAction(model,this);
+		// 注册SaveAction
+		action = new SaveAction(model, this);
 		registry.registerAction(action);
 	}
 
@@ -320,8 +307,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input)
-			throws PartInitException
-	{
+			throws PartInitException {
 
 		// 所属工程编号（Id）
 		projectId = ((DiagramEditorInput) input).getProjectId();
@@ -341,14 +327,13 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 			parent.mkdir();
 		if (file.exists())
 			file.delete();
-		try
-		{
+		try {
 			// 新建文件
 			file.createNewFile();
 
-		} catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		model = new ContentsModel(projectId, diagramId, fileName);
 		super.init(site, input);
@@ -359,8 +344,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 	 * 
 	 * @param contentsModel
 	 */
-	public void initModel()
-	{
+	public void initModel() {
 		String tfmName;
 		String tfmDesc;
 		String tfmType;
@@ -373,12 +357,10 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 		String sql = "select tfmname,tfmdesc,type,tradeid,tfmxml from t_tfm where tfmid="
 				+ Integer.parseInt(diagramId);
 		ResultSet rs;
-		try
-		{
+		try {
 			dbConnectImpl.openConn(CommonUtil.initPs(projectId));
 			rs = dbConnectImpl.retrive(sql);
-			if (rs.next())
-			{
+			if (rs.next()) {
 				tfmName = rs.getString(1);
 				tfmDesc = rs.getString(2);
 				tfmType = rs.getInt(3) + "";
@@ -388,8 +370,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 				// 获得数据库中流程图的xml文件的二进制文件
 				Blob blob = rs.getBlob(5);
 				// 二进制文件为空直接退出
-				if (blob == null)
-				{
+				if (blob == null) {
 					return;
 				}
 				// 输入流
@@ -415,64 +396,60 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette
 				// 关闭数据库连接
 				dbConnectImpl.closeConn();
 			}
-		} catch (SQLException | IOException | DocumentException e)
-		{
+		} catch (SQLException | IOException | DocumentException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 	}
 
-//	@Override
-//	public int promptToSaveOnClose()
-//	{
-//		if (isDirty())
-//		{
-//			boolean answer = MessageDialog.openQuestion(PlatformUI
-//					.getWorkbench().getActiveWorkbenchWindow().getShell(),
-//					"Close Virtual Terminal", "内容已经修改，你要保存吗?");
-//			if (!answer)
-//			{
-//				return ISaveablePart2.CANCEL;
-//			}
-//			else
-//			{
-//				WriteToXML.writeToXML(model);
-//			}
-//		}
-//		return ISaveablePart2.NO;
-//	}
+	// @Override
+	// public int promptToSaveOnClose()
+	// {
+	// if (isDirty())
+	// {
+	// boolean answer = MessageDialog.openQuestion(PlatformUI
+	// .getWorkbench().getActiveWorkbenchWindow().getShell(),
+	// "Close Virtual Terminal", "内容已经修改，你要保存吗?");
+	// if (!answer)
+	// {
+	// return ISaveablePart2.CANCEL;
+	// }
+	// else
+	// {
+	// WriteToXML.writeToXML(model);
+	// }
+	// }
+	// return ISaveablePart2.NO;
+	// }
 
 	@Override
-	public boolean isDirty()
-	{
+	public boolean isDirty() {
 		return isDirty;
 	}
 
 	@Override
-	public void commandStackChanged(EventObject event)
-	{
+	public void commandStackChanged(EventObject event) {
 		super.commandStackChanged(event);
 		getCommandStack().isDirty();
 		setIsDirty(getCommandStack().isDirty());
 	}
-	private boolean isDirty=false;
-	
-	public void setIsDirty(boolean flag)
-	{
-		isDirty=flag;
+
+	private boolean isDirty = false;
+
+	public void setIsDirty(boolean flag) {
+		isDirty = flag;
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
+
 	@Override
-	public boolean isSaveOnCloseNeeded()
-	{
+	public boolean isSaveOnCloseNeeded() {
 		return getCommandStack().isDirty();
 	}
 
 	KeyHandler sharedKeyHandler;
 
-	protected KeyHandler getCommonKeyHandler()
-	{
-		if (sharedKeyHandler == null)
-		{
+	protected KeyHandler getCommonKeyHandler() {
+		if (sharedKeyHandler == null) {
 			sharedKeyHandler = new KeyHandler();
 			sharedKeyHandler
 					.put(KeyStroke.getPressed(SWT.DEL, 127, 0),

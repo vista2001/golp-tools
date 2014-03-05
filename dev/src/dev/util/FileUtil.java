@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtil {
-	private static List<String> fileList=new ArrayList<String>();
+	private static List<String> fileList = new ArrayList<String>();
+
 	/**
 	 * 以字节为单位读取文件，常用于读二进制文件，如图片、声音、影像等文件。
 	 */
@@ -49,18 +50,21 @@ public class FileUtil {
 			br = new BufferedReader(new FileReader(file));
 			while ((aline = br.readLine()) != null) {
 				lines.add(aline);
-				DebugOut.println(aline);
+				DevLogger.printDebugMsg(aline);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		} finally {
 			if (br != null) {
 				try {
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
+					DevLogger.printError(e);
 				}
 			}
 		}
@@ -85,19 +89,20 @@ public class FileUtil {
 		try {
 			if (file.length() == 0) {
 				// 直接写入
-				//DebugOut.println("开始直接写入");
+				// DebugOut.println("开始直接写入");
 				bw = new BufferedWriter(new FileWriter(file));
 				bw.write(line);
 				bw.newLine();
 			} else {
 				// 追加写入
-				//DebugOut.println("开始追加写入");
+				// DebugOut.println("开始追加写入");
 				bw = new BufferedWriter(new FileWriter(file, true));
 				bw.write(line);
 				bw.newLine();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		} finally {
 			if (bw != null) {
 				try {
@@ -105,6 +110,7 @@ public class FileUtil {
 					bw.close();
 				} catch (IOException e) {
 					e.printStackTrace();
+					DevLogger.printError(e);
 				}
 			}
 		}
@@ -123,6 +129,7 @@ public class FileUtil {
 			bw.newLine();
 		} catch (IOException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		} finally {
 			if (bw != null) {
 				try {
@@ -130,6 +137,7 @@ public class FileUtil {
 					bw.close();
 				} catch (IOException e) {
 					e.printStackTrace();
+					DevLogger.printError(e);
 				}
 			}
 		}
@@ -149,6 +157,7 @@ public class FileUtil {
 			bw.newLine();
 		} catch (IOException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		} finally {
 			if (bw != null) {
 				try {
@@ -156,6 +165,7 @@ public class FileUtil {
 					bw.close();
 				} catch (IOException e) {
 					e.printStackTrace();
+					DevLogger.printError(e);
 				}
 			}
 		}
@@ -169,19 +179,16 @@ public class FileUtil {
 			fw = new FileWriter(file);
 			fw.write("");
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
-		}
-		finally
-		{
-		    try
-            {
-                fw.close();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+			DevLogger.printError(e);
+		} finally {
+			try {
+				fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				DevLogger.printError(e);
+			}
 		}
 	}
 
@@ -193,143 +200,134 @@ public class FileUtil {
 		return true;
 
 	}
-	/**创建一个文件*/
-	public static boolean createFile(String path){
-		if(path.endsWith(File.separator)){
-		    DebugOut.println("这不是一个文件:"+path);
+
+	/** 创建一个文件 */
+	public static boolean createFile(String path) {
+		if (path.endsWith(File.separator)) {
+			DevLogger.printDebugMsg("这不是一个文件:" + path);
 			return false;
 		}
-		File file=new File(path);
+		File file = new File(path);
 		try {
 			file.createNewFile();
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		return false;
 	}
 
-	public static boolean createMultiDir(String absPath){
-		//逐级创建
-		//这个方法如果给出的是相对路径，那么创建的文件夹可能会在当前工作区的根盘符下
-		File dirs=new File(absPath);
+	public static boolean createMultiDir(String absPath) {
+		// 逐级创建
+		// 这个方法如果给出的是相对路径，那么创建的文件夹可能会在当前工作区的根盘符下
+		File dirs = new File(absPath);
 		dirs.mkdirs();
 		return dirs.exists();
 	}
 
-    public static List<String> iteratorDirs(String rootPath, List<String> last)
-    {
-        // List<String> last=last;
+	public static List<String> iteratorDirs(String rootPath, List<String> last) {
+		// List<String> last=last;
 
-        File dir = new File(rootPath);
-        File[] files = dir.listFiles();
-        if (files == null)
-        {
-            return last;
-        }
-        else
-        {
-            if (last == null)
-            {
-                last = new ArrayList<String>();
-            }
-            for (int i = 0; i < files.length; i++)
-            {
-                if (files[i].isDirectory())
-                {
-                    // DebugOut.println(files[i].getAbsolutePath());
-                    last.add(files[i].getAbsolutePath() + File.separator);
-                    iteratorDirs(files[i].getAbsolutePath(), last);
-                }
-                else
-                {
-                    // String strFileName = files[i].getAbsolutePath();
-                    // DebugOut.println("---"+strFileName);
-                    last.add(files[i].getAbsolutePath());
-                }
-            }
+		File dir = new File(rootPath);
+		File[] files = dir.listFiles();
+		if (files == null) {
+			return last;
+		} else {
+			if (last == null) {
+				last = new ArrayList<String>();
+			}
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					// DebugOut.println(files[i].getAbsolutePath());
+					last.add(files[i].getAbsolutePath() + File.separator);
+					iteratorDirs(files[i].getAbsolutePath(), last);
+				} else {
+					// String strFileName = files[i].getAbsolutePath();
+					// DebugOut.println("---"+strFileName);
+					last.add(files[i].getAbsolutePath());
+				}
+			}
 
-        }
-        return last;
-    }
+		}
+		return last;
+	}
 
-    public static void main(String[] args)
-    {
-        String fileName = "e:\\test\\2";
-        // addToWriteFileByLine(fileName, "hahaha2");
-        // WriteBlankFileByLine(fileName, "hahaha1");
-        // createFile("f:/sss.txt");
-        // DebugOut.println(File.separator);
-        // DebugOut.println(File.separatorChar);
-        // DebugOut.println(createMultiDir("f:/ggeeff/gef/gmf/g"));
-        // DebugOut.println(createMultiDir(""));
-        File f = new File(fileName);
-//        try
-//        {
-            System.out.println(f.getParent());
-//        }
-//        catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
-        List<String> a = new ArrayList<String>();
-        a = iteratorDirs(fileName, null);
-//        for(String s : a)
-//        {
-//            System.out.println(s);
-//        }
-//        for (int i = 0; i < a.size(); i++)
-//        {
-//            System.out.println(a.get(i));
-//        }
-        String projectPath = "e:\\target";
-        
-        System.out.println("123456".substring(0));
-        
-//        Process p = null;
-//
-//        try
-//        {
-//            p = Runtime.getRuntime().exec("cmd /c xcopy " + fileName + " " + projectPath + "/e");
-//            p.waitFor();
-//        }
-//        catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        catch (InterruptedException e)
-//        {
-//            e.printStackTrace();
-//        }
-        
+	public static void main(String[] args) {
+		String fileName = "e:\\test\\2";
+		// addToWriteFileByLine(fileName, "hahaha2");
+		// WriteBlankFileByLine(fileName, "hahaha1");
+		// createFile("f:/sss.txt");
+		// DebugOut.println(File.separator);
+		// DebugOut.println(File.separatorChar);
+		// DebugOut.println(createMultiDir("f:/ggeeff/gef/gmf/g"));
+		// DebugOut.println(createMultiDir(""));
+		File f = new File(fileName);
+		// try
+		// {
+		DevLogger.printDebugMsg(f.getParent());
+		// }
+		// catch (IOException e)
+		// {
+		// e.printStackTrace();DevLogger.printError(e);
+		// }
+		List<String> a = new ArrayList<String>();
+		a = iteratorDirs(fileName, null);
+		// for(String s : a)
+		// {
+		// DevLogger.printDebugMsg(s);
+		// }
+		// for (int i = 0; i < a.size(); i++)
+		// {
+		// DevLogger.printDebugMsg(a.get(i));
+		// }
+		String projectPath = "e:\\target";
 
-        
-//        for (String string : a)
-//        {
-//            String sourceString = string;
-//            string = projectPath + string.substring(7);
-//            DebugOut.println(string);
-//            DebugOut.println(sourceString);
-//            
-////            if (string.endsWith(File.separator))
-////            {
-////                FileUtil.createMultiDir(string);
-////            }
-////            else
-////            {
-////                FileUtil.createFile(string);
-////                if (!FileUtil.isFileBlank(sourceString))
-////                {
-////                    List<String> sourceFile = FileUtil.readFileByLines(sourceString);
-////                    for (String string2 : sourceFile)
-////                    {
-////                        FileUtil.writeFileByLine(string, string2);
-////                    }
-////                }
-////            }
-//
-//        }
-        // DebugOut.println(a.toArray().toString());
-    }
-	
+		DevLogger.printDebugMsg("123456".substring(0));
+
+		// Process p = null;
+		//
+		// try
+		// {
+		// p = Runtime.getRuntime().exec("cmd /c xcopy " + fileName + " " +
+		// projectPath + "/e");
+		// p.waitFor();
+		// }
+		// catch (IOException e)
+		// {
+		// e.printStackTrace();DevLogger.printError(e);
+		// }
+		// catch (InterruptedException e)
+		// {
+		// e.printStackTrace();DevLogger.printError(e);
+		// }
+
+		// for (String string : a)
+		// {
+		// String sourceString = string;
+		// string = projectPath + string.substring(7);
+		// DebugOut.println(string);
+		// DebugOut.println(sourceString);
+		//
+		// // if (string.endsWith(File.separator))
+		// // {
+		// // FileUtil.createMultiDir(string);
+		// // }
+		// // else
+		// // {
+		// // FileUtil.createFile(string);
+		// // if (!FileUtil.isFileBlank(sourceString))
+		// // {
+		// // List<String> sourceFile = FileUtil.readFileByLines(sourceString);
+		// // for (String string2 : sourceFile)
+		// // {
+		// // FileUtil.writeFileByLine(string, string2);
+		// // }
+		// // }
+		// // }
+		//
+		// }
+		// DebugOut.println(a.toArray().toString());
+	}
+
 }

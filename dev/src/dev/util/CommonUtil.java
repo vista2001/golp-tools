@@ -20,33 +20,29 @@ import org.eclipse.jface.preference.PreferenceStore;
  * 
  * @author rxy
  */
-public class CommonUtil
-{
+public class CommonUtil {
 
-    /**
-     * 将指定工程ID对应的本地文件*.properties加载到一个PreferenceStore对象中，返回这个对象
-     * 
-     * @param projectId
-     *            指定工程的ID
-     * @return 加载了*.properties文件的PreferenceStore对象
-     */
-    public static PreferenceStore initPs(String projectId)
-    {
-        IWorkspace workspace = ResourcesPlugin.getWorkspace();
-        IWorkspaceRoot root = workspace.getRoot();
-        IProject project = root.getProject(projectId);
-        String propertyPath = project.getLocationURI().toString().substring(6)
-                              + File.separator + projectId + ".properties";
-        PreferenceStore ps = new PreferenceStore(propertyPath);
-        try
-        {
-            ps.load();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return ps;
-    }
+	/**
+	 * 将指定工程ID对应的本地文件*.properties加载到一个PreferenceStore对象中，返回这个对象
+	 * 
+	 * @param projectId
+	 *            指定工程的ID
+	 * @return 加载了*.properties文件的PreferenceStore对象
+	 */
+	public static PreferenceStore initPs(String projectId) {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot root = workspace.getRoot();
+		IProject project = root.getProject(projectId);
+		String propertyPath = project.getLocationURI().toString().substring(6)
+				+ File.separator + projectId + ".properties";
+		PreferenceStore ps = new PreferenceStore(propertyPath);
+		try {
+			ps.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+			DevLogger.printError(e);
+		}
+		return ps;
+	}
 
 }

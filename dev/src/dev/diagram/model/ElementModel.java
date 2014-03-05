@@ -16,8 +16,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @author Ä¾Ä¾
  * 
  */
-public abstract class ElementModel extends AbstractModel
-{
+public abstract class ElementModel extends AbstractModel {
 
 	// Ä£ÐÍ±àºÅ
 	private final int id;
@@ -38,18 +37,15 @@ public abstract class ElementModel extends AbstractModel
 
 	public abstract String getTypeName();
 
-	public ElementModel()
-	{
+	public ElementModel() {
 		id = generateNumber();
 	}
 
-	public Rectangle getConstraint()
-	{
+	public Rectangle getConstraint() {
 		return constraint;
 	}
 
-	public void setConstraint(Rectangle constraint)
-	{
+	public void setConstraint(Rectangle constraint) {
 		this.constraint = constraint;
 		firePropertyChange(ElementModel.CONSTRAINT, null, constraint);
 	}
@@ -61,55 +57,49 @@ public abstract class ElementModel extends AbstractModel
 	 * 
 	 * @return
 	 */
-	private int generateNumber()
-	{
+	private int generateNumber() {
 		return ++number;
 	}
-	public int getId()
-	{
+
+	public int getId() {
 		return id;
 	}
-	public static void setNumber(int n)
-	{
-		number=n;
+
+	public static void setNumber(int n) {
+		number = n;
 	}
+
 	@Override
-	public Object getEditableValue()
-	{
+	public Object getEditableValue() {
 
 		return null;
 	}
 
 	@Override
-	public IPropertyDescriptor[] getPropertyDescriptors()
-	{
+	public IPropertyDescriptor[] getPropertyDescriptors() {
 
 		return new IPropertyDescriptor[0];
 	}
 
 	@Override
-	public Object getPropertyValue(Object id)
-	{
+	public Object getPropertyValue(Object id) {
 
 		return null;
 	}
 
 	@Override
-	public boolean isPropertySet(Object id)
-	{
+	public boolean isPropertySet(Object id) {
 
 		return false;
 	}
 
 	@Override
-	public void resetPropertyValue(Object id)
-	{
+	public void resetPropertyValue(Object id) {
 
 	}
 
 	@Override
-	public void setPropertyValue(Object id, Object value)
-	{
+	public void setPropertyValue(Object id, Object value) {
 
 	}
 
@@ -120,13 +110,11 @@ public abstract class ElementModel extends AbstractModel
 	public static final String P_SOURCE_CONNECTION = "source_connection";
 	public static final String P_TARGET_CONNECTION = "target_connection";
 
-	public List<AbstractConnectionModel> getSourceConnection()
-	{
+	public List<AbstractConnectionModel> getSourceConnection() {
 		return sourceConnection;
 	}
 
-	public List<AbstractConnectionModel> getTargetConnection()
-	{
+	public List<AbstractConnectionModel> getTargetConnection() {
 		return targetConnection;
 	}
 
@@ -135,8 +123,7 @@ public abstract class ElementModel extends AbstractModel
 	 * 
 	 * @param connx
 	 */
-	public void addSourceConnection(AbstractConnectionModel connx)
-	{
+	public void addSourceConnection(AbstractConnectionModel connx) {
 
 		sourceConnection.add(connx);
 		firePropertyChange(P_SOURCE_CONNECTION, null, null);
@@ -147,8 +134,7 @@ public abstract class ElementModel extends AbstractModel
 	 * 
 	 * @param connx
 	 */
-	public void addTargetConnection(AbstractConnectionModel connx)
-	{
+	public void addTargetConnection(AbstractConnectionModel connx) {
 		targetConnection.add(connx);
 		firePropertyChange(P_TARGET_CONNECTION, null, null);
 	}
@@ -158,8 +144,7 @@ public abstract class ElementModel extends AbstractModel
 	 * 
 	 * @param connx
 	 */
-	public void removeSourceConnection(AbstractConnectionModel connx)
-	{
+	public void removeSourceConnection(AbstractConnectionModel connx) {
 
 		sourceConnection.remove(connx);
 		firePropertyChange(P_SOURCE_CONNECTION, null, null);
@@ -170,19 +155,16 @@ public abstract class ElementModel extends AbstractModel
 	 * 
 	 * @param connx
 	 */
-	public void removeTargetConnection(AbstractConnectionModel connx)
-	{
+	public void removeTargetConnection(AbstractConnectionModel connx) {
 		targetConnection.remove(connx);
 		firePropertyChange(P_TARGET_CONNECTION, null, null);
 	}
 
-	public List<AbstractConnectionModel> getModelSourceConnections()
-	{
+	public List<AbstractConnectionModel> getModelSourceConnections() {
 		return sourceConnection;
 	}
 
-	public List<AbstractConnectionModel> getModelTargetConnections()
-	{
+	public List<AbstractConnectionModel> getModelTargetConnections() {
 		return targetConnection;
 	}
 

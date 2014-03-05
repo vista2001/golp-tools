@@ -14,17 +14,16 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import dev.actions.PrjPropertyAction;
 
-public class OpenProperty extends AbstractHandler
-{
-    @Override
-    public Object execute(ExecutionEvent event) throws ExecutionException
-    {
-        IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-        if (window == null)
-            return null;
-        PrjPropertyAction action = new PrjPropertyAction(window);
-        action.run();
-        return null;
-    }
+public class OpenProperty extends AbstractHandler {
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		IWorkbenchWindow window = HandlerUtil
+				.getActiveWorkbenchWindowChecked(event);
+		if (window == null)
+			return null;
+		PrjPropertyAction action = new PrjPropertyAction(window);
+		action.run();
+		return null;
+	}
 
 }

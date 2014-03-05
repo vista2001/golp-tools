@@ -18,8 +18,7 @@ import dev.diagram.model.StartModel;
  * @author 木木
  * 
  */
-public class CreateConnectionCommand extends Command
-{
+public class CreateConnectionCommand extends Command {
 	// 源节点（块）
 	private ElementModel source;
 	// 指向节点（块）
@@ -31,8 +30,7 @@ public class CreateConnectionCommand extends Command
 	 * 执行前判断此连接命令是否可执行 如开始节点不容许作为目标节点，结束节点没有出边（不作为源节点）
 	 */
 	@Override
-	public boolean canExecute()
-	{
+	public boolean canExecute() {
 		if (source == null || target == null)
 			return false;
 		else if (source.equals(target))
@@ -51,8 +49,7 @@ public class CreateConnectionCommand extends Command
 	 * 
 	 * @return
 	 */
-	public ElementModel getSource()
-	{
+	public ElementModel getSource() {
 		return source;
 	}
 
@@ -61,8 +58,7 @@ public class CreateConnectionCommand extends Command
 	 * 
 	 * @return
 	 */
-	public ElementModel getTarget()
-	{
+	public ElementModel getTarget() {
 		return target;
 	}
 
@@ -71,8 +67,7 @@ public class CreateConnectionCommand extends Command
 	 * 
 	 * @return
 	 */
-	public AbstractConnectionModel getConnection()
-	{
+	public AbstractConnectionModel getConnection() {
 		return connection;
 	}
 
@@ -81,25 +76,22 @@ public class CreateConnectionCommand extends Command
 	 * 
 	 * @param connection
 	 */
-	public void setConnection(Object connection)
-	{
+	public void setConnection(Object connection) {
 		this.connection = (AbstractConnectionModel) connection;
 	}
 
 	/**
 	 * 执行命令，即对当前的边的连接的俩个节点加入边的信息
 	 */
-	public void execute()
-	{
+	public void execute() {
 		EdgeListLimitDialog dialog = new EdgeListLimitDialog(PlatformUI
 				.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				(CommonModel) source);
-		if(dialog.open()==Window.OK)
-		{
+		if (dialog.open() == Window.OK) {
 			connection.attachSource();
 			connection.attachTarget();
 			connection.setWeight(dialog.getText());
-			
+
 		}
 
 	}
@@ -109,8 +101,7 @@ public class CreateConnectionCommand extends Command
 	 * 
 	 * @param model
 	 */
-	public void setSource(Object model)
-	{
+	public void setSource(Object model) {
 		source = (ElementModel) model;
 		connection.setSource(source);
 
@@ -121,8 +112,7 @@ public class CreateConnectionCommand extends Command
 	 * 
 	 * @param model
 	 */
-	public void setTarget(Object model)
-	{
+	public void setTarget(Object model) {
 		target = (ElementModel) model;
 		connection.setTarget(target);
 	}
@@ -130,8 +120,7 @@ public class CreateConnectionCommand extends Command
 	/**
 	 * 撤销
 	 */
-	public void undo()
-	{
+	public void undo() {
 		connection.detachSource();
 		connection.detachTarget();
 	}

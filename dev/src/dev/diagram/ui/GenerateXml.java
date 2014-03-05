@@ -19,8 +19,7 @@ import dev.diagram.beans.TfmEdge;
 import dev.diagram.beans.TfmException;
 import dev.diagram.beans.TfmExtendAop;
 
-public class GenerateXml
-{
+public class GenerateXml {
 	/**
 	 * 读取保存流程图的xml文件
 	 * 
@@ -29,8 +28,7 @@ public class GenerateXml
 	 * @return
 	 * @throws DocumentException
 	 */
-	public static TfmBean readTfmXml(String filename) throws DocumentException
-	{
+	public static TfmBean readTfmXml(String filename) throws DocumentException {
 		File file = new File(filename);
 		TfmBean tfmBean = new TfmBean();
 		SAXReader saxReader = new SAXReader();
@@ -56,8 +54,7 @@ public class GenerateXml
 		List<?> edgesElement = root.element("edges").elements("edge");
 		List<?> nodesElement = root.element("nodes").elements("node");
 		// 解析流程图的节点block
-		for (Object object : nodesElement)
-		{
+		for (Object object : nodesElement) {
 			// nodePropertyElement 名称为node节点下的一级节点
 			// 遍历流程图的节点
 			// for (Object object : nodePropertyElement) {
@@ -80,8 +77,7 @@ public class GenerateXml
 			block.setDesc(nodeElement.elementText("desc"));
 			block.setNestedtfm(nodeElement.elementText("nestedtfm"));
 			// 遍历extendaops节点的每一个extendaop节点
-			for (Object extendaop : extendaopElements)
-			{
+			for (Object extendaop : extendaopElements) {
 				TfmExtendAop tfmExtendAop = new TfmExtendAop();
 				// TfmCommDeal tfmCommDeal=tfmExtendAop;
 				// 访问extendaop节点的内容
@@ -107,8 +103,7 @@ public class GenerateXml
 			// }
 		}
 		// 解析edge节点
-		for (Object edge : edgesElement)
-		{
+		for (Object edge : edgesElement) {
 			Element edgeElement = (Element) edge;
 			TfmEdge tfmEdge = new TfmEdge();
 			tfmEdge.setTfmId(edgeElement.elementText("tfmid"));
@@ -118,8 +113,7 @@ public class GenerateXml
 			edgesList.add(tfmEdge);
 		}
 		// 解析exception节点
-		for (Object exception : exceptionsElement)
-		{
+		for (Object exception : exceptionsElement) {
 			Element exceptionElement = (Element) exception;
 			TfmException tfmException = new TfmException();
 			// TfmCommDeal tfmCommDeal=tfmException.getTfmCommDeal();
@@ -127,8 +121,7 @@ public class GenerateXml
 			exceptionList.add(tfmException);
 		}
 		// 解析compersation节点
-		for (Object compersation : compersationsElement)
-		{
+		for (Object compersation : compersationsElement) {
 			Element compersationElement = (Element) compersation;
 			TfmCompersation tfmCompersation = new TfmCompersation();
 			// TfmCommDeal tfmCommDeal=tfmCompersation.getTfmCommDeal();
@@ -152,8 +145,7 @@ public class GenerateXml
 	 * @throws IOException
 	 */
 	public static void writeTfmXml(String filename, TfmBean tfmBean)
-			throws IOException
-	{
+			throws IOException {
 		File wfile = new File(filename);
 		Document wdocument = DocumentHelper.createDocument();
 		Element wroot = wdocument.addElement("tfm");
@@ -172,24 +164,21 @@ public class GenerateXml
 		Element wnodes = wroot.addElement("nodes");
 		Element wedges = wroot.addElement("edges");
 		List<?> exceptionsList = tfmBean.getTfmExceptionList();
-		for (Object object : exceptionsList)
-		{
+		for (Object object : exceptionsList) {
 			TfmException tfmException = (TfmException) object;
 			// TfmCommDeal tfmCommDeal=tfmException.getTfmCommDeal();
 			Element exception = wexceptions.addElement("exception");
 			getTfmCommDealNode(exception, tfmException);
 		}
 		List<?> wcompersationsList = tfmBean.getTfmCompersationList();
-		for (Object object : wcompersationsList)
-		{
+		for (Object object : wcompersationsList) {
 			TfmCompersation compersation1 = (TfmCompersation) object;
 			// TfmCommDeal tfmCommDeal=compersation1.getTfmCommDeal();
 			Element compersation = wcompersations.addElement("compersation");
 			getTfmCommDealNode(compersation, compersation1);
 		}
 		List<?> wedgesList = tfmBean.getTfmEdgesList();
-		for (Object object : wedgesList)
-		{
+		for (Object object : wedgesList) {
 			TfmEdge edge = (TfmEdge) object;
 			Element tfmEdge = wedges.addElement("edge");
 			Element tfmid = tfmEdge.addElement("tfmid");
@@ -203,8 +192,7 @@ public class GenerateXml
 			weight.setText(edge.getWeight());
 		}
 		List<?> wnodeList = tfmBean.getTfmBlockList();
-		for (Object object : wnodeList)
-		{
+		for (Object object : wnodeList) {
 			TfmBlock tfmBlock = (TfmBlock) object;
 			Element node = wnodes.addElement("node");
 			Element name = node.addElement("name");
@@ -235,8 +223,7 @@ public class GenerateXml
 			width.setText(tfmBlock.getWidth());
 			Element extendaops = node.addElement("extendaops");
 			List<?> extendAops = tfmBlock.getTfmExtendAopsList();
-			for (Object extendAop : extendAops)
-			{
+			for (Object extendAop : extendAops) {
 				TfmExtendAop tfmExtendAop = (TfmExtendAop) extendAop;
 				Element tfmaop = extendaops.addElement("extendaop");
 				Element exname = tfmaop.addElement("name");
@@ -265,8 +252,7 @@ public class GenerateXml
 	}
 
 	private static void getTfmCommDealDetail(TfmCommDeal tfmCommDeal,
-			Element element)
-	{
+			Element element) {
 		tfmCommDeal.setName(element.elementText("name"));
 		tfmCommDeal.setDesc(element.elementText("desc"));
 		tfmCommDeal.setTfmId(element.elementText("tfmid"));
@@ -276,8 +262,7 @@ public class GenerateXml
 	}
 
 	private static Element getTfmCommDealNode(Element node,
-			TfmCommDeal tfmCommDeal)
-	{
+			TfmCommDeal tfmCommDeal) {
 		Element name = node.addElement("name");
 		name.setText(tfmCommDeal.getName());
 		Element desc = node.addElement("desc");

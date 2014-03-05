@@ -25,39 +25,35 @@ import dev.diagram.model.AbstractConnectionModel;
 import dev.diagram.model.CommonModel;
 import dev.diagram.model.ContentsModel;
 import dev.util.CommonUtil;
+import dev.util.DevLogger;
 
-public class EdgeListLimitDialog extends Dialog
-{
+public class EdgeListLimitDialog extends Dialog {
 	private CommonModel commonModel;
 	private ContentsModel contentsModel;
 	private Table table;
 	private String text;
 
-	public EdgeListLimitDialog(Shell parentShell, CommonModel commonModel)
-	{
+	public EdgeListLimitDialog(Shell parentShell, CommonModel commonModel) {
 		super(parentShell);
 		this.commonModel = commonModel;
 		this.contentsModel = commonModel.getContentModel();
 	}
 
 	@Override
-	protected void configureShell(Shell newShell)
-	{
+	protected void configureShell(Shell newShell) {
 		newShell.setText("边权值选择");
 		super.configureShell(newShell);
 
 	}
 
 	@Override
-	protected void createButtonsForButtonBar(Composite parent)
-	{
+	protected void createButtonsForButtonBar(Composite parent) {
 		super.createButtonsForButtonBar(parent);
 		getButton(OK).setEnabled(false);
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent)
-	{
+	protected Control createDialogArea(Composite parent) {
 		Composite area = (Composite) super.createDialogArea(parent);
 		area.setLayout(new GridLayout(1, false));
 
@@ -83,17 +79,14 @@ public class EdgeListLimitDialog extends Dialog
 		TableColumn tblclmnNewColumn_1 = new TableColumn(table, SWT.NONE);
 		tblclmnNewColumn_1.setWidth(100);
 		tblclmnNewColumn_1.setText("\u72B6\u6001");
-		table.addSelectionListener(new SelectionListener()
-		{
+		table.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int index = table.getSelectionIndex();
 				if (index >= 0
 						&& !table.getItem(index).getBackground()
-								.equals(ColorConstants.gray))
-				{
+								.equals(ColorConstants.gray)) {
 					text = table.getItem(index).getText(0);
 					getButton(OK).setEnabled(true);
 				} else
@@ -101,60 +94,50 @@ public class EdgeListLimitDialog extends Dialog
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e)
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
 
 		String[] edgeList = SetEdgeList().split("\\|");
-		for (int i = 0; i < edgeList.length; i++)
-		{
+		for (int i = 0; i < edgeList.length; i++) {
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			tableItem.setText(edgeList[i]);
-			if (findEdge(edgeList[i]))
-			{
+			if (findEdge(edgeList[i])) {
 				tableItem.setBackground(ColorConstants.gray);
 				tableItem.setText(1, "已存在");
-			} else
-			{
+			} else {
 				tableItem.setText(1, "可以选择");
 			}
 		}
 		return area;
 	}
 
-	public String SetEdgeList()
-	{
+	public String SetEdgeList() {
 		String str = "999|";
 		String aopId = commonModel.getTfmBlock().getAopName();
 		DbConnectImpl dbConnectImpl = DbConnFactory.dbConnCreator();
 		String sql = "select aopretval from aop where aopid ='" + aopId + "'";
 		ResultSet rs;
-		try
-		{
+		try {
 			dbConnectImpl.openConn(CommonUtil.initPs(contentsModel.projectId));
 			rs = dbConnectImpl.retrive(sql);
-			if (rs.next())
-			{
+			if (rs.next()) {
 				str += rs.getString(1);
 			}
-		} catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		return new String(str);
 	}
 
-	public String getText()
-	{
+	public String getText() {
 		return text;
 	}
 
-	private boolean findEdge(String val)
-	{
-		for (AbstractConnectionModel edge : commonModel.getSourceConnection())
-		{
+	private boolean findEdge(String val) {
+		for (AbstractConnectionModel edge : commonModel.getSourceConnection()) {
 			if (val.equals((edge.getWeight() + "")))
 				return true;
 		}
@@ -162,8 +145,7 @@ public class EdgeListLimitDialog extends Dialog
 	}
 
 	@Override
-	protected void okPressed()
-	{
+	protected void okPressed() {
 
 		super.okPressed();
 	}

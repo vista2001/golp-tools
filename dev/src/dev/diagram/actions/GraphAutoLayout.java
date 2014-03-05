@@ -7,21 +7,21 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import dev.Application;
 import dev.diagram.model.ContentsModel;
+
 /**
  * 自动布局动作
  * 
  */
-public class GraphAutoLayout extends SelectionAction
-{
-	//自动布局的ID
-	//自动布局的对象contentsModel
+public class GraphAutoLayout extends SelectionAction {
+	// 自动布局的ID
+	// 自动布局的对象contentsModel
 	private ContentsModel contentsModel;
 	public final static String ID = "Action.GraphAutoLayout";
+
 	/**
 	 * 初始化信息
 	 */
-	public GraphAutoLayout(IWorkbenchPart part, ContentsModel contentsModel)
-	{
+	public GraphAutoLayout(IWorkbenchPart part, ContentsModel contentsModel) {
 		// TODO Auto-generated constructor stub
 		super(part);
 		this.contentsModel = contentsModel;
@@ -32,23 +32,23 @@ public class GraphAutoLayout extends SelectionAction
 		setImageDescriptor(descriptor);
 
 	}
-/*
- * 
- * (non-Javadoc)
- * @see org.eclipse.jface.action.Action#run()
- */
+
+	/*
+	 * 
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.action.Action#run()
+	 */
 	@Override
-	public void run()
-	{
-		//根据按钮被选择的状态进行自动布局
+	public void run() {
+		// 根据按钮被选择的状态进行自动布局
 		setChecked(!isChecked());
 		contentsModel.setAutoLayout(isChecked());
 	}
 
 	@Override
-	protected boolean calculateEnabled()
-	{
-		
+	protected boolean calculateEnabled() {
+
 		return true;
 	}
 

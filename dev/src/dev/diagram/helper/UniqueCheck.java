@@ -9,21 +9,15 @@ import dev.diagram.model.ContentsModel;
  * @author 木木
  * 
  */
-public class UniqueCheck
-{
-	public static boolean check(CommonModel child, ContentsModel contentsModel)
-	{
+public class UniqueCheck {
+	public static boolean check(CommonModel child, ContentsModel contentsModel) {
 		// 判断是否是开始或结束节点
-		if (child.getTypeId() == 4 || child.getTypeId() == 5)
-		{
+		if (child.getTypeId() == 4 || child.getTypeId() == 5) {
 			// 扫描当前图的所有节点，是否已经存在这俩个节点
-			for (int i = 1; i < contentsModel.getChildren().size(); i++)
-			{
-				if (contentsModel.getChildren().get(i) instanceof CommonModel)
-				{
+			for (int i = 1; i < contentsModel.getChildren().size(); i++) {
+				if (contentsModel.getChildren().get(i) instanceof CommonModel) {
 					if (child.getTypeId() == ((CommonModel) contentsModel
-							.getChildren().get(i)).getTypeId())
-					{
+							.getChildren().get(i)).getTypeId()) {
 						// MessageDialog dig = new MessageDialog(UIPlugin
 						// .getDefault().getWorkbench().getDisplay()
 						// .getActiveShell(), "错误", null,

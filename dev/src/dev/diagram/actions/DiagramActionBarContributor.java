@@ -13,14 +13,12 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.LabelRetargetAction;
 
-public class DiagramActionBarContributor extends ActionBarContributor
-{
+public class DiagramActionBarContributor extends ActionBarContributor {
 	/**
 	 * 创建action
 	 */
 	@Override
-	protected void buildActions()
-	{
+	protected void buildActions() {
 		// 撤销acion
 		addRetargetAction(new UndoRetargetAction());
 		// 回复action
@@ -35,13 +33,12 @@ public class DiagramActionBarContributor extends ActionBarContributor
 		addRetargetAction(new ZoomOutRetargetAction());
 		// 写入数据库action
 		addRetargetAction(new LabelRetargetAction(GenerateCodeAction.ID, null));
-		//保存xml
+		// 保存xml
 		addRetargetAction(new LabelRetargetAction(SaveAction.ID, null));
 	}
 
 	@Override
-	protected void declareGlobalActionKeys()
-	{
+	protected void declareGlobalActionKeys() {
 
 		addGlobalActionKey(GraphAutoLayout.ID);
 		addGlobalActionKey(GenerateCodeAction.ID);
@@ -52,8 +49,7 @@ public class DiagramActionBarContributor extends ActionBarContributor
 	 * action加入工具栏中
 	 */
 	@Override
-	public void contributeToToolBar(IToolBarManager toolBarManager)
-	{
+	public void contributeToToolBar(IToolBarManager toolBarManager) {
 		toolBarManager.add(getAction(ActionFactory.UNDO.getId()));
 		toolBarManager.add(getAction(ActionFactory.REDO.getId()));
 		toolBarManager.add(getAction(ActionFactory.DELETE.getId()));

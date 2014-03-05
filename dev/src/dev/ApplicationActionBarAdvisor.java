@@ -18,25 +18,24 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
-    private IWorkbenchAction aboutAction;
-    
-    public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
-        super(configurer);
-    }
+	private IWorkbenchAction aboutAction;
 
-    protected void makeActions(IWorkbenchWindow window) {
-        aboutAction = ActionFactory.ABOUT.create(window);
-        register(aboutAction);
-    }
+	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
+		super(configurer);
+	}
 
-    protected void fillMenuBar(IMenuManager menuBar) {
-    }
-    
-    protected void fillCoolBar(ICoolBarManager coolBar) {
-        IToolBarManager toolbar = new ToolBarManager(coolBar.getStyle());
-//        toolbar.add(aboutAction);
-        coolBar.add(toolbar);
-    }
-    
-    
+	protected void makeActions(IWorkbenchWindow window) {
+		aboutAction = ActionFactory.ABOUT.create(window);
+		register(aboutAction);
+	}
+
+	protected void fillMenuBar(IMenuManager menuBar) {
+	}
+
+	protected void fillCoolBar(ICoolBarManager coolBar) {
+		IToolBarManager toolbar = new ToolBarManager(coolBar.getStyle());
+		// toolbar.add(aboutAction);
+		coolBar.add(toolbar);
+	}
+
 }

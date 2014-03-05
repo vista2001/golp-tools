@@ -6,13 +6,11 @@ package dev.diagram.model;
  * @author Ä¾Ä¾
  * 
  */
-public class ConditionModel extends CommonModel
-{
+public class ConditionModel extends CommonModel {
 	private final static String name = "Ìõ¼þ";
 	private final static int typeId = 0;
 
-	public ConditionModel()
-	{
+	public ConditionModel() {
 		super(typeId, name);
 	}
 }

@@ -7,13 +7,11 @@ import dev.model.base.ResourceLeafNode;
 import dev.model.base.ResourceNode;
 import dev.model.base.TreeNode;
 
+public class AopNodes extends ResourceNode {
 
-public class AopNodes extends ResourceNode{
-
-	
 	public AopNodes(String name, String id, TreeNode parent) {
 		super(name, id, parent);
-		this.children=new ArrayList<TreeNode>();
+		this.children = new ArrayList<TreeNode>();
 	}
 
 	@Override
@@ -48,7 +46,7 @@ public class AopNodes extends ResourceNode{
 
 	@Override
 	public boolean hasChildren() {
-		if(this.children==null||this.children.isEmpty()){
+		if (this.children == null || this.children.isEmpty()) {
 			return false;
 		}
 		return !this.children.isEmpty();
@@ -57,5 +55,5 @@ public class AopNodes extends ResourceNode{
 	public void add(ResourceLeafNode rln) {
 		this.children.add(rln);
 	}
-	
+
 }

@@ -26,14 +26,12 @@ import dev.diagram.policies.CustomXYLayoutEditPolicy;
  * @author 木木
  * 
  */
-public class ContentsModelPart extends EditPartWithListener
-{
+public class ContentsModelPart extends EditPartWithListener {
 	/**
 	 * 创建图形，这里只建一个层，作为所有图形的父亲，层并不显示在视图中
 	 */
 	@Override
-	protected IFigure createFigure()
-	{
+	protected IFigure createFigure() {
 
 		Figure figure = new Layer();
 		return figure;
@@ -49,8 +47,7 @@ public class ContentsModelPart extends EditPartWithListener
 	 * 刷新视图，实现刷新前判断使用何种布局管理器
 	 * 
 	 */
-	public void refreshVisuals()
-	{
+	public void refreshVisuals() {
 		ContentsModel contentsModel = (ContentsModel) getModel();
 		if (contentsModel.isAutoLayout())
 			figure.setLayoutManager(graphLayout);
@@ -62,8 +59,7 @@ public class ContentsModelPart extends EditPartWithListener
 	 * 安装策略
 	 */
 	@Override
-	protected void createEditPolicies()
-	{
+	protected void createEditPolicies() {
 		// 安装XY布局管理器，这种管理器容许图形的位置和大小发生改变
 		installEditPolicy(EditPolicy.LAYOUT_ROLE,
 				new CustomXYLayoutEditPolicy());
@@ -74,8 +70,7 @@ public class ContentsModelPart extends EditPartWithListener
 	 * 返回子模型链表，自动调用；显示视图的时候通过返回的子模型链表显示子图形
 	 */
 	@Override
-	protected List<?> getModelChildren()
-	{
+	protected List<?> getModelChildren() {
 		return ((ContentsModel) getModel()).getChildren();
 	}
 
@@ -83,11 +78,9 @@ public class ContentsModelPart extends EditPartWithListener
 	 * 激活触发器后执行函数
 	 */
 	@Override
-	public void propertyChange(PropertyChangeEvent e)
-	{
+	public void propertyChange(PropertyChangeEvent e) {
 		// 发生子模型添加和删除的变化后刷新子控制器改变视图
-		if (e.getPropertyName().equals(ContentsModel.CHILDREN))
-		{
+		if (e.getPropertyName().equals(ContentsModel.CHILDREN)) {
 			// 刷新孩子控制器
 			refreshChildren();
 		}
@@ -102,10 +95,8 @@ public class ContentsModelPart extends EditPartWithListener
 	 * @param graph
 	 * @param map
 	 */
-	public void contributeNodesToGraph(DirectedGraph graph, Map map)
-	{
-		for (int i = 1; i < getChildren().size(); i++)
-		{
+	public void contributeNodesToGraph(DirectedGraph graph, Map map) {
+		for (int i = 1; i < getChildren().size(); i++) {
 			ElementEditPart modelP = (ElementEditPart) getChildren().get(i);
 			org.eclipse.draw2d.graph.Node node = new org.eclipse.draw2d.graph.Node(
 					modelP);
@@ -123,16 +114,12 @@ public class ContentsModelPart extends EditPartWithListener
 	 * @param graph
 	 * @param map
 	 */
-	public void contributeEdgesToGraph(DirectedGraph graph, Map map)
-	{
-		for (int i = 1; i < getChildren().size(); i++)
-		{
+	public void contributeEdgesToGraph(DirectedGraph graph, Map map) {
+		for (int i = 1; i < getChildren().size(); i++) {
 			ElementEditPart modelP = (ElementEditPart) getChildren().get(i);
 			List outgoing = modelP.getSourceConnections();
-			for (int j = 0; j < outgoing.size(); j++)
-			{
-				ConnectionEditPart conn = (ConnectionEditPart) outgoing
-						.get(j);
+			for (int j = 0; j < outgoing.size(); j++) {
+				ConnectionEditPart conn = (ConnectionEditPart) outgoing.get(j);
 				Node source = (Node) map.get(conn.getSource());
 				Node target = (Node) map.get(conn.getTarget());
 				Edge e = new Edge(conn, source, target);
@@ -144,10 +131,8 @@ public class ContentsModelPart extends EditPartWithListener
 		}
 	}
 
-	protected void applyGraphResults(DirectedGraph graph, Map map)
-	{
-		for (int i = 1; i < getChildren().size(); i++)
-		{
+	protected void applyGraphResults(DirectedGraph graph, Map map) {
+		for (int i = 1; i < getChildren().size(); i++) {
 			ElementEditPart modelP = (ElementEditPart) getChildren().get(i);
 			Node n = (Node) map.get(modelP);
 			modelP.getFigure().setBounds(

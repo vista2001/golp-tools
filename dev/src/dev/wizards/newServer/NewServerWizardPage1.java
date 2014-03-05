@@ -26,8 +26,7 @@ import org.eclipse.swt.widgets.Text;
 
 import dev.remote.RemoteDialog;
 
-public class NewServerWizardPage1 extends WizardPage
-{
+public class NewServerWizardPage1 extends WizardPage {
 	private ISelection selection;
 	private Text serverSpeclibPathText;
 	private List serverSpeclibPathList;
@@ -35,18 +34,15 @@ public class NewServerWizardPage1 extends WizardPage
 	private Button upButton;
 	private Button downButton;
 
-	public ISelection getSelection()
-	{
+	public ISelection getSelection() {
 		return selection;
 	}
 
-	public List getServerSpeclibPathList()
-	{
+	public List getServerSpeclibPathList() {
 		return serverSpeclibPathList;
 	}
 
-	public NewServerWizardPage1(ISelection selection)
-	{
+	public NewServerWizardPage1(ISelection selection) {
 		super("NewServerWizardPage1");
 		setTitle("新建服务程序向导");
 		setDescription("这个向导将指导你完成GOLP服务程序的创建");
@@ -54,9 +50,8 @@ public class NewServerWizardPage1 extends WizardPage
 	}
 
 	@Override
-	public void createControl(Composite parent)
-	{
-	    Composite container = new Composite(parent, SWT.NULL);
+	public void createControl(Composite parent) {
+		Composite container = new Composite(parent, SWT.NULL);
 		setControl(container);
 		container.setLayout(new GridLayout(3, false));
 
@@ -64,20 +59,17 @@ public class NewServerWizardPage1 extends WizardPage
 		serverSpeclibPathLabel.setText("服务程序个性依赖库路径：");
 
 		serverSpeclibPathText = new Text(container, SWT.BORDER);
-        serverSpeclibPathText.addKeyListener(new KeyAdapter()
-        {
-            @Override
-            public void keyPressed(KeyEvent e)
-            {
-                if((serverSpeclibPathText.getText().trim().isEmpty() == false)
-                    && (e.keyCode == SWT.CR))
-                {
-                    serverSpeclibPathList.add(serverSpeclibPathText.getText());
-                    serverSpeclibPathText.setText("");
-                    dialogChanged();
-                }
-            }
-        });
+		serverSpeclibPathText.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if ((serverSpeclibPathText.getText().trim().isEmpty() == false)
+						&& (e.keyCode == SWT.CR)) {
+					serverSpeclibPathList.add(serverSpeclibPathText.getText());
+					serverSpeclibPathText.setText("");
+					dialogChanged();
+				}
+			}
+		});
 		serverSpeclibPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
 
@@ -87,23 +79,20 @@ public class NewServerWizardPage1 extends WizardPage
 		gd_addButton.widthHint = 60;
 		addButton.setLayoutData(gd_addButton);
 		addButton.setText("添加");
-		addButton.addSelectionListener(new SelectionAdapter()
-		{
+		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-                String upProject = ((NewServerWizardPage0) getWizard().getPage(
-                        "NewServerWizardPage0")).getUpProjectCombo().getText();
-                ArrayList<String> paths = new ArrayList<String>();
-                RemoteDialog remoteDialog = new RemoteDialog(getShell(),
-                        upProject, null, RemoteDialog.REMOTEDIALOG_DIRECTORY,
-                        RemoteDialog.REMOTEDIALOG_MULTI, paths);
-                remoteDialog.open();
-                for (String str : paths)
-                {
-                    serverSpeclibPathList.add(str);
-                }
-                dialogChanged();
+			public void widgetSelected(SelectionEvent e) {
+				String upProject = ((NewServerWizardPage0) getWizard().getPage(
+						"NewServerWizardPage0")).getUpProjectCombo().getText();
+				ArrayList<String> paths = new ArrayList<String>();
+				RemoteDialog remoteDialog = new RemoteDialog(getShell(),
+						upProject, null, RemoteDialog.REMOTEDIALOG_DIRECTORY,
+						RemoteDialog.REMOTEDIALOG_MULTI, paths);
+				remoteDialog.open();
+				for (String str : paths) {
+					serverSpeclibPathList.add(str);
+				}
+				dialogChanged();
 			}
 		});
 		new Label(container, SWT.NONE);
@@ -112,21 +101,15 @@ public class NewServerWizardPage1 extends WizardPage
 				| SWT.V_SCROLL | SWT.MULTI);
 		serverSpeclibPathList.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
 				true, true, 1, 3));
-		serverSpeclibPathList.addSelectionListener(new SelectionAdapter()
-		{
+		serverSpeclibPathList.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				if (serverSpeclibPathList.getSelectionIndices().length > 0)
-				{
+			public void widgetSelected(SelectionEvent e) {
+				if (serverSpeclibPathList.getSelectionIndices().length > 0) {
 					delButton.setEnabled(true);
-					if (serverSpeclibPathList.getSelectionIndices().length == 1)
-					{
+					if (serverSpeclibPathList.getSelectionIndices().length == 1) {
 						upButton.setEnabled(true);
 						downButton.setEnabled(true);
-					}
-					else
-					{
+					} else {
 						upButton.setEnabled(false);
 						downButton.setEnabled(false);
 					}
@@ -143,11 +126,9 @@ public class NewServerWizardPage1 extends WizardPage
 		delButton.setText("移除");
 		new Label(container, SWT.NONE);
 
-		delButton.addSelectionListener(new SelectionAdapter()
-		{
+		delButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int[] indices = serverSpeclibPathList.getSelectionIndices();
 				serverSpeclibPathList.remove(indices);
 				delButton.setEnabled(false);
@@ -165,18 +146,16 @@ public class NewServerWizardPage1 extends WizardPage
 		upButton.setLayoutData(gd_upButton);
 		upButton.setText("上移");
 		new Label(container, SWT.NONE);
-		upButton.addSelectionListener(new SelectionAdapter()
-		{
+		upButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int index = serverSpeclibPathList.getSelectionIndex();
-				if(index > 0)
-				{
+				if (index > 0) {
 					String tmp = serverSpeclibPathList.getItem(index);
-					serverSpeclibPathList.setItem(index, serverSpeclibPathList.getItem(index-1));
-					serverSpeclibPathList.setItem(index-1, tmp);
-					serverSpeclibPathList.setSelection(index-1);
+					serverSpeclibPathList.setItem(index,
+							serverSpeclibPathList.getItem(index - 1));
+					serverSpeclibPathList.setItem(index - 1, tmp);
+					serverSpeclibPathList.setSelection(index - 1);
 				}
 			}
 		});
@@ -188,49 +167,40 @@ public class NewServerWizardPage1 extends WizardPage
 		gd_downButton.widthHint = 60;
 		downButton.setLayoutData(gd_downButton);
 		downButton.setText("下移");
-		downButton.addSelectionListener(new SelectionAdapter()
-		{
+		downButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
+			public void widgetSelected(SelectionEvent e) {
 				int index = serverSpeclibPathList.getSelectionIndex();
-				if(index < serverSpeclibPathList.getItemCount()-1)
-				{
+				if (index < serverSpeclibPathList.getItemCount() - 1) {
 					String tmp = serverSpeclibPathList.getItem(index);
-					serverSpeclibPathList.setItem(index, serverSpeclibPathList.getItem(index+1));
-					serverSpeclibPathList.setItem(index+1, tmp);
-					serverSpeclibPathList.setSelection(index+1);
+					serverSpeclibPathList.setItem(index,
+							serverSpeclibPathList.getItem(index + 1));
+					serverSpeclibPathList.setItem(index + 1, tmp);
+					serverSpeclibPathList.setSelection(index + 1);
 				}
 			}
 		});
 	}
 
 	// 此处虽设置为true，但还是会调用下边的canFlipToNextPage()方法
-	private void dialogChanged()
-	{
+	private void dialogChanged() {
 		setPageComplete(true);
 	}
+
 	@Override
-	public boolean canFlipToNextPage()
-	{
+	public boolean canFlipToNextPage() {
 		return true;
 
 	}
 
 	@Override
-	public IWizardPage getNextPage()
-	{
-		if(serverSpeclibPathList.getItemCount() > 0)
-		{
+	public IWizardPage getNextPage() {
+		if (serverSpeclibPathList.getItemCount() > 0) {
 			return super.getNextPage();
-		}
-		else
-		{
+		} else {
 			return getWizard().getPage("NewServerWizardPage3");
 		}
-				
-		
+
 	}
-	
 
 }

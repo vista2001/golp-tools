@@ -19,8 +19,7 @@ import dev.views.NavView;
  * @author 木木
  * 
  */
-public class ContentsModel extends AbstractModel
-{
+public class ContentsModel extends AbstractModel {
 	// 流程图的javabean
 	private TfmBean tfmBean = new TfmBean();
 	// 流程图子孩子节点，这里用于在画布中显示子模型
@@ -34,8 +33,7 @@ public class ContentsModel extends AbstractModel
 	/**
 	 * 初始化，并添加异常和补偿节点
 	 */
-	public ContentsModel(String projectId, String diagramId, String fileName)
-	{
+	public ContentsModel(String projectId, String diagramId, String fileName) {
 		this.projectId = projectId;
 		this.diagramId = Integer.parseInt(diagramId);
 		this.fileName = fileName;
@@ -46,8 +44,7 @@ public class ContentsModel extends AbstractModel
 		children.add(exAndComModel);
 	}
 
-	public void init(String name, String desc, String type, String tradeid)
-	{
+	public void init(String name, String desc, String type, String tradeid) {
 		tfmBean.setTfmName(name);
 		tfmBean.setTfmdesc(desc);
 		tfmBean.setTfmType(type);
@@ -71,25 +68,20 @@ public class ContentsModel extends AbstractModel
 	 * 
 	 * @return
 	 */
-	public boolean isComplete()
-	{
+	public boolean isComplete() {
 		int defEdgeNum = 0;
-		for (TfmEdge edge : getTfmBean().getTfmEdgesList())
-		{
+		for (TfmEdge edge : getTfmBean().getTfmEdgesList()) {
 			if (edge.getWeight().equals("999"))
 				defEdgeNum++;
 		}
-		if (defEdgeNum < children.size() - 2)
-		{
+		if (defEdgeNum < children.size() - 2) {
 			MessageDialog.openError(PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getShell(), "ERROR",
 					"图的信息不完整，节点的默认边没有完成！");
 			return false;
 		}
-		for (int i = 1; i < children.size(); i++)
-		{
-			if (!((CommonModel) children.get(i)).isConnected())
-			{
+		for (int i = 1; i < children.size(); i++) {
+			if (!((CommonModel) children.get(i)).isConnected()) {
 				MessageDialog.openError(PlatformUI.getWorkbench()
 						.getActiveWorkbenchWindow().getShell(), "ERROR",
 						"图的信息不完整，请确保所有节点都已连接！");
@@ -99,14 +91,11 @@ public class ContentsModel extends AbstractModel
 		return true;
 	}
 
-	public TfmBean getTfmBean()
-	{
-		for (int i = 1; i < getChildren().size(); i++)
-		{
+	public TfmBean getTfmBean() {
+		for (int i = 1; i < getChildren().size(); i++) {
 			List<AbstractConnectionModel> nodeList = ((ElementModel) (getChildren()
 					.get(i))).getSourceConnection();
-			for (AbstractConnectionModel edgeModel : nodeList)
-			{
+			for (AbstractConnectionModel edgeModel : nodeList) {
 				TfmEdge edge = edgeModel.getTfmEdge();
 				if (!tfmBean.getTfmEdgesList().contains(edge))
 					tfmBean.getTfmEdgesList().add(edge);
@@ -115,8 +104,7 @@ public class ContentsModel extends AbstractModel
 		return tfmBean;
 	}
 
-	public void setTfmBean(TfmBean tfmBean)
-	{
+	public void setTfmBean(TfmBean tfmBean) {
 		this.tfmBean = tfmBean;
 	}
 
@@ -134,13 +122,11 @@ public class ContentsModel extends AbstractModel
 	/**
 	 * 自动布局
 	 */
-	public boolean isAutoLayout()
-	{
+	public boolean isAutoLayout() {
 		return autoLayout;
 	}
 
-	public void setAutoLayout(boolean b)
-	{
+	public void setAutoLayout(boolean b) {
 		autoLayout = b;
 		firePropertyChange(LAYOUT, null, null);
 	}
@@ -150,11 +136,9 @@ public class ContentsModel extends AbstractModel
 	 * 
 	 * @param child
 	 */
-	public void addChild(Object child)
-	{
+	public void addChild(Object child) {
 		// 流程图中加入子孩子
-		if (child instanceof CommonModel)
-		{
+		if (child instanceof CommonModel) {
 			getTfmBean().getTfmBlockList().add(
 					((CommonModel) child).getTfmBlock());
 		}
@@ -170,13 +154,11 @@ public class ContentsModel extends AbstractModel
 	 * 
 	 * @param child
 	 */
-	public void removeChild(Object child)
-	{
+	public void removeChild(Object child) {
 		// 模型中异常子模型
 		children.remove(child);
 		// 流程图中移除子孩子节点
-		if (child instanceof CommonModel)
-		{
+		if (child instanceof CommonModel) {
 			getTfmBean().getTfmBlockList().remove(
 					((CommonModel) child).getTfmBlock());
 		}
@@ -187,16 +169,14 @@ public class ContentsModel extends AbstractModel
 
 	}
 
-	public List<Object> getChildren()
-	{
+	public List<Object> getChildren() {
 		return children;
 	}
 
 	// ///////////////////////////////////////////////////////////
 
 	@Override
-	public IPropertyDescriptor[] getPropertyDescriptors()
-	{
+	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] decriptors = {
 				new TextPropertyDescriptor(ContentsModel.TFM_DESC, "描述"),
 				new TextPropertyDescriptor(ContentsModel.TFM_ID, "ID"),
@@ -209,8 +189,7 @@ public class ContentsModel extends AbstractModel
 	}
 
 	@Override
-	public Object getPropertyValue(Object id)
-	{
+	public Object getPropertyValue(Object id) {
 
 		if (TFM_DESC.equals(id))
 			return tfmBean.getTfmdesc();
@@ -227,17 +206,14 @@ public class ContentsModel extends AbstractModel
 	}
 
 	@Override
-	public boolean isPropertySet(Object id)
-	{
+	public boolean isPropertySet(Object id) {
 		return false;
 
 	}
 
 	@Override
-	public void setPropertyValue(Object id, Object value)
-	{
-		if (TFM_NAME.equals(id))
-		{
+	public void setPropertyValue(Object id, Object value) {
+		if (TFM_NAME.equals(id)) {
 			tfmBean.setTfmName((String) value);
 			NavView view = (NavView) PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getActivePage()
@@ -252,15 +228,13 @@ public class ContentsModel extends AbstractModel
 	}
 
 	@Override
-	public Object getEditableValue()
-	{
+	public Object getEditableValue() {
 
 		return null;
 	}
 
 	@Override
-	public void resetPropertyValue(Object id)
-	{
+	public void resetPropertyValue(Object id) {
 
 	}
 

@@ -11,65 +11,58 @@ import org.eclipse.ui.dialogs.PropertyDialogAction;
 
 import dev.model.resource.ProjectNode;
 import dev.views.NavView;
+
 /**
  * 该类定义了在导航视图中，鼠标右键点击工程节点时，在弹出菜单所显示的“属性”按钮，当用户点击“属性”按钮后，会弹出工程属性对话框
  */
 public class PrjPropertyAction extends Action implements ISelectionListener,
-		IWorkbenchAction
-{
+		IWorkbenchAction {
 
 	private IWorkbenchWindow window;
 	public final static String ID = "dev.actions.prjPropertyAction";
 	private IStructuredSelection selection;
 
-	public PrjPropertyAction(IWorkbenchWindow window)
-	{
+	public PrjPropertyAction(IWorkbenchWindow window) {
 		super("prjPropertyAction");
 		setId(ID);
 		setText("属性");
 		this.window = window;
 		// 注册选择服务监听器
 		window.getSelectionService().addSelectionListener(this);
-		//setEnabled(false);
+		// setEnabled(false);
 	}
-	
-	public void run()
-	{
-		PropertyDialogAction action = new PropertyDialogAction(window
-				.getShell(), ((NavView)window.getActivePage().findView(NavView.ID)).getTreeViewer());
+
+	public void run() {
+		PropertyDialogAction action = new PropertyDialogAction(
+				window.getShell(), ((NavView) window.getActivePage().findView(
+						NavView.ID)).getTreeViewer());
 		action.run();
-//		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-//	    IWorkspaceRoot root = workspace.getRoot();
-//	    IProject project = root.getProject("a");
-//		String projectAbsPath=project.getLocationURI().toString();
-//		DebugOut.println(projectAbsPath);
+		// IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		// IWorkspaceRoot root = workspace.getRoot();
+		// IProject project = root.getProject("a");
+		// String projectAbsPath=project.getLocationURI().toString();
+		// DebugOut.println(projectAbsPath);
 	}
-	
+
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection incoming)
-	{
-		
-		if (incoming instanceof IStructuredSelection)
-		{
+	public void selectionChanged(IWorkbenchPart part, ISelection incoming) {
+
+		if (incoming instanceof IStructuredSelection) {
 			// 获得事件发生的源所携带的对象
-			
+
 			selection = (IStructuredSelection) incoming;
-			if(selection.getFirstElement() instanceof ProjectNode)
-			{
+			if (selection.getFirstElement() instanceof ProjectNode) {
 				this.setEnabled(true);
-			}
-			else
-			{
-				this.setEnabled(false);			
+			} else {
+				this.setEnabled(false);
 			}
 		}
 
 	}
-	
+
 	@Override
-	public void dispose()
-	{
-		
+	public void dispose() {
+
 		window.getSelectionService().removeSelectionListener(this);
 	}
 

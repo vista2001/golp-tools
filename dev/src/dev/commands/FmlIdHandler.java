@@ -9,12 +9,12 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
 
 import dev.generate.fml.FmlId;
 import dev.model.base.RootNode;
 import dev.model.base.TreeNode;
+import dev.util.DevLogger;
 import dev.views.NavView;
 
 public class FmlIdHandler extends AbstractHandler {
@@ -28,11 +28,7 @@ public class FmlIdHandler extends AbstractHandler {
 		List<TreeNode> project = ((RootNode) view.getTreeViewer().getInput())
 				.getChildren();
 		if (project.isEmpty()) {
-			MessageBox box = new MessageBox(Display.getCurrent()
-					.getActiveShell(), SWT.ICON_INFORMATION | SWT.OK);
-			box.setMessage("还没有创建工程。\n请创建完工程后再执行此操作");
-			box.setText("找不到工程");
-			box.open();
+			DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.OK, "找不到工程", "还没有创建工程。\n请创建完工程后再执行此操作");
 			return null;
 		}
 		FmlDialog dialog = new FmlDialog(Display.getCurrent().getActiveShell());
@@ -45,20 +41,12 @@ public class FmlIdHandler extends AbstractHandler {
 			try {
 				FmlId.generateFml(obj.get(i));
 			} catch (SQLException | IOException | InterruptedException e) {
-				MessageBox box = new MessageBox(Display.getCurrent()
-						.getActiveShell(), SWT.ICON_INFORMATION | SWT.OK);
-				box.setMessage("出现问题。\n生成成功"+i+"个");
-				box.setText("错误");
-				box.open();
+				DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.OK, "错误", "出现问题。\n生成成功" + i + "个");
 				return event;
 			}
-				
+
 		}
-		MessageBox box = new MessageBox(Display.getCurrent()
-				.getActiveShell(), SWT.ICON_INFORMATION | SWT.OK);
-		box.setMessage("fml生成成功");
-		box.setText("完成");
-		box.open();
+		DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.OK, "fml生成成功", "完成");
 		return event;
 	}
 

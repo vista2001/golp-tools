@@ -12,26 +12,23 @@ import dev.diagram.commands.DirectEditCommand;
  * @author 木木
  * 
  */
-public class CustomDirectEditPolicy extends DirectEditPolicy
-{
+public class CustomDirectEditPolicy extends DirectEditPolicy {
 	/**
 	 * 实现直接编辑
 	 */
 	@Override
-	protected Command getDirectEditCommand(DirectEditRequest request)
-	{
-		//创建新的命令
+	protected Command getDirectEditCommand(DirectEditRequest request) {
+		// 创建新的命令
 		DirectEditCommand command = new DirectEditCommand();
-		//设置被编辑的模型
+		// 设置被编辑的模型
 		command.setModel(getHost().getModel());
-		//设置新的文本内容
+		// 设置新的文本内容
 		command.setText((String) request.getCellEditor().getValue());
 		return command;
 	}
 
 	@Override
-	protected void showCurrentEditValue(DirectEditRequest request)
-	{
+	protected void showCurrentEditValue(DirectEditRequest request) {
 
 	}
 

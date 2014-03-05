@@ -8,12 +8,12 @@ package dev.util;
 
 /**
  * 类Constants，存放了代码中所用到的常量。
+ * 
  * @author rxy
  */
-public class Constants
-{
-    public static final String APP = "0";
-    public static final String GOLP = "1";
-    public static final int ALL = 0;
-    public static final int TFM_BINDING = 1;
+public class Constants {
+	public static final String APP = "0";
+	public static final String GOLP = "1";
+	public static final int ALL = 0;
+	public static final int TFM_BINDING = 1;
 }

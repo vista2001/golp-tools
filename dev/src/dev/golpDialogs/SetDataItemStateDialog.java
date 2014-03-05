@@ -33,10 +33,9 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import dev.db.DbConnectImpl;
-import dev.db.pojo.TAopDll;
 import dev.db.pojo.TDataItem;
 import dev.db.service.CommonDialogServiceImpl;
+import dev.util.DevLogger;
 
 /**
  * SetDataItemStateDialog类，该类实现了在设定数据项发布状态的handler中，让用户选择数据项状态的功能。
@@ -264,15 +263,16 @@ public class SetDataItemStateDialog extends TitleAreaDialog {
 
 	@Override
 	protected void okPressed() {
-	    CommonDialogServiceImpl commonDialogServiceImpl = new CommonDialogServiceImpl();
-        try
-        {
-            commonDialogServiceImpl.updateDataItemState(prjId, outputDataItemList.getItems(), allDataItemList.getItems());
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        } 
+		CommonDialogServiceImpl commonDialogServiceImpl = new CommonDialogServiceImpl();
+		try {
+			commonDialogServiceImpl.updateDataItemState(prjId,
+					outputDataItemList.getItems(), allDataItemList.getItems());
+			// throw new RuntimeException("Fake Exception");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			DevLogger.printError(e);
+
+		}
 		super.okPressed();
 	}
 
@@ -307,6 +307,7 @@ public class SetDataItemStateDialog extends TitleAreaDialog {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 	}
 

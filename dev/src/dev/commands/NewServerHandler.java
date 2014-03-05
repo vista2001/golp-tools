@@ -17,29 +17,30 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import dev.util.DebugOut;
+import dev.util.DevLogger;
 import dev.util.GolpWizardDialog;
 import dev.wizards.newServer.NewServerWizard;
 
-public class NewServerHandler extends AbstractHandler
-{
+public class NewServerHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException
-	{
-	    DebugOut.println("NewServerHandler is called");
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		DevLogger.printDebugMsg("NewServerHandler is called");
 		IWorkbenchWindow window = HandlerUtil
 				.getActiveWorkbenchWindowChecked(event);
-		//MessageDialog.openConfirm(window.getShell(), "Add", "The \"Add to Favorites\" handler was called");
-		ISelection selection=HandlerUtil.getCurrentSelection(event);
+		// MessageDialog.openConfirm(window.getShell(), "Add",
+		// "The \"Add to Favorites\" handler was called");
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		{
 			NewServerWizard wizard = new NewServerWizard();
 			wizard.init(
 					window.getWorkbench(),
-					selection instanceof IStructuredSelection ? 
-							(IStructuredSelection) selection: StructuredSelection.EMPTY);
-//			WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
-			GolpWizardDialog dialog = new GolpWizardDialog(window.getShell(), wizard);
+					selection instanceof IStructuredSelection ? (IStructuredSelection) selection
+							: StructuredSelection.EMPTY);
+			// WizardDialog dialog = new WizardDialog(window.getShell(),
+			// wizard);
+			GolpWizardDialog dialog = new GolpWizardDialog(window.getShell(),
+					wizard);
 			dialog.open();
 		}
 		return null;

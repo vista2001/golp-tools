@@ -25,8 +25,7 @@ import dev.diagram.model.TfmModel;
  * @author 木木
  * 
  */
-public class GenerateTfmBean
-{
+public class GenerateTfmBean {
 	/**
 	 * 从xml中获得流程图的JavaBean，根据JavaBean，将流程图内容写入到传入的模型参数contentsModel
 	 * 
@@ -35,8 +34,7 @@ public class GenerateTfmBean
 	 * @throws DocumentException
 	 */
 	public static void BeanToModel(ContentsModel contentsModel, String fileName)
-			throws DocumentException
-	{
+			throws DocumentException {
 		final TfmBean tfmBean;
 		// 从xml文件中读入JavaBean，即流程图
 		tfmBean = GenerateXml.readTfmXml(fileName);
@@ -56,10 +54,8 @@ public class GenerateTfmBean
 		Map<String, CommonModel> mapTfmBlock = new HashMap<String, CommonModel>();
 		CommonModel model;
 		// 根据节点的类型新建模型
-		for (TfmBlock tfmBlock : tfmBean.getTfmBlockList())
-		{
-			switch (tfmBlock.getNodeType())
-			{
+		for (TfmBlock tfmBlock : tfmBean.getTfmBlockList()) {
+			switch (tfmBlock.getNodeType()) {
 			// 条件模型
 			case "0":
 				model = new ConditionModel();
@@ -106,8 +102,7 @@ public class GenerateTfmBean
 			contentsModel.addChild(model);
 
 		}
-		for (TfmEdge tfmEdge : tfmBean.getTfmEdgesList())
-		{
+		for (TfmEdge tfmEdge : tfmBean.getTfmEdgesList()) {
 			// 新建边实例
 			LineConnectionModel l = new LineConnectionModel();
 			// 设置边的开始模型

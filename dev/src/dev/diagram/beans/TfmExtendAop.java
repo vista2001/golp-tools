@@ -2,15 +2,16 @@ package dev.diagram.beans;
 
 /**
  * 扩展点定义
+ * 
  * @author 木木
- *
+ * 
  */
-public class TfmExtendAop extends TfmCommDeal{
-	//扩展点所属的节点（块）
+public class TfmExtendAop extends TfmCommDeal {
+	// 扩展点所属的节点（块）
 	private String nodeid;
-	
+
 	public TfmExtendAop() {
-		nodeid="";
+		nodeid = "";
 	}
 
 	public String getNodeid() {
@@ -21,5 +22,4 @@ public class TfmExtendAop extends TfmCommDeal{
 		this.nodeid = nodeid;
 	}
 
-	
 }

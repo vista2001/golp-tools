@@ -18,27 +18,25 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import dev.wizards.newTfm.NewTfmWizard;
 
-public class NewTfmHandler extends AbstractHandler
-{
+public class NewTfmHandler extends AbstractHandler {
 
-    @Override
-    public Object execute(ExecutionEvent event) throws ExecutionException
-    {
-        
-        IWorkbenchWindow window = HandlerUtil
-                .getActiveWorkbenchWindowChecked(event);
-        
-        ISelection selection=HandlerUtil.getCurrentSelection(event);
-        {
-            NewTfmWizard wizard = new NewTfmWizard();
-            wizard.init(
-                    window.getWorkbench(),
-                    selection instanceof IStructuredSelection ? 
-                            (IStructuredSelection) selection: StructuredSelection.EMPTY);
-            WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
-            dialog.open();
-        }
-        return null;
-    }
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+
+		IWorkbenchWindow window = HandlerUtil
+				.getActiveWorkbenchWindowChecked(event);
+
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		{
+			NewTfmWizard wizard = new NewTfmWizard();
+			wizard.init(
+					window.getWorkbench(),
+					selection instanceof IStructuredSelection ? (IStructuredSelection) selection
+							: StructuredSelection.EMPTY);
+			WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
+			dialog.open();
+		}
+		return null;
+	}
 
 }

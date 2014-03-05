@@ -28,7 +28,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -37,24 +36,24 @@ import dev.db.pojo.TProject;
 import dev.db.service.ProjectDaoServiceImpl;
 import dev.model.base.RootNode;
 import dev.model.resource.ProjectNode;
-import dev.util.DebugOut;
+import dev.util.DevLogger;
 import dev.util.PropertiesUtil;
 import dev.views.NavView;
 
-public class NewProjectWizard extends Wizard  implements INewWizard{
+public class NewProjectWizard extends Wizard implements INewWizard {
 	private ISelection selection;
 	private NewProjectWizardPage0 page0;
 	private NewProjectWizardPage1 page1;
 	private NewProjectWizardPage2 page2;
 	private NewProjectWizardPage3 page3;
 	private IWorkbench workbench;
-	private String projectAbsPath="";
+	private String projectAbsPath = "";
 	private TProject project;
-	
+
 	public NewProjectWizard() {
 		super();
 		project = new TProject();
-		//setNeedsProgressMonitor(true);
+		// setNeedsProgressMonitor(true);
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 		this.selection = selection;
 		this.workbench = workbench;
 	}
-	
+
 	@Override
 	public void addPages() {
 		page0 = new NewProjectWizardPage0(selection);
@@ -77,67 +76,63 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 
 	@Override
 	public boolean performFinish() {
-		//获得向导中的数据
-	    getData();
-	    //检验数据库表中project表是否有记录
-	   if( checkHasRecord()==0){
-		    //创建工程工作区文件
+		// 获得向导中的数据
+		getData();
+		// 检验数据库表中project表是否有记录
+		if (checkHasRecord() == 0) {
+			// 创建工程工作区文件
 			createProject(project.getPrjId());
-			//创建工程工作目录
+			// 创建工程工作目录
 			createDirectorys();
-			
-			//创建工程属性文件
+
+			// 创建工程属性文件
 			createProperties();
-			
-			
-	        try
-	        {
-	            //创建数据库记录，此处之所以把创建数据库记录放在最后，是因为写数据库时，需要本地属性文件中的信息。
-	            createDbRecord(project);
-	            
-	            //通知其它视图或编辑器等
-	            informParts(project.getPrjId(), project.getPrjName(), project.getPrjDesc());
-	        }
-	        catch (SQLException e)
-	        {
-	            e.printStackTrace();
-	        }
-	   }else{
-		   showMessage(SWT.ICON_INFORMATION | SWT.YES, "提示", "数据库中已有工程记录，请载入工程！");
-	   }
-		
-		
+
+			try {
+				// 创建数据库记录，此处之所以把创建数据库记录放在最后，是因为写数据库时，需要本地属性文件中的信息。
+				createDbRecord(project);
+
+				// 通知其它视图或编辑器等
+				informParts(project.getPrjId(), project.getPrjName(),
+						project.getPrjDesc());
+			} catch (SQLException e) {
+				e.printStackTrace();
+				DevLogger.printError(e);
+			}
+		} else {
+			DevLogger.showMessage(SWT.ICON_INFORMATION | SWT.YES, "提示",
+					"数据库中已有工程记录，请载入工程！");
+		}
+
 		return true;
 	}
-	
+
 	private int checkHasRecord() {
-		ProjectDaoServiceImpl projectDaoServiceImpl=new ProjectDaoServiceImpl();
-		int count=0;
+		ProjectDaoServiceImpl projectDaoServiceImpl = new ProjectDaoServiceImpl();
+		int count = 0;
 		try {
-			count=projectDaoServiceImpl.countProject(
-					page1.getDbAddressText().getText()
-					, page1.getDbPortText().getText()
-					, page1.getDbInstanceText().getText()
-					, page1.getDbUserText().getText()
-					, page1.getDbPwdText().getText());
+			count = projectDaoServiceImpl.countProject(page1.getDbAddressText()
+					.getText(), page1.getDbPortText().getText(), page1
+					.getDbInstanceText().getText(), page1.getDbUserText()
+					.getText(), page1.getDbPwdText().getText());
 		} catch (SQLException e) {
 			e.printStackTrace();
+			DevLogger.printError(e);
 		}
 		return count;
 	}
 
-	private void getData()
-	{
-	    String prjId = page0.getPrjIdText().getText();
-	    project.setPrjId(prjId);
-        String prjName = page0.getPrjNameText().getText();
-        project.setPrjName(prjName);
-        String prjDesc = page0.getPrjDescText().getText();
-        project.setPrjDesc(prjDesc);
-        String appHome = page3.getAppHomeText().getText();
-        project.setAppHome(appHome);
-        String golpHome = page3.getGolpHomeText().getText();
-        project.setGolpHome(golpHome);
+	private void getData() {
+		String prjId = page0.getPrjIdText().getText();
+		project.setPrjId(prjId);
+		String prjName = page0.getPrjNameText().getText();
+		project.setPrjName(prjName);
+		String prjDesc = page0.getPrjDescText().getText();
+		project.setPrjDesc(prjDesc);
+		String appHome = page3.getAppHomeText().getText();
+		project.setAppHome(appHome);
+		String golpHome = page3.getGolpHomeText().getText();
+		project.setGolpHome(golpHome);
 	}
 
 	@Override
@@ -151,120 +146,119 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 		return false;
 	}
 
-	private void createDbRecord(TProject project) throws SQLException 
-	{
-	    ProjectDaoServiceImpl projectDaoServiceImpl = new ProjectDaoServiceImpl();
-	    projectDaoServiceImpl.insertProject(project);
+	private void createDbRecord(TProject project) throws SQLException {
+		ProjectDaoServiceImpl projectDaoServiceImpl = new ProjectDaoServiceImpl();
+		projectDaoServiceImpl.insertProject(project);
 	}
 
-	private void createProject(String prjId){
+	private void createProject(String prjId) {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-	    IWorkspaceRoot root = workspace.getRoot();
-	    IProject project = root.getProject(prjId);
-	    IProject[] prj1=root.getProjects();
-/*	    for (IProject iProject : prj1) {
-			DebugOut.println(iProject.getName());
-			DebugOut.println(iProject.getFullPath());
-			DebugOut.println(iProject.getLocation());
-		}*/
-	    if (!project.exists())
-	        try
-	        {
-	          project.create(null);
-	          project.open(null);
-	          projectAbsPath=project.getLocation().toFile().getCanonicalPath();
-	          System.out.println(project.getLocationURI().toString());
-	          IProjectDescription projectDesc = project.getDescription();
-	          String[] oldIds = projectDesc.getNatureIds();
-	          String[] newIds = new String[oldIds.length + 1];
-	          System.arraycopy(oldIds, 0, newIds, 0, oldIds.length);
-	          newIds[oldIds.length] = "dev.natures.golpProjectNature";
-	          projectDesc.setNatureIds(newIds);
-	          project.setDescription(projectDesc, null);
-	
-	        }
-	        catch (Exception e)
-	        {
-	          //LogUtil.getInstance().logError("创建工程失败!", e);
-	        	//LogUtil.getInstance().logError("创建工程失败!", e);
-	        	//LogUtil.getInstance().logError("创建工程失败!", e);
-	        	//LogUtil.getInstance().logError("创建工程失败!", e);
-	        	e.printStackTrace();
-	        }
-	      else
-	        try {
-	          project.open(null);
-	        } catch (CoreException e) {
-	          //LogUtil.getInstance().logError("创建工程失败!", e);
-	        	e.printStackTrace();
-	        }
+		IWorkspaceRoot root = workspace.getRoot();
+		IProject project = root.getProject(prjId);
+		IProject[] prj1 = root.getProjects();
+		/*
+		 * for (IProject iProject : prj1) {
+		 * DebugOut.println(iProject.getName());
+		 * DebugOut.println(iProject.getFullPath());
+		 * DebugOut.println(iProject.getLocation()); }
+		 */
+		if (!project.exists())
+			try {
+				project.create(null);
+				project.open(null);
+				projectAbsPath = project.getLocation().toFile()
+						.getCanonicalPath();
+				DevLogger.printDebugMsg(project.getLocationURI().toString());
+				IProjectDescription projectDesc = project.getDescription();
+				String[] oldIds = projectDesc.getNatureIds();
+				String[] newIds = new String[oldIds.length + 1];
+				System.arraycopy(oldIds, 0, newIds, 0, oldIds.length);
+				newIds[oldIds.length] = "dev.natures.golpProjectNature";
+				projectDesc.setNatureIds(newIds);
+				project.setDescription(projectDesc, null);
+
+			} catch (Exception e) {
+				// LogUtil.getInstance().logError("创建工程失败!", e);
+				// LogUtil.getInstance().logError("创建工程失败!", e);
+				// LogUtil.getInstance().logError("创建工程失败!", e);
+				// LogUtil.getInstance().logError("创建工程失败!", e);
+				e.printStackTrace();
+				DevLogger.printError(e);
+			}
+		else
+			try {
+				project.open(null);
+			} catch (CoreException e) {
+				// LogUtil.getInstance().logError("创建工程失败!", e);
+				e.printStackTrace();
+				DevLogger.printError(e);
+			}
 	}
 
-    /** 创建相关工程目录 */
-    private void createDirectorys()
-    {
-        // 读取路径
-        String targetPath = projectAbsPath;
-        String sourcePath = (new File(projectAbsPath).getParentFile().getParent())
-                            + File.separator + "sampleWorkDir";
-        System.out.println(targetPath);
-        System.out.println(sourcePath);
-        Process p = null;
-        try
-        {
-            p = Runtime.getRuntime().exec(
-                    "cmd /c xcopy " + sourcePath + " " + targetPath + "/e");
-            p.waitFor();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-    }
+	/** 创建相关工程目录 */
+	private void createDirectorys() {
+		// 读取路径
+		String targetPath = projectAbsPath;
+		String sourcePath = (new File(projectAbsPath).getParentFile()
+				.getParent()) + File.separator + "sampleWorkDir";
+		DevLogger.printDebugMsg(targetPath);
+		DevLogger.printDebugMsg(sourcePath);
+		Process p = null;
+		try {
+			p = Runtime.getRuntime().exec(
+					"cmd /c xcopy " + sourcePath + " " + targetPath + "/e");
+			p.waitFor();
+		} catch (IOException e) {
+			e.printStackTrace();
+			DevLogger.printError(e);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			DevLogger.printError(e);
+		}
+	}
 
-	/** 通知其他视图或编辑器*/
+	/** 通知其他视图或编辑器 */
 	private void informParts(String prjId, String prjName, String prjDesc) {
-	IViewPart view = this.workbench.getActiveWorkbenchWindow().getActivePage().findView(NavView.ID);
-	if (view != null) {
-		NavView v = (NavView) view;
-		TreeViewer tv = v.getTreeViewer();
-		RootNode root = (RootNode) tv.getInput();
-		if (root == null) {
-			root = new RootNode("root", "root", null);
-//			ProjectNode prj = new ProjectNode(prjId, prjName, root);
-			ProjectNode prj = new ProjectNode(prjId, prjId, root);
-			root.add(prj);
-			tv.setInput(root);
-		} else {
-//			ProjectNode prj = new ProjectNode(prjId, prjName, root);
-			ProjectNode prj = new ProjectNode(prjId, prjId, root);
-			root.add(prj);
+		IViewPart view = this.workbench.getActiveWorkbenchWindow()
+				.getActivePage().findView(NavView.ID);
+		if (view != null) {
+			NavView v = (NavView) view;
+			TreeViewer tv = v.getTreeViewer();
+			RootNode root = (RootNode) tv.getInput();
+			if (root == null) {
+				root = new RootNode("root", "root", null);
+				// ProjectNode prj = new ProjectNode(prjId, prjName, root);
+				ProjectNode prj = new ProjectNode(prjId, prjId, root);
+				root.add(prj);
+				tv.setInput(root);
+			} else {
+				// ProjectNode prj = new ProjectNode(prjId, prjName, root);
+				ProjectNode prj = new ProjectNode(prjId, prjId, root);
+				root.add(prj);
 			}
 			v.getTreeViewer().refresh();
 		}
 	}
-	
+
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status = new Status(IStatus.ERROR, "ccp", IStatus.OK, message,
 				null);
 		throw new CoreException(status);
 	}
-	
-	private void createProperties(){
-		LinkedHashMap<String,String> map=new LinkedHashMap<String, String>();
-/*		map.put("dbAddress", page1.getDbAddressText().getText());
-		map.put("dbInstance", page1.getDbInstanceText().getText());
-		map.put("dbPort", page1.getDbPortText().getText());
-		map.put("dbUser", page1.getDbUserText().getText());
-		map.put("dbPwd", page1.getDbPwdText().getText());*/
+
+	private void createProperties() {
+		LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+		/*
+		 * map.put("dbAddress", page1.getDbAddressText().getText());
+		 * map.put("dbInstance", page1.getDbInstanceText().getText());
+		 * map.put("dbPort", page1.getDbPortText().getText()); map.put("dbUser",
+		 * page1.getDbUserText().getText()); map.put("dbPwd",
+		 * page1.getDbPwdText().getText());
+		 */
 		map.put("prjId", page0.getPrjIdText().getText());
-//		map.put("prjName", page0.getPrjNameText().getText());
-//		map.put("prjDesc", page0.getPrjDescText().getText());
-//		map.put("dbType", page1.getDbTypeCombo().getText());
+		// map.put("prjName", page0.getPrjNameText().getText());
+		// map.put("prjDesc", page0.getPrjDescText().getText());
+		// map.put("dbType", page1.getDbTypeCombo().getText());
 		map.put("dbAddress", page1.getDbAddressText().getText());
 		map.put("dbInstance", page1.getDbInstanceText().getText());
 		map.put("dbPort", page1.getDbPortText().getText());
@@ -273,19 +267,13 @@ public class NewProjectWizard extends Wizard  implements INewWizard{
 		map.put("remoteAddress", page2.getRemoteAddressText().getText());
 		map.put("remoteUser", page2.getRemoteUserText().getText());
 		map.put("remotePwd", page2.getRemotePwdText().getText());
-//		map.put("appHomePath", page3.getAppHomePathText().getText());
-//		map.put("golpHomePath", page3.getGolpHomePathText().getText());
-		String properties=projectAbsPath+File.separator+page0.getPrjIdText().getText()+".properties";
-		DebugOut.println("properties path is :"+properties);
+		// map.put("appHomePath", page3.getAppHomePathText().getText());
+		// map.put("golpHomePath", page3.getGolpHomePathText().getText());
+		String properties = projectAbsPath + File.separator
+				+ page0.getPrjIdText().getText() + ".properties";
+		DevLogger.printDebugMsg("properties path is :" + properties);
 		PropertiesUtil.rewriteProperties1(properties, map);
-		
+
 	}
-	private int showMessage(int style, String title, String message)
-    {
-        MessageBox box = new MessageBox(workbench.getActiveWorkbenchWindow().getShell(),
-                                        style);
-        box.setText(title);
-        box.setMessage(message);
-        return box.open();
-    }
+
 }
