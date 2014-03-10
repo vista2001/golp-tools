@@ -69,10 +69,10 @@ public class DbConnectImpl implements IDbConnect {
 		 * this.conn.setAutoCommit(autoCommit);
 		 */
 		try {
-			this.url = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
+			this.url = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
 			this.driver = "oracle.jdbc.driver.OracleDriver";
-			this.username = "golp";
-			this.password = "golp";
+			this.username = "fapdb";
+			this.password = "fapdb";
 			Class.forName(driver).newInstance();
 			this.conn = DriverManager.getConnection(url, username, password);
 		} catch (ClassNotFoundException e) {

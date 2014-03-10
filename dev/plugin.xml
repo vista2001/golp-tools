@@ -966,7 +966,7 @@
          </enabledWhen>
       </handler>
       <handler
-            class="dev.commands.SetDataItemState"
+            class="dev.commands.SetDataItemStateHandler"
             commandId="dev.menu.project.setDataItemState">
          <enabledWhen>
             <with
